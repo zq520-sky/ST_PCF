@@ -1,0 +1,556 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.samton.web.manage.task.dao.TCustTaskMapper">
+    <resultMap id="BaseResultMap" type="com.samton.web.manage.task.bean.entity.TCustTask">
+        <id column="task_id" property="taskId" jdbcType="INTEGER"/>
+        <result column="task_code" property="taskCode" jdbcType="VARCHAR"/>
+        <result column="order_id" property="orderId" jdbcType="INTEGER"/>
+        <result column="cust_id" property="custId" jdbcType="INTEGER"/>
+        <result column="product_id" property="productId" jdbcType="INTEGER"/>
+        <result column="buyer_id" property="buyerId" jdbcType="INTEGER"/>
+        <result column="order_num" property="orderNum" jdbcType="NUMERIC"/>
+        <result column="unit_price" property="unitPrice" jdbcType="NUMERIC"/>
+        <result column="tax" property="tax" jdbcType="NUMERIC"/>
+        <result column="order_money" property="orderMoney" jdbcType="NUMERIC"/>
+        <result column="order_sn" property="orderSn" jdbcType="VARCHAR"/>
+        <result column="freight_sn" property="freightSn" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="return_money" property="returnMoney" jdbcType="NUMERIC"/>
+        <result column="account_money" property="accountMoney" jdbcType="NUMERIC"/>
+        <result column="deposit_money" property="depositMoney" jdbcType="NUMERIC"/>
+        <result column="cards_code" property="cardsCode" jdbcType="VARCHAR"/>
+        <result column="exec_date" property="execDate" jdbcType="DATE"/>
+        <result column="task_state" property="taskState" jdbcType="INTEGER"/>
+        <result column="liable_user_id" property="liableUserId" jdbcType="BIGINT"/>
+        <result column="task_finish_time" property="taskFinishTime" jdbcType="TIMESTAMP"/>
+        <result column="task_finish_note" property="taskFinishNote" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="create_user_id" property="createUserId" jdbcType="BIGINT"/>
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="modify_user_id" property="modifyUserId" jdbcType="BIGINT"/>
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        task_id,
+        task_code,
+        order_id,
+        cust_id,
+        product_id,
+        buyer_id,
+        order_num,
+        unit_price,
+        tax,
+        order_money,
+        order_sn,
+        freight_sn,
+        address,
+        return_money,
+        account_money,
+        deposit_money,
+        cards_code,
+        exec_date,
+        task_state,
+        liable_user_id,
+        task_finish_time,
+        task_finish_note,
+        remark,
+        create_user_id,
+        create_date,
+        modify_user_id,
+        modify_date
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from public.t_cust_task
+        where task_id = #{taskId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from public.t_cust_task
+        where task_id = #{taskId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.samton.web.manage.task.bean.entity.TCustTask">
+        insert into public.t_cust_task (task_id, task_code, order_id,
+                                        cust_id, product_id, buyer_id,
+                                        order_num, unit_price, tax,
+                                        order_money, order_sn, freight_sn,
+                                        address, return_money, account_money,
+                                        deposit_money, cards_code, exec_date,
+                                        task_state, liable_user_id, task_finish_time,
+                                        task_finish_note, remark, create_user_id,
+                                        create_date, modify_user_id, modify_date)
+        values (#{taskId,jdbcType=INTEGER}, #{taskCode,jdbcType=VARCHAR}, #{orderId,jdbcType=INTEGER},
+                #{custId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{buyerId,jdbcType=INTEGER},
+                #{orderNum,jdbcType=NUMERIC}, #{unitPrice,jdbcType=NUMERIC}, #{tax,jdbcType=NUMERIC},
+                #{orderMoney,jdbcType=NUMERIC}, #{orderSn,jdbcType=VARCHAR}, #{freightSn,jdbcType=VARCHAR},
+                #{address,jdbcType=VARCHAR}, #{returnMoney,jdbcType=NUMERIC}, #{accountMoney,jdbcType=NUMERIC},
+                #{depositMoney,jdbcType=NUMERIC}, #{cardsCode,jdbcType=VARCHAR}, #{execDate,jdbcType=DATE},
+                #{taskState,jdbcType=INTEGER}, #{liableUserId,jdbcType=BIGINT}, #{taskFinishTime,jdbcType=TIMESTAMP},
+                #{taskFinishNote,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT},
+                #{createDate,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=BIGINT}, #{modifyDate,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.samton.web.manage.task.bean.entity.TCustTask">
+        insert into public.t_cust_task
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="taskId != null">
+                task_id,
+            </if>
+            <if test="taskCode != null">
+                task_code,
+            </if>
+            <if test="orderId != null">
+                order_id,
+            </if>
+            <if test="custId != null">
+                cust_id,
+            </if>
+            <if test="productId != null">
+                product_id,
+            </if>
+            <if test="buyerId != null">
+                buyer_id,
+            </if>
+            <if test="orderNum != null">
+                order_num,
+            </if>
+            <if test="unitPrice != null">
+                unit_price,
+            </if>
+            <if test="tax != null">
+                tax,
+            </if>
+            <if test="orderMoney != null">
+                order_money,
+            </if>
+            <if test="orderSn != null">
+                order_sn,
+            </if>
+            <if test="freightSn != null">
+                freight_sn,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="returnMoney != null">
+                return_money,
+            </if>
+            <if test="accountMoney != null">
+                account_money,
+            </if>
+            <if test="depositMoney != null">
+                deposit_money,
+            </if>
+            <if test="cardsCode != null">
+                cards_code,
+            </if>
+            <if test="execDate != null">
+                exec_date,
+            </if>
+            <if test="taskState != null">
+                task_state,
+            </if>
+            <if test="liableUserId != null">
+                liable_user_id,
+            </if>
+            <if test="taskFinishTime != null">
+                task_finish_time,
+            </if>
+            <if test="taskFinishNote != null">
+                task_finish_note,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="createUserId != null">
+                create_user_id,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="modifyUserId != null">
+                modify_user_id,
+            </if>
+            <if test="modifyDate != null">
+                modify_date,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="taskId != null">
+                #{taskId,jdbcType=INTEGER},
+            </if>
+            <if test="taskCode != null">
+                #{taskCode,jdbcType=VARCHAR},
+            </if>
+            <if test="orderId != null">
+                #{orderId,jdbcType=INTEGER},
+            </if>
+            <if test="custId != null">
+                #{custId,jdbcType=INTEGER},
+            </if>
+            <if test="productId != null">
+                #{productId,jdbcType=INTEGER},
+            </if>
+            <if test="buyerId != null">
+                #{buyerId,jdbcType=INTEGER},
+            </if>
+            <if test="orderNum != null">
+                #{orderNum,jdbcType=NUMERIC},
+            </if>
+            <if test="unitPrice != null">
+                #{unitPrice,jdbcType=NUMERIC},
+            </if>
+            <if test="tax != null">
+                #{tax,jdbcType=NUMERIC},
+            </if>
+            <if test="orderMoney != null">
+                #{orderMoney,jdbcType=NUMERIC},
+            </if>
+            <if test="orderSn != null">
+                #{orderSn,jdbcType=VARCHAR},
+            </if>
+            <if test="freightSn != null">
+                #{freightSn,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="returnMoney != null">
+                #{returnMoney,jdbcType=NUMERIC},
+            </if>
+            <if test="accountMoney != null">
+                #{accountMoney,jdbcType=NUMERIC},
+            </if>
+            <if test="depositMoney != null">
+                #{depositMoney,jdbcType=NUMERIC},
+            </if>
+            <if test="cardsCode != null">
+                #{cardsCode,jdbcType=VARCHAR},
+            </if>
+            <if test="execDate != null">
+                #{execDate,jdbcType=DATE},
+            </if>
+            <if test="taskState != null">
+                #{taskState,jdbcType=INTEGER},
+            </if>
+            <if test="liableUserId != null">
+                #{liableUserId,jdbcType=BIGINT},
+            </if>
+            <if test="taskFinishTime != null">
+                #{taskFinishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="taskFinishNote != null">
+                #{taskFinishNote,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="createUserId != null">
+                #{createUserId,jdbcType=BIGINT},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyUserId != null">
+                #{modifyUserId,jdbcType=BIGINT},
+            </if>
+            <if test="modifyDate != null">
+                #{modifyDate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.samton.web.manage.task.bean.entity.TCustTask">
+        update public.t_cust_task
+        <set>
+            <if test="taskCode != null">
+                task_code = #{taskCode,jdbcType=VARCHAR},
+            </if>
+            <if test="orderId != null">
+                order_id = #{orderId,jdbcType=INTEGER},
+            </if>
+            <if test="custId != null">
+                cust_id = #{custId,jdbcType=INTEGER},
+            </if>
+            <if test="productId != null">
+                product_id = #{productId,jdbcType=INTEGER},
+            </if>
+            <if test="buyerId != null">
+                buyer_id = #{buyerId,jdbcType=INTEGER},
+            </if>
+            <if test="orderNum != null">
+                order_num = #{orderNum,jdbcType=NUMERIC},
+            </if>
+            <if test="unitPrice != null">
+                unit_price = #{unitPrice,jdbcType=NUMERIC},
+            </if>
+            <if test="tax != null">
+                tax = #{tax,jdbcType=NUMERIC},
+            </if>
+            <if test="orderMoney != null">
+                order_money = #{orderMoney,jdbcType=NUMERIC},
+            </if>
+            <if test="orderSn != null">
+                order_sn = #{orderSn,jdbcType=VARCHAR},
+            </if>
+            <if test="freightSn != null">
+                freight_sn = #{freightSn,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="returnMoney != null">
+                return_money = #{returnMoney,jdbcType=NUMERIC},
+            </if>
+            <if test="accountMoney != null">
+                account_money = #{accountMoney,jdbcType=NUMERIC},
+            </if>
+            <if test="depositMoney != null">
+                deposit_money = #{depositMoney,jdbcType=NUMERIC},
+            </if>
+            <if test="cardsCode != null">
+                cards_code = #{cardsCode,jdbcType=VARCHAR},
+            </if>
+            <if test="execDate != null">
+                exec_date = #{execDate,jdbcType=DATE},
+            </if>
+            <if test="taskState != null">
+                task_state = #{taskState,jdbcType=INTEGER},
+            </if>
+            <if test="liableUserId != null">
+                liable_user_id = #{liableUserId,jdbcType=BIGINT},
+            </if>
+            <if test="taskFinishTime != null">
+                task_finish_time = #{taskFinishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="taskFinishNote != null">
+                task_finish_note = #{taskFinishNote,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="createUserId != null">
+                create_user_id = #{createUserId,jdbcType=BIGINT},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyUserId != null">
+                modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+            </if>
+            <if test="modifyDate != null">
+                modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where task_id = #{taskId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.samton.web.manage.task.bean.entity.TCustTask">
+        update public.t_cust_task
+        set task_code        = #{taskCode,jdbcType=VARCHAR},
+            order_id         = #{orderId,jdbcType=INTEGER},
+            cust_id          = #{custId,jdbcType=INTEGER},
+            product_id       = #{productId,jdbcType=INTEGER},
+            buyer_id         = #{buyerId,jdbcType=INTEGER},
+            order_num        = #{orderNum,jdbcType=NUMERIC},
+            unit_price       = #{unitPrice,jdbcType=NUMERIC},
+            tax              = #{tax,jdbcType=NUMERIC},
+            order_money      = #{orderMoney,jdbcType=NUMERIC},
+            order_sn         = #{orderSn,jdbcType=VARCHAR},
+            freight_sn       = #{freightSn,jdbcType=VARCHAR},
+            address          = #{address,jdbcType=VARCHAR},
+            return_money     = #{returnMoney,jdbcType=NUMERIC},
+            account_money    = #{accountMoney,jdbcType=NUMERIC},
+            deposit_money    = #{depositMoney,jdbcType=NUMERIC},
+            cards_code       = #{cardsCode,jdbcType=VARCHAR},
+            exec_date        = #{execDate,jdbcType=DATE},
+            task_state       = #{taskState,jdbcType=INTEGER},
+            liable_user_id   = #{liableUserId,jdbcType=BIGINT},
+            task_finish_time = #{taskFinishTime,jdbcType=TIMESTAMP},
+            task_finish_note = #{taskFinishNote,jdbcType=VARCHAR},
+            remark           = #{remark,jdbcType=VARCHAR},
+            create_user_id   = #{createUserId,jdbcType=BIGINT},
+            create_date      = #{createDate,jdbcType=TIMESTAMP},
+            modify_user_id   = #{modifyUserId,jdbcType=BIGINT},
+            modify_date      = #{modifyDate,jdbcType=TIMESTAMP}
+        where task_id = #{taskId,jdbcType=INTEGER}
+    </update>
+
+    <sql id="Base_Column_List_Vo">
+        t
+        .
+        task_id,
+        t
+        .
+        task_code,
+        t
+        .
+        order_id,
+        t
+        .
+        cust_id,
+        t
+        .
+        product_id,
+        t
+        .
+        buyer_id,
+        t
+        .
+        order_num,
+        t
+        .
+        unit_price,
+        t
+        .
+        tax,
+        t
+        .
+        order_money,
+        t
+        .
+        order_sn,
+        t
+        .
+        freight_sn,
+        t
+        .
+        address,
+        t
+        .
+        return_money,
+        t
+        .
+        account_money,
+        t
+        .
+        deposit_money,
+        t
+        .
+        cards_code,
+        t
+        .
+        exec_date,
+        t
+        .
+        task_state,
+        t
+        .
+        liable_user_id,
+        t
+        .
+        task_finish_time,
+        t
+        .
+        task_finish_note,
+        t
+        .
+        remark,
+        t
+        .
+        create_user_id,
+        t
+        .
+        create_date,
+        t
+        .
+        modify_user_id,
+        t
+        .
+        modify_date
+    </sql>
+    <sql id="queryPageList_where">
+        <if test="search != null">
+            <if test="search.custName != null and search.custName != ''">
+                and tc.cust_name like '%'||#{search.custName,jdbcType=VARCHAR}||'%'
+            </if>
+            <if test="search.itemId != null and search.itemId != ''">
+                and p.item_id like '%'||#{search.itemId,jdbcType=VARCHAR}||'%'
+            </if>
+            <if test="search.platformType != null and search.platformType != ''">
+                and p.platform_type like '%'||#{search.platformType,jdbcType=VARCHAR}||'%'
+            </if>
+            <if test="search.demandType != null">
+                and r.demand_type = #{search.demandType,jdbcType=INTEGER}
+            </if>
+            <if test="search.isClose != null">
+                and c.is_close = #{search.isClose,jdbcType=INTEGER}
+            </if>
+            <if test="search.taskEndDateBegin != null">
+                <![CDATA[ and t.task_finish_time >= #{search.taskEndDateBegin,jdbcType=TIMESTAMP} ]]>
+            </if>
+            <if test="search.taskEndDateEnd != null">
+                <![CDATA[ and t.task_finish_time <= #{search.taskEndDateEnd,jdbcType=TIMESTAMP} ]]>
+            </if>
+        </if>
+    </sql>
+    <!-- 客户授信记录分页查询 -->
+    <select id="queryPageTaskList" parameterType="com.samton.platform.framework.mybatis.pagination.Pagination"
+            resultType="com.samton.web.manage.task.bean.vo.CustTaskVo">
+        SELECT DISTINCT <include refid="Base_Column_List_Vo"/>,
+        case r.demand_type when 1 then '采购' when 2 then '刷单' end as redemand_type,
+        case c.is_close when 0 then '未还款' when 1 then '已还款' end as reis_close,
+        p.item_id,
+        p.platform_type,
+        p.accounts_name,
+        r.dollar_rate,
+        tc.cust_name,
+        c.is_close,
+        t.order_num*t.unit_price*r.dollar_rate+t.tax*r.dollar_rate as order_price
+        FROM
+        t_cust_task t
+        INNER JOIN t_customer tc ON tc.cust_id = t.cust_id
+        INNER JOIN t_cust_product p ON p.cust_id = t.cust_id and p.product_id = t.product_id
+        INNER JOIN t_cust_order r ON r.cust_id = t.cust_id
+        INNER JOIN t_cust_account_credit c ON c.cust_id = t.cust_id
+        <where>
+            <include refid="queryPageList_where"/>
+        </where>
+    </select>
+
+    <!-- 客户授信记录页面导出 -->
+    <select id="exportTaskInfoList" parameterType="com.samton.platform.framework.mybatis.pagination.Pagination"
+            resultType="java.util.Map">
+        SELECT DISTINCT <include refid="Base_Column_List_Vo"/>,
+        case r.demand_type when 1 then '采购' when 2 then '刷单' end as redemand_type,
+        case c.is_close when 0 then '未还款' when 1 then '已还款' end as reis_close,
+        p.item_id,
+        p.platform_type,
+        p.accounts_name,
+        r.dollar_rate,
+        tc.cust_name,
+        c.is_close,
+        t.order_num*t.unit_price*r.dollar_rate+t.tax*r.dollar_rate as order_price
+        FROM
+        t_cust_task t
+        INNER JOIN t_customer tc ON tc.cust_id = t.cust_id
+        INNER JOIN t_cust_product p ON p.product_id = t.product_id
+        INNER JOIN t_cust_order r ON r.cust_id = t.cust_id
+        INNER JOIN t_cust_account_credit c ON c.cust_id = t.cust_id
+        <where>
+            <include refid="queryPageList_where"/>
+        </where>
+    </select>
+
+    <!-- 客户授信记录查看-->
+    <select id="selectTaskVoById" resultType="com.samton.web.manage.task.bean.vo.CustTaskVo">
+        select
+        case r.demand_type when 1 then '采购' when 2 then '刷单' end as redemand_type,
+        t.order_num,<!-- 订单数量-->
+        t.unit_price,<!-- 商品单价-->
+        t.tax,<!-- 税收-->
+        p.item_id,<!-- 产品id-->
+        p.platform_type,<!-- 平台类型-->
+        p.accounts_name,<!-- 店铺名称-->
+        r.dollar_rate,<!-- 美元汇率-->
+        tc.cust_name,<!-- 客户名称-->
+        tc.cust_code,<!-- 客户编号-->
+        t.task_code,<!-- 任务编号-->
+        t.task_finish_time,<!-- 订单完成时间-->
+        t.order_num*t.unit_price*r.dollar_rate+t.tax*r.dollar_rate as order_price<!-- 订单金额-->
+        FROM
+        t_cust_task t
+        INNER JOIN t_customer tc ON tc.cust_id = t.cust_id
+        INNER JOIN t_cust_product p ON p.product_id = t.product_id
+        INNER JOIN t_cust_order r ON r.cust_id = t.cust_id
+        where t.task_id = #{0} and p.product_id = #{1}
+    </select>
+</mapper>

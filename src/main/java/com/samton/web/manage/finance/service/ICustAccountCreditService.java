@@ -1,0 +1,36 @@
+package com.samton.web.manage.finance.service;
+
+import com.samton.platform.common.service.ISuperIntegerService;
+import com.samton.platform.framework.mybatis.pagination.Pagination;
+import com.samton.web.manage.finance.bean.entity.TCustAccountCredit;
+import com.samton.web.manage.finance.bean.excel.CustAccountCreditEntity;
+import com.samton.web.manage.finance.bean.vo.CustAccountCreditVo;
+
+import java.util.Map;
+
+/**
+ * @Description: 客户授信记录Service
+ * @Author: ZhongShengbin
+ * @Date: 2020/04/13 17:18
+ * Copyright (c) 2019, Samton. All rights reserved
+ */
+public interface ICustAccountCreditService extends ISuperIntegerService<TCustAccountCredit> {
+    /**
+     * @description  客户授信记录分页
+     * @param  paramBean
+     */
+    public Pagination<TCustAccountCredit> queryCreditPageList(Pagination<TCustAccountCredit> paramBean) throws Exception;
+
+    /**
+     * 客户授信记录导出
+     * @param paramBean
+     */
+    public Pagination<CustAccountCreditEntity> exportCreditPageList(Pagination<TCustAccountCredit> paramBean) throws Exception;
+
+    /**
+     * 客户授信记录查看
+     * @param creditId
+     */
+    public CustAccountCreditVo selectCreditVoById(Integer creditId) throws Exception;
+
+}

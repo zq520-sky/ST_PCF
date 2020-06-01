@@ -1,0 +1,32 @@
+var index = null;
+var frameId = window.frameElement && window.frameElement.id || '';
+var custOrderAddValidate;
+
+
+//执行查询
+function doSearch() {
+    $("#pageForm").submit();
+    top.progressbar(frameId);
+}
+
+//新增充值
+function openAddPage() {
+    index = layer.open({
+        type : 1,
+        title : '新增需求订单信息',
+        move : false,
+        area : [ '820px', '600px' ], // 宽高
+        content : $('#addCustOrder'),
+        btn : [ '保存', '关闭' ],
+        yes : function(index, layero) {
+            $("#addCustOrderForm").submit();
+        },
+        close: function(index, layero){
+            layer.close(index);
+        },
+        cancel : function(index) {
+            FormUtil.resetForm("addCustOrderForm");
+            // custOrderAddValidate.resetForm();
+        }
+    });
+}

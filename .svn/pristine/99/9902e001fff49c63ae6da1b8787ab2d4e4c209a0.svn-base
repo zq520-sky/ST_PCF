@@ -1,0 +1,14 @@
+package com.samton.web.manage.order.service;
+
+import com.samton.platform.common.service.ISuperIntegerService;
+import com.samton.web.manage.order.bean.entity.TCustOrder;
+
+/**
+ * @ClassName: CustOrderService
+ * @Description:
+ * @Author: wuzhiqiang
+ * @Date: 2020-04-16 18:10
+ * @Copyright (c) 2020, Samton. All rights reserved
+ **/
+public interface CustOrderService extends ISuperIntegerService<TCustOrder> {
+}

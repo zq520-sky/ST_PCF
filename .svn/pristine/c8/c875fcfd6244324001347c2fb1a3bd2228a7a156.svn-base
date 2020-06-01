@@ -1,0 +1,76 @@
+package com.samton.web.manage.finance.service.impl;
+
+import com.samton.platform.common.service.impl.SuperServiceIntegerImpl;
+import com.samton.platform.framework.mybatis.pagination.PageContext;
+import com.samton.platform.framework.mybatis.pagination.Pagination;
+import com.samton.platform.framework.util.JsonUtil;
+import com.samton.web.manage.finance.bean.excel.CustAccountEntity;
+import com.samton.web.manage.finance.service.ICustAccountService;
+import com.samton.web.manage.finance.bean.entity.TCustAccount;
+import com.samton.web.manage.finance.bean.vo.CustAccountVo;
+import com.samton.web.manage.finance.dao.TCustAccountMapper;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @Description: 客户账户Service接口实现类
+ * @Author: YangYangen
+ * @Date: 2020/4/15 15:21
+ * Copyright (c) 2020, Samton. All rights reserved
+*/
+@Service("custAccountService")
+public class CustAccountServiceImpl extends SuperServiceIntegerImpl<TCustAccountMapper, TCustAccount> implements ICustAccountService {
+
+
+    /**
+     * 客户信息分页查询
+     * @param paramBean
+     * @return
+     */
+    @Override
+    public Pagination<CustAccountVo> queryPageCustAccountVoList(Pagination<CustAccountVo> paramBean) throws Exception {
+        Pagination<CustAccountVo> pagination = PageContext.initialize(paramBean.getPage(), paramBean.getRows());
+        List<CustAccountVo> list = mapper.queryPageCustAccountVoList(paramBean, pagination.getRowBounds());
+        pagination.setData(list);
+        return pagination;
+    }
+
+    /**
+     * 客户信息导出
+     * @param paramBean
+     * @return
+     */
+    @Override
+    public Pagination<CustAccountEntity> exportPageCustAccountVoList(Pagination<CustAccountVo> paramBean) throws Exception {
+        Pagination<CustAccountEntity> pagination = PageContext.initialize(paramBean.getPage(), paramBean.getRows());
+        List<CustAccountEntity> list = mapper.exportPageCustAccountVoList(paramBean, pagination.getRowBounds());
+        pagination.setData(list);
+        return pagination;
+    }
+
+    /**
+     * 修改客户账户
+     * @param custAccountVo
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public boolean editCustAccount(CustAccountVo custAccountVo) throws Exception{
+        return this.mapper.updateCustAccount(JsonUtil.stringify(custAccountVo)) > 0 ? true : false;
+    }
+
+    /**
+     * 查询客户账户
+     * @param accountId
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public CustAccountVo findCustAccountVoById(Integer accountId) throws Exception {
+        return this.mapper.selectCustAccountVoById(accountId);
+    }
+
+
+}

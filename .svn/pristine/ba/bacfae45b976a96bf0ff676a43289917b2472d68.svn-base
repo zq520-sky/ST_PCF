@@ -1,0 +1,163 @@
+package com.samton.web.manage.finance.controller;
+
+import com.samton.platform.framework.base.BaseController;
+import com.samton.platform.framework.constant.WebConstant;
+import com.samton.platform.framework.mybatis.pagination.Pagination;
+import com.samton.platform.framework.util.CurrentUtil;
+import com.samton.platform.pm.bean.entity.TSysLog;
+import com.samton.platform.pm.constant.PmStateConstant;
+import com.samton.platform.pm.service.ILogService;
+import com.samton.web.manage.finance.bean.entity.TCustAccountCredit;
+import com.samton.web.manage.finance.bean.vo.CustAccountCreditVo;
+import com.samton.web.manage.finance.service.ICustAccountCreditService;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @Description: 授信记录Controller
+ * @Author: ZhongShengbin
+ * @Date: 2020/04/13 16:46
+ * Copyright (c) 2019, Samton. All rights reserved
+ */
+@Controller
+@RequestMapping("/manage/finance/")
+public class CustAccountCreditController extends BaseController {
+
+    @Resource
+    ICustAccountCreditService iCustAccountCreditService;
+
+    @Resource
+    ILogService logService;
+
+    /**
+     * 客户授信记录分页
+     *
+     * @param paramBean
+     * @param custAccountCreditVo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("queryCreditInfoList" + WebConstant.PAGE_SUFFIX)
+    public String queryFinanceInfoList(Pagination<TCustAccountCredit> paramBean, CustAccountCreditVo custAccountCreditVo) throws Exception {
+
+        paramBean.setSearch(custAccountCreditVo);
+        Pagination<TCustAccountCredit> pageData = iCustAccountCreditService.queryCreditPageList(paramBean);
+        this.addAttr("pageData", pageData);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdfParse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        if (custAccountCreditVo.getCreditTimeBegin() == null) {
+            custAccountCreditVo.setCreditTimeBegin(sdfParse.parse(sdf.format(System.currentTimeMillis()) + " 00:00"));
+        }
+        if (custAccountCreditVo.getCreditTimeEnd() == null) {
+            custAccountCreditVo.setCreditTimeEnd(sdfParse.parse(sdf.format(System.currentTimeMillis()) + " 23:59"));
+        }
+        return "finance/custCreditManage";
+    }
+    /**
+     * 客户授信记录导出
+     * @param paramBean
+     * @param custAccountCreditVo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/exportCreditInfoList" + WebConstant.BUSINESS_SUFFIX)
+    public String exportCreditInfoList(Pagination<TCustAccountCredit> paramBean, CustAccountCreditVo custAccountCreditVo) throws Exception {
+        paramBean.setSearch(custAccountCreditVo);
+        Pagination<Map<String, Object>> pageData = iCustAccountCreditService.exportCreditPageList(paramBean);
+        logService.addLog(new TSysLog("客户授信记录-导出", "导出客户授信记录！", PmStateConstant.LOG_PLATFORM));
+        String title = "客户编号,客户名称,所属公司,操作前授信余额,操作后授信余额,授信金额（元）,授信时间";
+        List<String> colNames = new ArrayList<String>();
+        colNames.add("cust_code");
+        colNames.add("cust_name");
+        colNames.add("company_name");
+        colNames.add("before_credit_money");
+        colNames.add("after_credit_money");
+        colNames.add("credit_money");
+        colNames.add("credit_time");
+        this.export(response,"客户授信记录" + String.format("%1$tY%1$tm%1$td", new Date()), title, colNames, pageData);
+        return null;
+    }
+
+    /**
+     * 客户授信记录查看
+     * @param creditId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/viewCreditInfoList" + WebConstant.BUSINESS_SUFFIX)
+    @ResponseBody
+    public Map<String, Object> viewFinance(Integer creditId) throws Exception {
+        CustAccountCreditVo custAccountCreditVo = iCustAccountCreditService.selectCreditVoById(creditId);
+        return this.getResultMap(true, custAccountCreditVo);
+    }
+
+    /**
+     * 客户授信记录分页(客户端)
+     *
+     * @param paramBean
+     * @param custAccountCreditVo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("queryCreditInfoListByCustId" + WebConstant.PAGE_SUFFIX)
+    public String queryFinanceInfoListByCustId(Pagination<TCustAccountCredit> paramBean, CustAccountCreditVo custAccountCreditVo) throws Exception {
+        custAccountCreditVo.setCustId(CurrentUtil.getCurrentUser().getEnterpriseId());
+        paramBean.setSearch(custAccountCreditVo);
+        Pagination<TCustAccountCredit> pageData = iCustAccountCreditService.queryCreditPageList(paramBean);
+        this.addAttr("pageData", pageData);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdfParse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        if (custAccountCreditVo.getCreditTimeBegin() == null) {
+            custAccountCreditVo.setCreditTimeBegin(sdfParse.parse(sdf.format(System.currentTimeMillis()) + " 00:00"));
+        }
+        if (custAccountCreditVo.getCreditTimeEnd() == null) {
+            custAccountCreditVo.setCreditTimeEnd(sdfParse.parse(sdf.format(System.currentTimeMillis()) + " 23:59"));
+        }
+        return "finance/custCreditManageCust";
+    }
+    /**
+     * 客户授信记录导出(客户端)
+     * @param paramBean
+     * @param custAccountCreditVo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/exportCreditInfoListByCustId" + WebConstant.BUSINESS_SUFFIX)
+    public String exportCreditInfoListByCustId(Pagination<TCustAccountCredit> paramBean, CustAccountCreditVo custAccountCreditVo) throws Exception {
+        custAccountCreditVo.setCustId(CurrentUtil.getCurrentUser().getEnterpriseId());
+        paramBean.setSearch(custAccountCreditVo);
+        Pagination<Map<String, Object>> pageData = iCustAccountCreditService.exportCreditPageList(paramBean);
+        logService.addLog(new TSysLog(3,"客户授信记录-导出", "导出客户授信记录！"));
+        String title = "客户编号,客户名称,所属公司,操作前授信余额,操作后授信余额,授信金额（元）,授信时间";
+        List<String> colNames = new ArrayList<String>();
+        colNames.add("cust_code");
+        colNames.add("cust_name");
+        colNames.add("company_name");
+        colNames.add("before_credit_money");
+        colNames.add("after_credit_money");
+        colNames.add("credit_money");
+        colNames.add("credit_time");
+        this.export(response,"客户授信记录" + String.format("%1$tY%1$tm%1$td", new Date()), title, colNames, pageData);
+        return null;
+    }
+
+    /**
+     * 客户授信记录查看(客户端)
+     * @param creditId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/viewCreditInfoListByCreditId" + WebConstant.BUSINESS_SUFFIX)
+    @ResponseBody
+    public Map<String, Object> viewFinanceByCustId(Integer creditId) throws Exception {
+        CustAccountCreditVo custAccountCreditVo = iCustAccountCreditService.selectCreditVoById(creditId);
+        return this.getResultMap(true, custAccountCreditVo);
+    }
+}

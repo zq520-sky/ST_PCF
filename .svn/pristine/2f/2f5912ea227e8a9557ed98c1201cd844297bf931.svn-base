@@ -1,0 +1,95 @@
+package com.samton.web.manage.finance.service.impl;
+
+import com.samton.platform.common.service.impl.SuperServiceIntegerImpl;
+import com.samton.platform.common.util.IdGen;
+import com.samton.platform.framework.bean.UserCacheBean;
+import com.samton.platform.framework.mybatis.pagination.PageContext;
+import com.samton.platform.framework.mybatis.pagination.Pagination;
+import com.samton.platform.framework.util.BASE64DecodedMultipartFile;
+import com.samton.platform.framework.util.CurrentUtil;
+import com.samton.platform.framework.util.FileUtils;
+import com.samton.platform.pm.bean.entity.TSysPmUser;
+import com.samton.platform.pm.dao.TSysPmUserMapper;
+import com.samton.web.manage.finance.bean.entity.TCustDepositOrder;
+import com.samton.web.manage.finance.bean.vo.CustAccountVo;
+import com.samton.web.manage.finance.bean.vo.CustDepositOrderVo;
+import com.samton.web.manage.finance.dao.TCustAccountMapper;
+import com.samton.web.manage.finance.dao.TCustDepositOrderMapper;
+import com.samton.web.manage.finance.service.ICustDepositOrderService;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @Description: 客户充值记录Impl
+ * @Author: ZhongShengbin
+ * @Date: 2020/04/10 16:01
+ * Copyright (c) 2019, Samton. All rights reserved
+ */
+@Service("custDepositOrderService")
+public class CustDepositOrderServiceImpl extends SuperServiceIntegerImpl<TCustDepositOrderMapper, TCustDepositOrder> implements ICustDepositOrderService {
+
+    @Resource
+    private TSysPmUserMapper tSysPmUserMapper;
+
+    @Resource
+    private TCustAccountMapper tCustAccountMapper;
+    /**
+     *客户账户管理分页查询
+     * @param paramBean
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public Pagination<CustDepositOrderVo> queryChargePageList(Pagination<CustDepositOrderVo> paramBean) throws Exception {
+        Pagination<CustDepositOrderVo> pagination = PageContext.initialize(paramBean.getPage(), paramBean.getRows());
+        List<CustDepositOrderVo> list = mapper.queryPageChargeList(paramBean, pagination.getRowBounds());
+        pagination.setData(list);
+        return pagination;
+    }
+
+    @Override
+    public Pagination<Map<String, Object>> exportOrderPageList(Pagination<TCustDepositOrder> paramBean) throws Exception {
+        Pagination<Map<String, Object>> pagination = PageContext.initialize(paramBean.getPage(), paramBean.getRows());
+        List<Map<String, Object>> list = mapper.exportOrderInfoList(paramBean, pagination.getRowBounds());
+        pagination.setData(list);
+        return pagination;
+    }
+
+    @Override
+    public CustDepositOrderVo selectFinanceVoById(Integer orderId) throws Exception {
+            return this.mapper.selectFinanceVoById(orderId);
+    }
+
+    @Override
+    public String addCustRegisterOrder(CustDepositOrderVo custDepositOrderVo) throws Exception {
+        MultipartFile multipartFile = BASE64DecodedMultipartFile.base64ToMultipart(custDepositOrderVo.getFile());
+        Map<String, String> imageData = FileUtils.imageTo(multipartFile, "payImage");
+        custDepositOrderVo.setPayImage(imageData.get("attachmentPath"));
+        custDepositOrderVo.setOrderCode(IdGen.getBusinessCode("CZ"));
+        custDepositOrderVo.setRechargeType(0);
+        custDepositOrderVo.setApproveState(0);
+        custDepositOrderVo.setPayStatus(0);
+        UserCacheBean currentUser = CurrentUtil.getCurrentUser();
+        Date currentDate = new Date();
+        custDepositOrderVo.setCreateUserId(currentUser.getUserId());
+        custDepositOrderVo.setCreateDate(currentDate);
+        custDepositOrderVo.setModifyUserId(currentUser.getUserId());
+        custDepositOrderVo.setModifyDate(currentDate);
+        TSysPmUser tSysPmUser = tSysPmUserMapper.selectByPrimaryKey(currentUser.getUserId());
+        Integer custId = tSysPmUser.getCustId();
+        custDepositOrderVo.setCustId(custId);
+        CustAccountVo custAccountVo = tCustAccountMapper.selectByCustId(custId);
+        BigDecimal accountMoney = custAccountVo.getAccountMoney();
+        custDepositOrderVo.setAccountId(custAccountVo.getAccountId());
+        custDepositOrderVo.setBeforeAccountMoney(accountMoney);
+        custDepositOrderVo.setAfterAccountMoney(accountMoney.add(custDepositOrderVo.getRechargeMoney()));
+        int insert = mapper.insertSelective(custDepositOrderVo);
+        return insert > 0 ? custDepositOrderVo.getOrderCode() : "";
+    }
+}

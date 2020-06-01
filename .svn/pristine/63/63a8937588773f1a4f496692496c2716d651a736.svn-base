@@ -1,0 +1,95 @@
+package com.samton.web.manage.order.service;
+
+import com.samton.platform.common.service.ISuperIntegerService;
+import com.samton.platform.framework.mybatis.pagination.Pagination;
+import com.samton.web.manage.order.bean.entity.TCustOrder;
+import com.samton.web.manage.order.bean.excel.CustOrderExcel;
+import com.samton.web.manage.order.bean.vo.CustOrderDto;
+import com.samton.web.manage.order.bean.vo.CustOrderVo;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+
+import java.util.Map;
+
+/**
+ * @ClassName: ICustOrderService
+ * @Description:
+ * @Author: wuzhiqiang
+ * @Date: 2020-04-16 18:10
+ * @Copyright (c) 2020, Samton. All rights reserved
+ **/
+public interface ICustOrderService extends ISuperIntegerService<TCustOrder> {
+
+    /**
+     * 查询需求订单
+     * @author: wuzhiqiang
+     * @date: 2020/4/21
+     * @param paramBean:
+     * @return: com.samton.platform.framework.mybatis.pagination.Pagination<com.samton.web.manage.order.bean.vo.CustOrderVo>
+     */
+    Pagination<CustOrderVo> queryOrderPageList(Pagination<CustOrderVo> paramBean) throws Exception;
+
+    /**
+     * 导出需求订单
+     * @author: wuzhiqiang
+     * @date: 2020/4/21
+     * @param paramBean:
+     * @return: com.samton.platform.framework.mybatis.pagination.Pagination<com.samton.web.manage.order.bean.vo.CustOrderVo>
+     */
+    Pagination<CustOrderExcel> exportOrderPageList(Pagination<CustOrderVo> paramBean) throws Exception;
+
+    /**
+     *
+     * @author: wuzhiqiang
+     * @date: 2020/4/21
+     * @param orderId:
+     * @return: com.samton.web.manage.order.bean.vo.CustOrderVo
+     */
+    CustOrderVo selectCustOrderById(Integer orderId) throws Exception;
+    
+    /**
+     *
+     * @author: wuzhiqiang
+     * @date: 2020/4/21
+     * @param file: 
+     * @param type: 1-管理端 2-客户端
+     * @return: void
+     */
+    Map<String, String> importOrders(CommonsMultipartFile file, Integer type) throws Exception;
+
+    /**
+     *
+     * @author: wuzhiqiang
+     * @date: 2020/4/22
+     * @param custOrderDto: 
+     * @return: java.lang.String
+     */
+    String addCustOrder(CustOrderDto custOrderDto) throws  Exception;
+
+    /**
+     * 更新需求订单信息
+     * @author: wuzhiqiang
+     * @date: 2020/4/23
+     * @param custOrderDto:
+     * @return: boolean
+     */
+    String updateCustOrder(CustOrderDto custOrderDto) throws Exception;
+
+    /**
+     * 取消订单
+     * @author: wuzhiqiang
+     * @date: 2020/4/24
+     * @param orderId:
+     * @return: boolean
+     */
+    boolean cancel(Integer orderId) throws Exception;
+
+    /**
+     * 删除需求订单
+     * @author: wuzhiqiang
+     * @date: 2020/4/24
+     * @param orderId:
+     * @return: boolean
+     */
+    boolean del(Integer orderId) throws Exception;
+
+}

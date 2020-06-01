@@ -1,0 +1,74 @@
+var index = null;
+var frameId = window.frameElement && window.frameElement.id || '';
+
+
+//执行查询
+function doSearch() {
+	$("#pageForm").submit();
+	top.progressbar(frameId);
+}
+
+//打开查看页面
+function viewPage(id) {
+	if (Number(id)) {
+		$.ajax({
+			url : ctx.path + '/manage/task/viewCustTaskInfo' + ctx.bizSuffix,
+			async : true,
+			dataType : 'json',
+			type : 'POST',
+			data : {taskId : id},
+			success : function(data) {
+				if (data.rs== -1) {
+					top.toastr.error("获取数据信息失败");
+					return false;
+				}
+				//返回的map对象参数
+				var dataRet = data.data;
+				//对页面属性赋值（要求页面id与map的key值保持一致）
+				var cust = dataRet.cust;
+				var order = dataRet.order;
+				var task = dataRet.task;
+				var product = dataRet.product;
+				var account = dataRet.account;
+				var buyer = dataRet.buyer;
+
+				for (var key in dataRet) {
+					$("#viewId #"+ key +"View").text(dataRet[key]);
+				}
+				for (var key in cust) {
+					$("#viewId #"+ key +"View").text(cust[key]);
+				}
+				for (var key in order) {
+					$("#viewId #"+ key +"View").text(order[key]);
+				}
+				for (var key in task) {
+					$("#viewId #"+ key +"View").text(task[key]);
+				}
+				for (var key in product) {
+					$("#viewId #"+ key +"View").text(product[key]);
+				}
+				for (var key in buyer) {
+					$("#viewId #"+ key +"View").text(buyer[key]);
+				}
+				for (var key in account) {
+					$("#viewId #"+ key +"View").text(account[key]);
+				}
+
+				parentIndex = layer.open({
+					title : '查看任务信息',
+					type : 1,
+					area : [ '60%', '98%' ], //宽高
+					content : $('#viewId'),
+					btn : [ '关闭' ],
+					cancel : function(index) {
+					}
+				});
+			},
+			error : function(jqXHR, textStatus, errorThrown) {
+				top.toastr.error("操作失败");
+			}
+		});
+	} else {
+		top.toastr.error("数据异常！");
+	}
+}

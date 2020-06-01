@@ -1,0 +1,10 @@
+package com.samton.web.manage.finance.controller;
+
+/**
+ * @Description: 授信记录Controller
+ * @Author: ZhongShengbin
+ * @Date: 2020/04/13 16:46
+ * Copyright (c) 2019, Samton. All rights reserved
+ */
+public class CustAccountCreditController {
+}

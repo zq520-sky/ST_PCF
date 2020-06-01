@@ -1,0 +1,317 @@
+var index = null;
+var frameId = window.frameElement && window.frameElement.id || '';
+var editValidate;
+$(function() {
+	//编辑校验
+	editValidate = $("#editForm").validate({
+		rules : {
+			"task.orderNum" : {
+				required : true,
+				negative : true
+			},
+			"task.tax" : {
+				positivefloat : true
+			},
+			"buyer.buyerCode" : {
+				required : true
+			},
+			"task.depositMoney" : {
+				money : true
+			}
+		},
+		messages : {
+			"task.orderNum" : {
+				required : "请输入订单数量！",
+				negative : "请输入正确的订单数量！"
+			},
+			"task.tax" : {
+				positivefloat : "请输入正确的税收！"
+			},
+			"buyer.buyerCode" : {
+				required : "请输入买家账号！"
+			},
+			"task.depositMoney" : {
+				money : "请输入正确的应充金额！"
+			}
+		},
+		submitHandler : function(form) {
+			$(form).ajaxSubmit({
+				//表单提交成功后的回调
+				success : function(responseText, statusText, xhr, $form) {
+					if (responseText.rs > 0) {
+						top.toastr.success("编辑客户信息【" + $("#custNameEdit").val() + "】成功！");
+						FormUtil.resetForm("editForm");
+						doSearch();
+						layer.close(index); //再执行关闭
+					}
+				}
+			});
+		}
+	});
+});
+
+//执行查询
+function doSearch() {
+	$("#pageForm").submit();
+	top.progressbar(frameId);
+}
+
+//打开查看页面
+function viewPage(id) {
+	if (Number(id)) {
+		$.ajax({
+			url : ctx.path + '/manage/task/viewCustTaskInfo' + ctx.bizSuffix,
+			async : true,
+			dataType : 'json',
+			type : 'POST',
+			data : {taskId : id},
+			success : function(data) {
+				if (data.rs== -1) {
+					top.toastr.error("获取数据信息失败");
+					return false;
+				}
+				//返回的map对象参数
+				var dataRet = data.data;
+				//对页面属性赋值（要求页面id与map的key值保持一致）
+				var cust = dataRet.cust;
+				var order = dataRet.order;
+				var task = dataRet.task;
+				var product = dataRet.product;
+				var account = dataRet.account;
+				var buyer = dataRet.buyer;
+
+				for (var key in dataRet) {
+					$("#viewId #"+ key +"View").text(dataRet[key]);
+				}
+				for (var key in cust) {
+					$("#viewId #"+ key +"View").text(cust[key]);
+				}
+				for (var key in order) {
+					$("#viewId #"+ key +"View").text(order[key]);
+				}
+				for (var key in task) {
+					$("#viewId #"+ key +"View").text(task[key]);
+				}
+				for (var key in product) {
+					$("#viewId #"+ key +"View").text(product[key]);
+				}
+				for (var key in buyer) {
+					$("#viewId #"+ key +"View").text(buyer[key]);
+				}
+				for (var key in account) {
+					$("#viewId #"+ key +"View").text(account[key]);
+				}
+
+				parentIndex = layer.open({
+					title : '查看任务信息',
+					type : 1,
+					area : [ '60%', '98%' ], //宽高
+					content : $('#viewId'),
+					btn : [ '关闭' ],
+					cancel : function(index) {
+					}
+				});
+			},
+			error : function(jqXHR, textStatus, errorThrown) {
+				top.toastr.error("操作失败");
+			}
+		});
+	} else {
+		top.toastr.error("数据异常！");
+	}
+}
+
+
+
+function viewCustPage(id) {
+	if (Number(id)) {
+		$.ajax({
+			url : ctx.path + '/manage/task/viewCustTaskInfoByCustId' + ctx.bizSuffix,
+			async : true,
+			dataType : 'json',
+			type : 'POST',
+			data : {taskId : id},
+			success : function(data) {
+				if (data.rs== -1) {
+					top.toastr.error("获取数据信息失败");
+					return false;
+				}
+				//返回的map对象参数
+				var dataRet = data.data;
+				//对页面属性赋值（要求页面id与map的key值保持一致）
+				var cust = dataRet.cust;
+				var order = dataRet.order;
+				var task = dataRet.task;
+				var product = dataRet.product;
+				var account = dataRet.account;
+				var buyer = dataRet.buyer;
+
+				for (var key in dataRet) {
+					$("#viewId #"+ key +"View").text(dataRet[key]);
+				}
+				for (var key in cust) {
+					$("#viewId #"+ key +"View").text(cust[key]);
+				}
+				for (var key in order) {
+					$("#viewId #"+ key +"View").text(order[key]);
+				}
+				for (var key in task) {
+					$("#viewId #"+ key +"View").text(task[key]);
+				}
+				for (var key in product) {
+					$("#viewId #"+ key +"View").text(product[key]);
+				}
+				for (var key in buyer) {
+					$("#viewId #"+ key +"View").text(buyer[key]);
+				}
+				for (var key in account) {
+					$("#viewId #"+ key +"View").text(account[key]);
+				}
+
+				parentIndex = layer.open({
+					title : '查看任务信息',
+					type : 1,
+					area : [ '60%', '98%' ], //宽高
+					content : $('#viewId'),
+					btn : [ '关闭' ],
+					cancel : function(index) {
+					}
+				});
+			},
+			error : function(jqXHR, textStatus, errorThrown) {
+				top.toastr.error("操作失败");
+			}
+		});
+	} else {
+		top.toastr.error("数据异常！");
+	}
+}
+
+//计算订单总额
+function calcOrderMoney(){
+	debugger;
+	var orderNumNew = $("#editId #orderNumEdit").val();
+	var taxNew = $("#editId #taxEdit").val();
+
+	var demandType = $("#editId #demandTypeCnEdit").text();
+	var unitPrice = $("#editId #unitPriceEdit").text();
+	var dollarRate = $("#editId #dollarRateEdit").text();
+	var cycle = $("#editId #cycleEdit").text();
+	var frequency = $("#editId #frequencyEdit").text();
+
+	/**
+	 * 订单金额(元)，每次编辑时需要再计算
+	 * 刷单订单金额(元)=刷单数量（默认为1）*商品单价*美元汇率*刷单周期*刷单频次
+	 * 采购订单金额(元)=(订单单价*订单数量+税收)*美元汇率
+	 */
+	if(demandType == '采购'){
+		var orderMoney = ((unitPrice * orderNumNew) + taxNew) * dollarRate;
+		$("#editId #orderMoneyEdit").text(orderMoney.toFixed(2));
+		$("#editId #orderMoneyEditHid").val(orderMoney.toFixed(2));
+
+	}else if(demandType == '刷单'){
+		var orderMoney = orderNumNew * unitPrice * dollarRate * cycle * frequency;
+		$("#editId #orderMoneyEdit").text(orderMoney.toFixed(2));
+		$("#editId #orderMoneyEditHid").val(orderMoney.toFixed(2));
+	}
+}
+
+$(function() {
+	//订单数量修改后触发
+	$("#editId #orderNumEdit").blur(function () {
+		if(!$("#editForm").valid()){
+			return false;
+		}
+		calcOrderMoney();
+	});
+
+	//税收修改后触发
+	$("#editId #taxEdit").blur(function () {
+		calcOrderMoney();
+	});
+
+	//买家账号修改后触发
+	$("#editId #buyerCodeEdit").blur(function () {
+		alert("11111");
+	});
+});
+
+//打开编辑页面
+function editPage(id) {
+	if (Number(id)) {
+		$.ajax({
+			url : ctx.path + '/manage/task/viewCustTaskInfo' + ctx.bizSuffix,
+			async : true,
+			dataType : 'json',
+			type : 'POST',
+			data : {taskId : id},
+			success : function(data) {
+				if (data.rs== -1) {
+					top.toastr.error("获取数据信息失败");
+					return false;
+				}
+				//返回的map对象参数
+				var dataRet = data.data;
+				//对页面属性赋值（要求页面id与map的key值保持一致）
+				var cust = dataRet.cust;
+				var order = dataRet.order;
+				var task = dataRet.task;
+				var product = dataRet.product;
+				var account = dataRet.account;
+				var buyer = dataRet.buyer;
+
+				for (var key in dataRet) {
+					$("#editId #"+ key +"Edit").text(dataRet[key]);
+				}
+				for (var key in cust) {
+					$("#editId #"+ key +"Edit").text(cust[key]);
+				}
+				for (var key in order) {
+					$("#editId #"+ key +"Edit").text(order[key]);
+				}
+				for (var key in task) {
+					$("#editId #"+ key +"Edit").text(task[key]);
+				}
+				for (var key in product) {
+					$("#editId #"+ key +"Edit").text(product[key]);
+				}
+				for (var key in buyer) {
+					$("#editId #"+ key +"Edit").text(buyer[key]);
+				}
+				for (var key in account) {
+					$("#editId #"+ key +"Edit").text(account[key]);
+				}
+
+				$("#editId #taskIdEdit").val(task.taskId);
+				$("#editId #orderNumEdit").val(task.orderNum);
+				$("#editId #taxEdit").val(task.tax);
+				$("#editId #orderMoneyEditHid").val(task.orderMoney);
+				$("#editId #buyerCodeEdit").val(buyer.buyerCode);
+				$("#editId #buyerIdEditHid").val(buyer.buyerId);
+				$("#editId #depositMoneyEdit").val(task.depositMoney);
+				$("#editId #taskRemarkEdit").val(task.taskRemark);
+
+
+				parentIndex = layer.open({
+					title : '编辑任务信息',
+					type : 1,
+					area : [ '60%', '98%' ], //宽高
+					btn : [ '保存', '关闭' ],
+					yes : function(index, layero) {
+						$("#editForm").submit();
+					},
+					content : $('#editId'),
+					cancel : function(index) {
+						FormUtil.resetForm("editForm");
+						editValidate.resetForm();
+					}
+				});
+			},
+			error : function(jqXHR, textStatus, errorThrown) {
+				top.toastr.error("操作失败");
+			}
+		});
+	} else {
+		top.toastr.error("数据异常！");
+	}
+}

@@ -1,0 +1,29 @@
+package com.samton.web.manage.finance.service;
+
+import com.samton.platform.common.service.ISuperIntegerService;
+import com.samton.platform.framework.mybatis.pagination.Pagination;
+import com.samton.web.manage.finance.bean.entity.TCustAccountReturn;
+import com.samton.web.manage.finance.bean.vo.CustAccountReturnVo;
+import java.util.Map;
+
+public interface ICustAccountReturnService extends ISuperIntegerService<TCustAccountReturn> {
+
+    /**
+     * 客户还款记录分页查询
+     * @param paramBean
+     * @return
+     */
+    public Pagination<TCustAccountReturn> queryReturnPageList(Pagination<TCustAccountReturn> paramBean) throws Exception;
+
+    /**
+     * 客户还款记录导出
+     * @param paramBean
+     */
+    public Pagination<Map<String, Object>> exportReturnPageList(Pagination<TCustAccountReturn> paramBean) throws Exception;
+
+    /**
+     * 客户还款记录查看
+     * @param custId
+     */
+    public CustAccountReturnVo selectReturnVoById(Integer custId) throws Exception;
+}

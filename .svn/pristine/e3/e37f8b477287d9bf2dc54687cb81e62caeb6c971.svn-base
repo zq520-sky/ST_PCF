@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.samton.web.manage.finance.dao.TCustAccountCreditMapper" >
+  <resultMap id="BaseResultMap" type="com.samton.web.manage.finance.bean.entity.TCustAccountCredit" >
+    <id column="credit_id" property="creditId" jdbcType="INTEGER" />
+    <result column="account_id" property="accountId" jdbcType="INTEGER" />
+    <result column="cust_id" property="custId" jdbcType="INTEGER" />
+    <result column="credit_money" property="creditMoney" jdbcType="NUMERIC" />
+    <result column="before_credit_money" property="beforeCreditMoney" jdbcType="NUMERIC" />
+    <result column="after_credit_money" property="afterCreditMoney" jdbcType="NUMERIC" />
+    <result column="credit_time" property="creditTime" jdbcType="TIMESTAMP" />
+    <result column="is_close" property="isClose" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="BIGINT" />
+    <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    credit_id, account_id, cust_id, credit_money, before_credit_money, after_credit_money, 
+    credit_time, is_close, remark, create_user_id, create_date, modify_user_id, modify_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from public.t_cust_account_credit
+    where credit_id = #{creditId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from public.t_cust_account_credit
+    where credit_id = #{creditId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.samton.web.manage.finance.bean.entity.TCustAccountCredit" >
+    insert into public.t_cust_account_credit (credit_id, account_id, cust_id, 
+      credit_money, before_credit_money, after_credit_money, 
+      credit_time, is_close, remark, 
+      create_user_id, create_date, modify_user_id, 
+      modify_date)
+    values (#{creditId,jdbcType=INTEGER}, #{accountId,jdbcType=INTEGER}, #{custId,jdbcType=INTEGER}, 
+      #{creditMoney,jdbcType=NUMERIC}, #{beforeCreditMoney,jdbcType=NUMERIC}, #{afterCreditMoney,jdbcType=NUMERIC}, 
+      #{creditTime,jdbcType=TIMESTAMP}, #{isClose,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+      #{createUserId,jdbcType=BIGINT}, #{createDate,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=BIGINT}, 
+      #{modifyDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.samton.web.manage.finance.bean.entity.TCustAccountCredit" >
+    insert into public.t_cust_account_credit
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="creditId != null" >
+        credit_id,
+      </if>
+      <if test="accountId != null" >
+        account_id,
+      </if>
+      <if test="custId != null" >
+        cust_id,
+      </if>
+      <if test="creditMoney != null" >
+        credit_money,
+      </if>
+      <if test="beforeCreditMoney != null" >
+        before_credit_money,
+      </if>
+      <if test="afterCreditMoney != null" >
+        after_credit_money,
+      </if>
+      <if test="creditTime != null" >
+        credit_time,
+      </if>
+      <if test="isClose != null" >
+        is_close,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id,
+      </if>
+      <if test="modifyDate != null" >
+        modify_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="creditId != null" >
+        #{creditId,jdbcType=INTEGER},
+      </if>
+      <if test="accountId != null" >
+        #{accountId,jdbcType=INTEGER},
+      </if>
+      <if test="custId != null" >
+        #{custId,jdbcType=INTEGER},
+      </if>
+      <if test="creditMoney != null" >
+        #{creditMoney,jdbcType=NUMERIC},
+      </if>
+      <if test="beforeCreditMoney != null" >
+        #{beforeCreditMoney,jdbcType=NUMERIC},
+      </if>
+      <if test="afterCreditMoney != null" >
+        #{afterCreditMoney,jdbcType=NUMERIC},
+      </if>
+      <if test="creditTime != null" >
+        #{creditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isClose != null" >
+        #{isClose,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyDate != null" >
+        #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.samton.web.manage.finance.bean.entity.TCustAccountCredit" >
+    update public.t_cust_account_credit
+    <set >
+      <if test="accountId != null" >
+        account_id = #{accountId,jdbcType=INTEGER},
+      </if>
+      <if test="custId != null" >
+        cust_id = #{custId,jdbcType=INTEGER},
+      </if>
+      <if test="creditMoney != null" >
+        credit_money = #{creditMoney,jdbcType=NUMERIC},
+      </if>
+      <if test="beforeCreditMoney != null" >
+        before_credit_money = #{beforeCreditMoney,jdbcType=NUMERIC},
+      </if>
+      <if test="afterCreditMoney != null" >
+        after_credit_money = #{afterCreditMoney,jdbcType=NUMERIC},
+      </if>
+      <if test="creditTime != null" >
+        credit_time = #{creditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isClose != null" >
+        is_close = #{isClose,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyDate != null" >
+        modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where credit_id = #{creditId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.samton.web.manage.finance.bean.entity.TCustAccountCredit" >
+    update public.t_cust_account_credit
+    set account_id = #{accountId,jdbcType=INTEGER},
+      cust_id = #{custId,jdbcType=INTEGER},
+      credit_money = #{creditMoney,jdbcType=NUMERIC},
+      before_credit_money = #{beforeCreditMoney,jdbcType=NUMERIC},
+      after_credit_money = #{afterCreditMoney,jdbcType=NUMERIC},
+      credit_time = #{creditTime,jdbcType=TIMESTAMP},
+      is_close = #{isClose,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      modify_date = #{modifyDate,jdbcType=TIMESTAMP}
+    where credit_id = #{creditId,jdbcType=INTEGER}
+  </update>
+
+    <sql id="Base_Column_List_Vo" >
+        c.credit_id, c.account_id, c.cust_id, c.credit_money, c.before_credit_money, c.after_credit_money,
+        c.credit_time, c.is_close, c.remark, c.create_user_id, c.create_date, c.modify_user_id, c.modify_date
+    </sql>
+
+  <sql id="queryPageList_where">
+    <if test="search != null">
+      <if test="search.custName != null and search.custName != ''">
+        and tc.cust_name like '%'||#{search.custName,jdbcType=VARCHAR}||'%'
+      </if>
+      <if test="search.companyName != null and search.companyName != ''">
+        and tc.company_name like '%'||#{search.companyName,jdbcType=VARCHAR}||'%'
+      </if>
+      <if test="search.creditTimeBegin != null">
+        <![CDATA[ and c.credit_time >= #{search.creditTimeBegin,jdbcType=TIMESTAMP} ]]>
+      </if>
+      <if test="search.creditTimeEnd != null">
+        <![CDATA[ and c.credit_time <= #{search.creditTimeEnd,jdbcType=TIMESTAMP} ]]>
+      </if>
+    </if>
+  </sql>
+    <!-- 客户授信记录分页查询 -->
+    <select id="queryPageCreditList" parameterType="com.samton.platform.framework.mybatis.pagination.Pagination" resultType="com.samton.web.manage.finance.bean.vo.CustAccountCreditVo">
+        SELECT <include refid="Base_Column_List_Vo" />,
+        tc.cust_code,
+        tc.cust_name,
+        tc.company_name
+        FROM
+        t_cust_account_credit c
+        INNER JOIN t_customer tc ON c.cust_id = tc.cust_id
+        <where>
+            <include refid="queryPageList_where" />
+        </where>
+    </select>
+
+    <!-- 客户授信记录页面导出 -->
+    <select id="exportCreditInfoList" parameterType="com.samton.platform.framework.mybatis.pagination.Pagination" resultType="java.util.Map">
+        select <include refid="Base_Column_List_Vo"/>,
+        tc.cust_code,
+        tc.cust_name,
+        tc.company_name
+        from
+        t_cust_account_credit c
+        INNER join t_customer tc on c.cust_id = tc.cust_id
+        <where>
+            <include refid="queryPageList_where" />
+        </where>
+    </select>
+
+    <!-- 客户授信记录查看-->
+    <select id="selectCreditVoById" parameterType="java.lang.Integer" resultType="com.samton.web.manage.finance.bean.vo.CustAccountCreditVo">
+        select
+        <include refid="Base_Column_List_Vo"/>,
+        tc.cust_code,
+        tc.cust_name,
+        a.dollar_rate,
+        tc.company_name
+        from t_cust_account_credit c
+        INNER join t_cust_account a on c.cust_id = a.cust_id
+        INNER join t_customer tc on c.cust_id = tc.cust_id
+        where c.credit_id = #{creditId,jdbcType=INTEGER}
+    </select>
+</mapper>

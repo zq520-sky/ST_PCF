@@ -1,0 +1,102 @@
+package com.samton.web.manage.finance.controller;
+
+import com.samton.platform.framework.base.BaseController;
+import com.samton.platform.framework.constant.WebConstant;
+import com.samton.platform.framework.mybatis.pagination.Pagination;
+import com.samton.platform.pm.bean.entity.TSysLog;
+import com.samton.platform.pm.constant.PmStateConstant;
+import com.samton.platform.pm.service.ILogService;
+import com.samton.web.manage.finance.bean.entity.TCustAccountReturn;
+import com.samton.web.manage.finance.bean.vo.CustAccountReturnVo;
+import com.samton.web.manage.finance.service.ICustAccountReturnService;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @Description: 还款记录控制类
+ * @Author: ZhongShengbin
+ * @Date: 2020/04/14 19:14
+ * Copyright (c) 2019, Samton. All rights reserved
+ */
+@Controller
+@RequestMapping("/manage/finance")
+public class CustAccountReturnController extends BaseController {
+
+    @Resource
+    ICustAccountReturnService iCustAccountReturnService;
+
+    @Resource
+    ILogService logService;
+
+    /**
+     * 客户授信记录分页
+     *
+     * @param paramBean
+     * @param custAccountReturnVo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("queryReturnInfoList" + WebConstant.PAGE_SUFFIX)
+    public String queryReturnInfoList(Pagination<TCustAccountReturn> paramBean, CustAccountReturnVo custAccountReturnVo) throws Exception {
+
+        paramBean.setSearch(custAccountReturnVo);
+        Pagination<TCustAccountReturn> pageData = iCustAccountReturnService.queryReturnPageList(paramBean);
+        this.addAttr("pageData", pageData);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdfParse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        if (custAccountReturnVo.getReturnTimeBegin() == null) {
+            custAccountReturnVo.setReturnTimeBegin(sdfParse.parse(sdf.format(System.currentTimeMillis()) + " 00:00"));
+        }
+        if (custAccountReturnVo.getReturnTimeEnd() == null) {
+            custAccountReturnVo.setReturnTimeEnd(sdfParse.parse(sdf.format(System.currentTimeMillis()) + " 23:59"));
+        }
+        return "finance/custReturnManage";
+    }
+    /**
+     * 客户授信记录导出
+     * @param paramBean
+     * @param custAccountReturnVo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/exportReturnInfoList" + WebConstant.BUSINESS_SUFFIX)
+    public String exportReturnInfoList(Pagination<TCustAccountReturn> paramBean, CustAccountReturnVo custAccountReturnVo) throws Exception {
+        paramBean.setSearch(custAccountReturnVo);
+        Pagination<Map<String, Object>> pageData = iCustAccountReturnService.exportReturnPageList(paramBean);
+        logService.addLog(new TSysLog("客户还款记录-导出", "导出客户还款记录！", PmStateConstant.LOG_PLATFORM));
+        String title = "客户编号,客户名称,所属公司,还款金额（元）,备注,授信时间";
+        List<String> colNames = new ArrayList<String>();
+        colNames.add("cust_code");
+        colNames.add("cust_name");
+        colNames.add("company_name");
+        //colNames.add("before_return_money");
+        //colNames.add("after_return_money");
+        colNames.add("return_money");
+        colNames.add("remark");
+        colNames.add("return_time");
+        this.export(response,"客户还款记录" + String.format("%1$tY%1$tm%1$td", new Date()), title, colNames, pageData);
+        return null;
+    }
+
+    /**
+     * 客户授信记录查看
+     * @param returnId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/viewReturnInfoList" + WebConstant.BUSINESS_SUFFIX)
+    @ResponseBody
+    public Map<String, Object> viewReturn(Integer returnId) throws Exception {
+        CustAccountReturnVo custAccountReturnVo = iCustAccountReturnService.selectReturnVoById(returnId);
+        return this.getResultMap(true, custAccountReturnVo);
+    }
+}

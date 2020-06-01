@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.samton.web.manage.buyer.dao.TBuyersMapper" >
+  <resultMap id="BaseResultMap" type="com.samton.web.manage.buyer.bean.entity.TBuyers" >
+    <id column="buyer_id" property="buyerId" jdbcType="INTEGER" />
+    <result column="platform_type" property="platformType" jdbcType="VARCHAR" />
+    <result column="buyer_code" property="buyerCode" jdbcType="VARCHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="postcode" property="postcode" jdbcType="VARCHAR" />
+    <result column="register_time" property="registerTime" jdbcType="TIMESTAMP" />
+    <result column="last_brush_time" property="lastBrushTime" jdbcType="TIMESTAMP" />
+    <result column="is_forbid" property="isForbid" jdbcType="INTEGER" />
+    <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="BIGINT" />
+    <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    buyer_id, platform_type, buyer_code, buyer_name, user_name, address, city, province, 
+    postcode, register_time, last_brush_time, is_forbid, create_user_id, create_date, 
+    modify_user_id, modify_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from public.t_buyers
+    where buyer_id = #{buyerId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from public.t_buyers
+    where buyer_id = #{buyerId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.samton.web.manage.buyer.bean.entity.TBuyers" >
+    insert into public.t_buyers (buyer_id, platform_type, buyer_code, 
+      buyer_name, user_name, address, 
+      city, province, postcode, 
+      register_time, last_brush_time, is_forbid, 
+      create_user_id, create_date, modify_user_id, 
+      modify_date)
+    values (#{buyerId,jdbcType=INTEGER}, #{platformType,jdbcType=VARCHAR}, #{buyerCode,jdbcType=VARCHAR}, 
+      #{buyerName,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{postcode,jdbcType=VARCHAR}, 
+      #{registerTime,jdbcType=TIMESTAMP}, #{lastBrushTime,jdbcType=TIMESTAMP}, #{isForbid,jdbcType=INTEGER}, 
+      #{createUserId,jdbcType=BIGINT}, #{createDate,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=BIGINT}, 
+      #{modifyDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.samton.web.manage.buyer.bean.entity.TBuyers" >
+    insert into public.t_buyers
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="buyerId != null" >
+        buyer_id,
+      </if>
+      <if test="platformType != null" >
+        platform_type,
+      </if>
+      <if test="buyerCode != null" >
+        buyer_code,
+      </if>
+      <if test="buyerName != null" >
+        buyer_name,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="postcode != null" >
+        postcode,
+      </if>
+      <if test="registerTime != null" >
+        register_time,
+      </if>
+      <if test="lastBrushTime != null" >
+        last_brush_time,
+      </if>
+      <if test="isForbid != null" >
+        is_forbid,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id,
+      </if>
+      <if test="modifyDate != null" >
+        modify_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="buyerId != null" >
+        #{buyerId,jdbcType=INTEGER},
+      </if>
+      <if test="platformType != null" >
+        #{platformType,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerCode != null" >
+        #{buyerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerName != null" >
+        #{buyerName,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="postcode != null" >
+        #{postcode,jdbcType=VARCHAR},
+      </if>
+      <if test="registerTime != null" >
+        #{registerTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastBrushTime != null" >
+        #{lastBrushTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isForbid != null" >
+        #{isForbid,jdbcType=INTEGER},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyDate != null" >
+        #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.samton.web.manage.buyer.bean.entity.TBuyers" >
+    update public.t_buyers
+    <set >
+      <if test="platformType != null" >
+        platform_type = #{platformType,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerCode != null" >
+        buyer_code = #{buyerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerName != null" >
+        buyer_name = #{buyerName,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="postcode != null" >
+        postcode = #{postcode,jdbcType=VARCHAR},
+      </if>
+      <if test="registerTime != null" >
+        register_time = #{registerTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastBrushTime != null" >
+        last_brush_time = #{lastBrushTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isForbid != null" >
+        is_forbid = #{isForbid,jdbcType=INTEGER},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyDate != null" >
+        modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where buyer_id = #{buyerId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.samton.web.manage.buyer.bean.entity.TBuyers" >
+    update public.t_buyers
+    set platform_type = #{platformType,jdbcType=VARCHAR},
+      buyer_code = #{buyerCode,jdbcType=VARCHAR},
+      buyer_name = #{buyerName,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      postcode = #{postcode,jdbcType=VARCHAR},
+      register_time = #{registerTime,jdbcType=TIMESTAMP},
+      last_brush_time = #{lastBrushTime,jdbcType=TIMESTAMP},
+      is_forbid = #{isForbid,jdbcType=INTEGER},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      modify_date = #{modifyDate,jdbcType=TIMESTAMP}
+    where buyer_id = #{buyerId,jdbcType=INTEGER}
+  </update>
+
+  <!--买家账号查询列表-->
+  <sql id="Base_Column_List_Vo" >
+    a.platform_type, a.buyer_code, a.buyer_name, a.user_name, a.address, a.city, a.province,
+    a.postcode, a.register_time, a.last_brush_time, a.is_forbid,
+    b.record_id, b.buyer_id, b.record_month, b.account_money_his, b.brush_recharge, b.purchase_recharge,
+    b.recharge_total, b.quota_limit, b.quota_month, b.brush_num, b.purchase_num, b.brush_total_money,
+    b.purchase_total_money, b.refund_money, b.account_money,case when a.is_forbid=0 then '正常' else '禁用' end as is_forbid_CN
+  </sql>
+  <!-- 买家账号管理分页查询 -->
+  <select id="queryPageBuyerVoList" parameterType="com.samton.platform.framework.mybatis.pagination.Pagination" resultType="com.samton.web.manage.buyer.bean.vo.BuyersVo">
+    select
+    <include refid="Base_Column_List_Vo" />
+    from t_buyers a inner join t_buyers_record b on a.buyer_id = b.buyer_id
+    <where>
+      <include refid="queryPageList_where_Vo" />
+    </where>
+    <if test="search != null">
+      <if test="search.accountMoneyOrder == 1">
+        order by b.account_money asc
+      </if>
+      <if test="search.accountMoneyOrder == 2">
+        order by b.account_money desc
+      </if>
+    </if>
+  </select>
+
+  <!-- 买家账号管理页面导出 -->
+  <select id="exportPageBuyerVoList" parameterType="com.samton.platform.framework.mybatis.pagination.Pagination" resultType="java.util.Map">
+    select
+    <include refid="Base_Column_List_Vo" />
+    from t_buyers a inner join t_buyers_record b on a.buyer_id = b.buyer_id
+    <where>
+      <include refid="queryPageList_where_Vo" />
+    </where>
+    <if test="search != null">
+      <if test="search.accountMoneyOrder == 1">
+        order by b.account_money asc
+      </if>
+      <if test="search.accountMoneyOrder == 2">
+        order by b.account_money desc
+      </if>
+    </if>
+  </select>
+
+  <!-- 买家账号管理分页查询where条件 -->
+  <sql id="queryPageList_where_Vo">
+    <if test="search != null">
+      <if test="search.buyerCode != null and search.buyerCode != ''">
+        and (a.buyer_code like '%'||#{search.buyerCode,jdbcType=VARCHAR}||'%' or a.user_name like '%'||#{search.buyerCode,jdbcType=VARCHAR}||'%')
+      </if>
+      <if test="search.buyerName != null and search.buyerName != ''">
+        and a.buyer_name like '%'||#{search.buyerName,jdbcType=VARCHAR}||'%'
+      </if>
+      <if test="search.address != null and search.address != ''">
+        and a.address like '%'||#{search.address,jdbcType=VARCHAR}||'%'
+      </if>
+      <if test="search.province != null and search.province != ''">
+        and a.province like '%'||#{search.province,jdbcType=VARCHAR}||'%'
+      </if>
+      <if test="search.platformType != null and search.platformType != ''">
+        and a.platform_type like '%'||#{search.platformType,jdbcType=VARCHAR}||'%'
+      </if>
+
+      <if test="search.isForbid == 1">
+        and a.is_forbid = 0
+      </if>
+      <if test="search.isForbid == 2">
+        and a.is_forbid = 1
+      </if>
+
+      <if test="search.accountMoneyOprType == 1">
+        and b.account_money <![CDATA[ <= ]]> 100
+      </if>
+      <if test="search.accountMoneyOprType == 2">
+        and b.account_money <![CDATA[ > ]]> 100
+      </if>
+    </if>
+  </sql>
+
+  <!-- 买家账号查看 -->
+  <select id="selectBuyerAccountByRecordId" parameterType="java.lang.Integer" resultType="com.samton.web.manage.buyer.bean.vo.BuyersVo">
+    select
+    <include refid="Base_Column_List_Vo" />
+    from t_buyers a inner join t_buyers_record b on a.buyer_id = b.buyer_id
+    where b.record_id = #{recordId,jdbcType=INTEGER}
+  </select>
+
+  <!-- 买家账号查看 -->
+  <select id="importBuyerAccount" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select * from f_buyer_account_import(#{josnStr,jdbcType=VARCHAR}::json)
+  </select>
+
+  <!-- 通过买家账号查询买家信息 -->
+  <select id="selectBuyerByBuyerCode" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from public.t_buyers
+    where buyer_code = #{buyerCode,jdbcType=VARCHAR}
+      and is_forbid = 0
+  </select>
+</mapper>

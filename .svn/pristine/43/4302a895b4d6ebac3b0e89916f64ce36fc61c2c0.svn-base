@@ -1,0 +1,45 @@
+package com.samton.web.manage.task.bean.vo;
+
+import cn.afterturn.easypoi.excel.annotation.Excel;
+
+/**
+ * @Description: 批量导入报告完成状态Vo
+ * @Author: ZhongShengbin
+ * @Date: 2020/04/27 15:02
+ * Copyright (c) 2019, Samton. All rights reserved
+ */
+public class TaskExcelVo {
+
+    @Excel(name="任务编号")
+    private String taskCode;
+
+    @Excel(name="卡号")
+    private String cardsCode;
+
+    @Excel(name="任务状态")
+    private Integer taskState;
+
+    public String getTaskCode() {
+        return taskCode;
+    }
+
+    public void setTaskCode(String taskCode) {
+        this.taskCode = taskCode;
+    }
+
+    public String getCardsCode() {
+        return cardsCode;
+    }
+
+    public void setCardsCode(String cardsCode) {
+        this.cardsCode = cardsCode;
+    }
+
+    public Integer getTaskState() {
+        return taskState;
+    }
+
+    public void setTaskState(Integer taskState) {
+        this.taskState = taskState;
+    }
+}

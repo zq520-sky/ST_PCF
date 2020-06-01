@@ -1,0 +1,152 @@
+package com.samton.web.manage.task.controller;
+
+import com.samton.platform.framework.base.BaseController;
+import com.samton.platform.framework.constant.WebConstant;
+import com.samton.platform.framework.exception.ServiceException;
+import com.samton.platform.framework.mybatis.pagination.Pagination;
+import com.samton.platform.pm.bean.entity.TSysLog;
+import com.samton.platform.pm.constant.PmStateConstant;
+import com.samton.platform.pm.service.ILogService;
+import com.samton.web.manage.buyer.bean.entity.TBuyers;
+import com.samton.web.manage.buyer.service.IBuyerAccountService;
+import com.samton.web.manage.cust.constant.CustomerExpCodeConstant;
+import com.samton.web.manage.task.bean.entity.TCustTask;
+import com.samton.web.manage.task.bean.vo.CustTaskInfoVo;
+import com.samton.web.manage.task.service.ICustTaskService;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @Description: 任务信息Controller
+ * @Author: YangYangen
+ * @Date: 2020/4/18 17:11
+ * Copyright (c) 2020, Samton. All rights reserved
+*/
+@Controller
+@RequestMapping("/manage/task/")
+public class CustTaskInfoController extends BaseController {
+    @Resource
+    private ICustTaskService iCustTaskService;
+    @Resource
+    private IBuyerAccountService buyerAccountService;
+    @Resource
+    private ILogService logService;
+
+    /**
+     * 任务信息分页查询
+     * @param paramBean
+     * @param custTaskInfoVo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("queryCustTaskInfoList" + WebConstant.PAGE_SUFFIX)
+    public String queryCustTaskInfoList(Pagination<CustTaskInfoVo> paramBean, CustTaskInfoVo custTaskInfoVo) throws Exception {
+        paramBean.setSearch(custTaskInfoVo);
+        Pagination<CustTaskInfoVo> pageData = iCustTaskService.queryPageCustTaskInfoList(paramBean);
+        this.addAttr("pageData", pageData);
+        return "task/custTaskInfoManage";
+    }
+    /**
+     * 任务信息导出
+     * @param paramBean
+     * @param custTaskInfoVo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("exportCustTaskInfoList" + WebConstant.BUSINESS_SUFFIX)
+    public String exportCustTaskInfoList(Pagination<CustTaskInfoVo> paramBean, CustTaskInfoVo custTaskInfoVo) throws Exception {
+        paramBean.setSearch(custTaskInfoVo);
+        Pagination<CustTaskInfoVo> pageData = iCustTaskService.queryPageCustTaskInfoList(paramBean);
+        logService.addLog(new TSysLog("任务信息-导出", "导出任务信息！", PmStateConstant.LOG_PLATFORM));
+
+        String title = "任务编号,客户名称,电商平台,需求类型,买家账号代码,买家账户名称,卖家账号,产品ID,订单数量,商品单价($),税收($),订单金额(元),执行日期,任务状态,任务完成时间,负责人";
+        List<String> colNames = new ArrayList<String>();
+        colNames.add("task_code");
+        colNames.add("cust_name");
+        colNames.add("platform_type");
+        colNames.add("demand_type_cn");
+        colNames.add("buyer_code");
+        colNames.add("buyer_name");
+        colNames.add("accounts_name");
+        colNames.add("item_id");
+        colNames.add("order_num");
+        colNames.add("unit_price");
+        colNames.add("tax");
+        colNames.add("order_money");
+        colNames.add("exec_date");
+        colNames.add("task_state_cn");
+        colNames.add("task_finish_time");
+        colNames.add("liable_user_name");
+        this.export(response,"任务信息管理" + String.format("%1$tY%1$tm%1$td", new Date()), title, colNames, pageData);
+        return null;
+    }
+
+    /**
+     * 任务信息查看
+     * @param taskId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("viewCustTaskInfo" + WebConstant.BUSINESS_SUFFIX)
+    @ResponseBody
+    public Map<String, Object> viewReturn(Integer taskId) throws Exception {
+        CustTaskInfoVo custTaskInfoVo = iCustTaskService.findCustTaskInfoById(taskId);
+        return this.getResultMap(true, custTaskInfoVo);
+    }
+
+    /**
+     * 通过买家账号查询买家信息
+     * @param buyerCode
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("viewBuyerbyBuyerCode" + WebConstant.BUSINESS_SUFFIX)
+    @ResponseBody
+    public Map<String, Object> viewBuyerbyBuyerCode(String buyerCode) throws Exception {
+        TBuyers buyer = buyerAccountService.findBuyerByBuyerCode(buyerCode);
+        return this.getResultMap(true, buyer);
+    }
+
+    /**
+     * 单个修改任务责任人
+     * @param taskId
+     * @param beforeLiableUserName
+     * @param afterLiableUser
+     * @param afterLiableUserName
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("changeLiableUser" + WebConstant.BUSINESS_SUFFIX)
+    @ResponseBody
+    public Map<String, Object> changeLiableUser(Integer taskId, String beforeLiableUserName, Integer afterLiableUser, String afterLiableUserName) throws Exception {
+        //校验主键ID
+        if(taskId == null || afterLiableUser == null){
+            throw new ServiceException(CustomerExpCodeConstant.CUST_EDIT_COLUMN_ERROR);
+        }
+        TCustTask custTask = new TCustTask();
+        custTask.setTaskId(taskId);
+        custTask.setLiableUserId(Long.valueOf(afterLiableUser));
+        //执行编辑
+        boolean result = iCustTaskService.updateSelectiveById(custTask);
+        if (result) {
+            logService.addLog(new TSysLog("任务信息管理-修改责任人", "责任人由【"+ beforeLiableUserName +"】修改为【"+ afterLiableUserName +"】成功！", PmStateConstant.LOG_PLATFORM));
+        } else {
+            logService.addLog(new TSysLog("任务信息管理-修改责任人", "修改责任人失败！", PmStateConstant.LOG_PLATFORM));
+        }
+        if (!result) {
+            throw new ServiceException(CustomerExpCodeConstant.CUST_EDIT_COLUMN_ERROR);
+        }
+        return this.getResultMap(true, result);
+    }
+
+
+
+
+}

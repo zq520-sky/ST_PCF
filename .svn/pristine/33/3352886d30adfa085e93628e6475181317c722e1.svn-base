@@ -1,0 +1,75 @@
+package com.samton.web.manage.cust.service.impl;
+
+import com.samton.platform.common.service.impl.SuperServiceIntegerImpl;
+import com.samton.platform.framework.mybatis.pagination.PageContext;
+import com.samton.platform.framework.mybatis.pagination.Pagination;
+import com.samton.platform.framework.util.JsonUtil;
+import com.samton.web.manage.cust.bean.entity.TCustomer;
+import com.samton.web.manage.cust.bean.excel.CustomerEntity;
+import com.samton.web.manage.cust.bean.vo.CustomerVo;
+import com.samton.web.manage.cust.dao.TCustomerMapper;
+import com.samton.web.manage.cust.service.ICustomerService;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @Description: 客户信息Service接口实现类
+ * @Author: YangYangen
+ * @Date: 2020/4/13 11:03
+ * Copyright (c) 2020, Samton. All rights reserved
+*/
+@Service("customerService")
+public class CustomerServiceImpl extends SuperServiceIntegerImpl<TCustomerMapper, TCustomer> implements ICustomerService {
+    /**
+     * 客户信息分页查询
+     * @param paramBean
+     * @return
+     */
+    @Override
+    public Pagination<CustomerVo> queryPageCustomerVoList(Pagination<CustomerVo> paramBean) throws Exception {
+        Pagination<CustomerVo> pagination = PageContext.initialize(paramBean.getPage(), paramBean.getRows());
+        List<CustomerVo> list = mapper.queryPageCustomerVoList(paramBean, pagination.getRowBounds());
+        pagination.setData(list);
+        return pagination;
+    }
+
+    /**
+     * 客户信息导出
+     * @param paramBean
+     * @return
+     */
+    @Override
+    public Pagination<CustomerEntity> exportPageCustomerVoList(Pagination<TCustomer> paramBean) throws Exception {
+        Pagination<CustomerEntity> pagination = PageContext.initialize(paramBean.getPage(), paramBean.getRows());
+        List<CustomerEntity> list = mapper.exportPageCustomerVoList(paramBean, pagination.getRowBounds());
+        pagination.setData(list);
+        return pagination;
+    }
+    /**
+     * 新增客户信息
+     * @param customer
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public boolean insertCustomer(TCustomer customer) throws Exception{
+        return this.mapper.insertCustomer(JsonUtil.stringify(customer)) > 0 ? true : false;
+    }
+    /**
+     * 查询客户信息
+     * @param custId
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public CustomerVo findCustomerVoById(Integer custId) throws Exception {
+        return this.mapper.selectCustomerVoById(custId);
+    }
+
+    @Override
+    public Map<String, Object> selectCustAccountInfo(Integer custId) throws Exception {
+        return mapper.selectCustAccountInfo(custId);
+    }
+}

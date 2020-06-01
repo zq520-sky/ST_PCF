@@ -1,0 +1,222 @@
+package com.samton.web.manage.buyer.bean.vo;
+
+import cn.afterturn.easypoi.excel.annotation.Excel;
+
+import java.math.BigDecimal;
+
+/**
+ * @Auther: Huangqiuping
+ * @Date: 2020/4/24 10:31
+ * @Description:
+ */
+public class BuyersExcelVo {
+
+    @Excel(name="买家姓名")
+    private String userName;
+
+    @Excel(name="账号类型")
+    private String platformType;
+
+    @Excel(name="账号代码")
+    private String buyerCode;
+
+    @Excel(name="账户名")
+    private String buyerName;
+
+    @Excel(name="地址")
+    private String address;
+
+    @Excel(name="城市")
+    private String city;
+
+    @Excel(name="州")
+    private String province;
+
+    @Excel(name="邮编")
+    private String postcode;
+
+    @Excel(name="历史余额")
+    private BigDecimal accountMoneyHis;
+
+    @Excel(name="刷单充值")
+    private BigDecimal brushRecharge;
+
+    @Excel(name="采购充值")
+    private BigDecimal purchaseRecharge;
+
+    @Excel(name="充值总额")
+    private BigDecimal rechargeTotal;
+
+    @Excel(name="单月可用额度")
+    private BigDecimal quotaMonth;
+
+    @Excel(name="刷单次数")
+    private Integer brushNum;
+
+    @Excel(name="采购次数")
+    private Integer purchaseNum;
+
+    @Excel(name="刷单总额")
+    private BigDecimal brushTotalMoney;
+
+    @Excel(name="采购总额")
+    private BigDecimal purchaseTotalMoney;
+
+    @Excel(name="退款金额")
+    private BigDecimal refundMoney;
+
+    @Excel(name="余额")
+    private BigDecimal accountMoney;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPlatformType() {
+        return platformType;
+    }
+
+    public void setPlatformType(String platformType) {
+        this.platformType = platformType;
+    }
+
+    public String getBuyerCode() {
+        return buyerCode;
+    }
+
+    public void setBuyerCode(String buyerCode) {
+        this.buyerCode = buyerCode;
+    }
+
+    public String getBuyerName() {
+        return buyerName;
+    }
+
+    public void setBuyerName(String buyerName) {
+        this.buyerName = buyerName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getPostcode() {
+        return postcode;
+    }
+
+    public void setPostcode(String postcode) {
+        this.postcode = postcode;
+    }
+
+    public BigDecimal getAccountMoneyHis() {
+        return accountMoneyHis;
+    }
+
+    public void setAccountMoneyHis(BigDecimal accountMoneyHis) {
+        this.accountMoneyHis = accountMoneyHis;
+    }
+
+    public BigDecimal getBrushRecharge() {
+        return brushRecharge;
+    }
+
+    public void setBrushRecharge(BigDecimal brushRecharge) {
+        this.brushRecharge = brushRecharge;
+    }
+
+    public BigDecimal getPurchaseRecharge() {
+        return purchaseRecharge;
+    }
+
+    public void setPurchaseRecharge(BigDecimal purchaseRecharge) {
+        this.purchaseRecharge = purchaseRecharge;
+    }
+
+    public BigDecimal getRechargeTotal() {
+        return rechargeTotal;
+    }
+
+    public void setRechargeTotal(BigDecimal rechargeTotal) {
+        this.rechargeTotal = rechargeTotal;
+    }
+
+    public BigDecimal getQuotaMonth() {
+        return quotaMonth;
+    }
+
+    public void setQuotaMonth(BigDecimal quotaMonth) {
+        this.quotaMonth = quotaMonth;
+    }
+
+    public Integer getBrushNum() {
+        return brushNum;
+    }
+
+    public void setBrushNum(Integer brushNum) {
+        this.brushNum = brushNum;
+    }
+
+    public Integer getPurchaseNum() {
+        return purchaseNum;
+    }
+
+    public void setPurchaseNum(Integer purchaseNum) {
+        this.purchaseNum = purchaseNum;
+    }
+
+    public BigDecimal getBrushTotalMoney() {
+        return brushTotalMoney;
+    }
+
+    public void setBrushTotalMoney(BigDecimal brushTotalMoney) {
+        this.brushTotalMoney = brushTotalMoney;
+    }
+
+    public BigDecimal getPurchaseTotalMoney() {
+        return purchaseTotalMoney;
+    }
+
+    public void setPurchaseTotalMoney(BigDecimal purchaseTotalMoney) {
+        this.purchaseTotalMoney = purchaseTotalMoney;
+    }
+
+    public BigDecimal getRefundMoney() {
+        return refundMoney;
+    }
+
+    public void setRefundMoney(BigDecimal refundMoney) {
+        this.refundMoney = refundMoney;
+    }
+
+    public BigDecimal getAccountMoney() {
+        return accountMoney;
+    }
+
+    public void setAccountMoney(BigDecimal accountMoney) {
+        this.accountMoney = accountMoney;
+    }
+}

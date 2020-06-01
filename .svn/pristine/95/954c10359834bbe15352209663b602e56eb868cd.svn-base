@@ -1,0 +1,109 @@
+package com.samton.web.manage.finance.controller;
+
+import com.samton.platform.framework.base.BaseController;
+import com.samton.platform.framework.constant.WebConstant;
+import com.samton.platform.framework.mybatis.pagination.Pagination;
+import com.samton.platform.pm.bean.entity.TSysLog;
+import com.samton.platform.pm.constant.PmStateConstant;
+import com.samton.platform.pm.service.ILogService;
+import com.samton.web.manage.finance.bean.entity.TCustDepositOrder;
+import com.samton.web.manage.finance.bean.vo.CustDepositOrderVo;
+import com.samton.web.manage.finance.service.ICustDepositOrderService;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @Description: 客户充值记录Controller
+ * @Author: ZhongShengbin
+ * @Date: 2020/04/10 1600
+ * Copyright (c) 2019, Samton. All rights reserved
+ */
+@Controller
+@RequestMapping("/manage/finance/")
+public class CustDepositOrderController extends BaseController {
+
+    @Resource
+    private ICustDepositOrderService iCustDepositOrderService;
+
+    @Resource
+    private ILogService logService;
+
+    /**
+     * 客户充值信息管理分页
+     * @param paramBean
+     * @param custDepositOrderVo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("queryOrderInfoList" + WebConstant.PAGE_SUFFIX)
+    public String queryFinanceInfoList(Pagination<TCustDepositOrder> paramBean, CustDepositOrderVo custDepositOrderVo) throws Exception{
+
+        paramBean.setSearch(custDepositOrderVo);
+        Pagination<TCustDepositOrder> pageData = iCustDepositOrderService.queryChargePageList(paramBean);
+        this.addAttr("pageData", pageData);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdfParse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        if (custDepositOrderVo.getPayTimeBegin() == null) {
+            custDepositOrderVo.setPayTimeBegin(sdfParse.parse(sdf.format(System.currentTimeMillis()) + " 00:00"));
+        }
+        if (custDepositOrderVo.getPayTimeEnd()== null) {
+            custDepositOrderVo.setPayTimeEnd(sdfParse.parse(sdf.format(System.currentTimeMillis()) + " 23:59"));
+        }
+        return "finance/custFinanceManage";
+    }
+
+    /**
+     * 客户充值信息管理导出
+     * @param paramBean
+     * @param custDepositOrderVo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/exportOrderInfoList" + WebConstant.BUSINESS_SUFFIX)
+    public String exportFinanceInfoList(Pagination<TCustDepositOrder> paramBean, CustDepositOrderVo custDepositOrderVo) throws Exception {
+        paramBean.setSearch(custDepositOrderVo);
+        Pagination<Map<String, Object>> pageData = iCustDepositOrderService.exportOrderPageList(paramBean);
+        logService.addLog(new TSysLog("客户充值记录-导出", "导出客户充值记录！", PmStateConstant.LOG_PLATFORM));
+        String title = "客户编号,客户名称,所属公司,操作前账户余额,操作后账户余额,充值金额(元),充值方式,充值时间";
+        List<String> colNames = new ArrayList<String>();
+        colNames.add("cust_code");
+        colNames.add("cust_name");
+        colNames.add("company_name");
+        colNames.add("before_account_money");
+        colNames.add("after_account_money");
+        colNames.add("recharge_money");
+        pageData.putExprotKV("pay_type", "1", "支付宝");
+        pageData.putExprotKV("pay_type", "2", "微信");
+        pageData.putExprotKV("pay_type", "5", "其他");
+        colNames.add("pay_time");
+        this.export(response,"客户充值记录" + String.format("%1$tY%1$tm%1$td", new Date()), title, colNames, pageData);
+        return null;
+    }
+
+    /**
+     * 客户充值信息查看
+     * @param custId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/viewOrderInfoList" + WebConstant.BUSINESS_SUFFIX)
+    @ResponseBody
+    public Map<String, Object> viewFinance(Integer custId) throws Exception {
+        TCustDepositOrder custDepositOrderVo = iCustDepositOrderService.selectFinanceVoById(custId);
+        //转换成VO对象属性值，比如转义相关字段含义
+        ((CustDepositOrderVo) custDepositOrderVo).setRepayType(custDepositOrderVo.getPayStatus() == 1 ? "微信" : "支付宝");
+        if(custDepositOrderVo.getPayStatus() == 3){
+            ((CustDepositOrderVo) custDepositOrderVo).setRepayType("其他");
+        }
+        return this.getResultMap(true, custDepositOrderVo);
+    }
+
+}

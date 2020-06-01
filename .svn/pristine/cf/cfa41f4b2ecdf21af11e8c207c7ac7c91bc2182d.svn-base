@@ -1,0 +1,37 @@
+package com.samton.web.manage.finance.service.impl;
+
+import com.samton.platform.common.service.impl.SuperServiceIntegerImpl;
+import com.samton.platform.framework.mybatis.pagination.Pagination;
+import com.samton.web.manage.finance.bean.entity.TCustAccountCredit;
+import com.samton.web.manage.finance.bean.vo.CustAccountCreditVo;
+import com.samton.web.manage.finance.dao.TCustAccountCreditMapper;
+import com.samton.web.manage.finance.service.ICustAccountCreditService;
+import org.springframework.stereotype.Service;
+
+import java.util.Map;
+
+/**
+ * @Description: 客户授信记录ServiceImpl
+ * @Author: ZhongShengbin
+ * @Date: 2020/04/13 17:22
+ * Copyright (c) 2019, Samton. All rights reserved
+ */
+@Service
+public class CustAccountCreditServiceImpl extends SuperServiceIntegerImpl<TCustAccountCreditMapper, TCustAccountCredit> implements ICustAccountCreditService {
+
+
+    @Override
+    public Pagination<TCustAccountCredit> queryCreditPageList(Pagination<TCustAccountCredit> paramBean) throws Exception {
+        return null;
+    }
+
+    @Override
+    public Pagination<Map<String, Object>> exportCreditPageList(Pagination<TCustAccountCredit> paramBean) throws Exception {
+        return null;
+    }
+
+    @Override
+    public CustAccountCreditVo selectCreditVoById(Integer custId) throws Exception {
+        return null;
+    }
+}

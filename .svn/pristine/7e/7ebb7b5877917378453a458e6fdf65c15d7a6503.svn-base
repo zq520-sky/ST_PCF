@@ -1,0 +1,17 @@
+package com.samton.web.manage.order.controller;
+
+import com.samton.platform.framework.base.BaseController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+/**
+ * @ClassName: CustOrderController
+ * @Description:
+ * @Author: wuzhiqiang
+ * @Date: 2020-04-16 18:09
+ * @Copyright (c) 2020, Samton. All rights reserved
+ **/
+@Controller
+@RequestMapping("/manage/cust/order/")
+public class CustOrderController extends BaseController {
+}

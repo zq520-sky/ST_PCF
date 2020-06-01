@@ -1,0 +1,17 @@
+package com.samton.web.manage.finance.dao;
+
+import com.samton.web.manage.finance.bean.entity.TCustAccountReturn;
+
+public interface TCustAccountReturnMapper {
+    int deleteByPrimaryKey(Integer returnId);
+
+    int insert(TCustAccountReturn record);
+
+    int insertSelective(TCustAccountReturn record);
+
+    TCustAccountReturn selectByPrimaryKey(Integer returnId);
+
+    int updateByPrimaryKeySelective(TCustAccountReturn record);
+
+    int updateByPrimaryKey(TCustAccountReturn record);
+}

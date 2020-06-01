@@ -1,0 +1,72 @@
+package com.samton.web.manage.task.controller;
+
+import com.samton.platform.framework.base.BaseController;
+import com.samton.platform.framework.constant.WebConstant;
+import com.samton.platform.framework.exception.ServiceException;
+import com.samton.platform.pm.bean.entity.TSysLog;
+import com.samton.platform.pm.constant.PmStateConstant;
+import com.samton.platform.pm.service.ILogService;
+import com.samton.web.manage.cust.constant.CustomerExpCodeConstant;
+import com.samton.web.manage.task.bean.entity.TCustTaskSet;
+import com.samton.web.manage.task.service.ICustTaskSetService;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.Map;
+/**
+ * @Description: 任务分配设置Controller
+ * @Author: YangYangen
+ * @Date: 2020/4/17 13:50
+ * Copyright (c) 2020, Samton. All rights reserved
+*/
+@Controller
+@RequestMapping("/manage/task/")
+public class CustTaskSetController extends BaseController {
+    @Resource
+    private ICustTaskSetService custTaskSetService;
+    @Resource
+    private ILogService logService;
+
+    /**
+     * 任务分配设置查看
+     * @param taskSetId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("viewCustTaskSet" + WebConstant.PAGE_SUFFIX)
+    public String viewCustTaskSet(Integer taskSetId) throws Exception {
+        Integer id = taskSetId == null ? 1 : taskSetId;
+         TCustTaskSet custTaskSet = custTaskSetService.selectById(id);
+         this.addAttr("custTaskSet", custTaskSet);
+
+         return "task/taskSetManage";
+    }
+
+    /**
+     * 任务分配设置编辑
+     * @param custTaskSet
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("editCustTaskSet" + WebConstant.BUSINESS_SUFFIX)
+    @ResponseBody
+    public Map<String, Object> editCustTaskSet(TCustTaskSet custTaskSet) throws Exception {
+        //校验主键ID
+        if(custTaskSet.getTaskSetId() == null){
+            throw new ServiceException(CustomerExpCodeConstant.CUST_EDIT_COLUMN_ERROR);
+        }
+        //执行编辑
+        boolean result = custTaskSetService.updateSelectiveById(custTaskSet);
+        if (result) {
+            logService.addLog(new TSysLog("分配规则设置-编辑", "分配规则设置成功 ！", PmStateConstant.LOG_PLATFORM));
+        } else {
+            logService.addLog(new TSysLog("分配规则设置-编辑", "分配规则设置失败！", PmStateConstant.LOG_PLATFORM));
+        }
+        if (!result) {
+            throw new ServiceException(CustomerExpCodeConstant.CUST_EDIT_COLUMN_ERROR);
+        }
+        return this.getResultMap(true, result);
+    }
+}

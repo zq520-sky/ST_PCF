@@ -1,0 +1,24 @@
+package com.samton.web.manage.finance.bean.vo;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
+
+/**
+ * @Description: 客户授信记录
+ * @Author: ZhongShengbin
+ * @Date: 2020/04/13 16:22
+ * Copyright (c) 2019, Samton. All rights reserved
+ */
+public class CustAccountCreditVo {
+    private String custName;
+
+    private String companyName;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date beginTime;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date endTime;
+
+}

@@ -1,0 +1,56 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: wzq
+  Date: 2020/4/18
+  Time: 11:55
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%@ include file="/resources/platform/inc.jsp"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <link href="${ctx.path}/resources/components/bootstrap/bootstrap-theme.min.css?v=2.1" rel="stylesheet" />
+    <link rel="stylesheet" href="${ctx.path}/resources/css/task/taskSetManage.css?v=1.0" rel="stylesheet" />
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <table class="table table-hover" >
+        <tbody class="taskweekend" >
+        <tr  class="taskweekendtr">
+            <td>
+		        <input type="checkbox" class="taskweekendinput" >
+                陈1豪</td>
+        </tr>
+        <tr class="taskweekendtr">
+            <td>
+                <input type="checkbox" class="taskweekendinput">
+                陈1豪</td>
+
+        </tr>
+        <tr class="taskweekendtr">
+            <td>
+                <input type="checkbox" class="taskweekendinput">
+                陈1豪</td>
+        </tr>
+        <tr class="taskweekendtr">
+            <td>
+                <input type="checkbox" class="taskweekendinput">
+                陈1豪</td>
+        </tr>
+        <tr class="taskweekendtr">
+            <td>
+                <input type="checkbox" class="taskweekendinput">
+                陈1豪</td>
+
+        </tr>
+    
+        </tbody>
+    </table>
+
+
+</div>
+
+</body>
+</html>

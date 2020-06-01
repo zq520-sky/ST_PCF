@@ -1,0 +1,47 @@
+package com.samton.web.manage.finance.dao;
+
+import com.samton.platform.common.dao.AutoMapperInteger;
+import com.samton.platform.framework.mybatis.pagination.Pagination;
+import com.samton.web.manage.finance.bean.entity.TCustDepositOrder;
+import com.samton.web.manage.finance.bean.vo.CustDepositOrderVo;
+import org.apache.ibatis.session.RowBounds;
+
+import java.util.List;
+import java.util.Map;
+
+public interface TCustDepositOrderMapper extends AutoMapperInteger<TCustDepositOrder> {
+    int deleteByPrimaryKey(Integer orderId);
+
+    int insert(TCustDepositOrder record);
+
+    int insertSelective(TCustDepositOrder record);
+
+    TCustDepositOrder selectByPrimaryKey(Integer orderId);
+
+    int updateByPrimaryKeySelective(TCustDepositOrder record);
+
+    int updateByPrimaryKey(TCustDepositOrder record);
+    /**
+     * 客户充值记录查询
+     * @param paramBean
+     * @param rowBounds
+     * @return
+     */
+    List<TCustDepositOrder> queryPageChargeList(Pagination<TCustDepositOrder> paramBean, RowBounds rowBounds) throws Exception;
+
+    /**
+     * 客户充值记录导出
+     * @param paramBean
+     * @param rowBounds
+     * @return
+     */
+    List<Map<String, Object>> exportOrderInfoList(Pagination<TCustDepositOrder> paramBean, RowBounds rowBounds) throws Exception;
+
+    /**
+     * 查询客户充值信息
+     * @param custId
+     * @return
+     * @throws Exception
+     */
+    public CustDepositOrderVo selectFinanceVoById(Integer custId) throws Exception;
+}

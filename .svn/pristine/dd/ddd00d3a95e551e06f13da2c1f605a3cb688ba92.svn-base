@@ -1,0 +1,557 @@
+var index = null;
+var frameId = window.frameElement && window.frameElement.id || '';
+var custOrderAddValidate, custOrderEditValidate, custOrderImportValidate;
+
+
+
+$(function() {
+    //校验新增表单
+    custOrderAddValidate = $("#addCustOrderForm").validate(
+        {
+            rules: {
+                accountsName : {
+                    required : true
+                },
+                itemId : {
+                    required : true
+                },
+                unitPrice : {
+                    required : true,
+                    money: true
+                },
+                orderNum : {
+                    required : true,
+                    negative : true
+                },
+                frequency : {
+                    required : true,
+                    negative : true
+                },
+                cycle : {
+                    required : true,
+                    negative : true
+                },
+                demandType : {
+                    required : true
+                },
+                platformType : {
+                    required : true
+                },
+                titleKeyword : {
+                    required : true
+                },
+                taskStartDate : {
+                    required : true
+                }
+            },
+            messages: {
+                accountsName : {
+                    required : "请填写卖家账号（店铺名称）！"
+                },
+                itemId : {
+                    required : "请填写产品ID！"
+                },
+                unitPrice : {
+                    required : "请填写商品单价！",
+                    money : "请填写正确的金额！"
+                },
+                orderNum : {
+                    required : "请填写订单数量！",
+                    negative : "请填写正整数！"
+                },
+                frequency : {
+                    required : "请填写刷单频率！",
+                    negative : "请填写正整数！"
+                },
+                cycle : {
+                    required : "请填写刷单周期！",
+                    negative : "请填写正整数！"
+                },
+                demandType : {
+                    required : "请选择需求类型！"
+                },
+                platformType : {
+                    required : "请选择电商平台！"
+                },
+                titleKeyword : {
+                    required : "请填写标题/关键词！"
+                },
+                taskStartDate : {
+                    required : "请选择任务开始日期！"
+                }
+            },
+            submitHandler: function (form) {
+                $(form).ajaxSubmit(
+                    {
+                        //表单提交成功后的回调
+                        success: function (responseText, statusText,
+                                           xhr, $form) {
+                            if (responseText.rs > 0) {
+                                top.toastr.success("新增需求订单成功！");
+                                FormUtil.resetForm("addCustOrderForm");
+                                doSearch();
+                                layer.close(index); //再执行关闭
+                            }
+                        }
+                    });
+            }
+        });
+
+    custOrderEditValidate = $("#editCustOrderForm").validate(
+        {
+            rules: {
+                accountsName : {
+                    required : true
+                },
+                itemId : {
+                    required : true
+                },
+                unitPrice : {
+                    required : true,
+                    money: true
+                },
+                orderNum : {
+                    required : true,
+                    negative : true
+                },
+                frequency : {
+                    required : true,
+                    negative : true
+                },
+                cycle : {
+                    required : true,
+                    negative : true
+                },
+                demandType : {
+                    required : true
+                },
+                platformType : {
+                    required : true
+                },
+                titleKeyword : {
+                    required : true
+                },
+                taskStartDate : {
+                    required : true
+                }
+            },
+            messages: {
+                accountsName : {
+                    required : "请填写卖家账号（店铺名称）！"
+                },
+                itemId : {
+                    required : "请填写产品ID！"
+                },
+                unitPrice : {
+                    required : "请填写商品单价！",
+                    money : "请填写正确的金额！"
+                },
+                orderNum : {
+                    required : "请填写订单数量！",
+                    negative : "请填写正整数！"
+                },
+                frequency : {
+                    required : "请填写刷单频率！",
+                    negative : "请填写正整数！"
+                },
+                cycle : {
+                    required : "请填写刷单周期！",
+                    negative : "请填写正整数！"
+                },
+                demandType : {
+                    required : "请选择需求类型！"
+                },
+                platformType : {
+                    required : "请选择电商平台！"
+                },
+                titleKeyword : {
+                    required : "请填写标题/关键词！"
+                },
+                taskStartDate : {
+                    required : "请选择任务开始日期！"
+                }
+            },
+            submitHandler: function (form) {
+                $(form).ajaxSubmit(
+                    {
+                        //表单提交成功后的回调
+                        success: function (responseText, statusText,
+                                           xhr, $form) {
+                            if (responseText.rs > 0) {
+                                top.toastr.success("修改需求订单成功！");
+                                FormUtil.resetForm("editCustOrderForm");
+                                doSearch();
+                                layer.close(index); //再执行关闭
+                            }
+                        }
+                    });
+            }
+        });
+
+    custOrderImportValidate = $("#importOrderForm").validate(
+        {
+            rules: {
+                file : {
+                    required : true
+                }
+            },
+            messages: {
+                file : {
+                    required : "请上传文件！"
+                }
+            },
+            submitHandler: function (form) {
+                $(form).ajaxSubmit(
+                    {
+                        //表单提交成功后的回调
+                        success: function (responseText, statusText,
+                                           xhr, $form) {
+                            if(responseText.data['error'] != null){
+                                layer.msg(responseText.data['error']);
+                            }else{
+                                top.toastr.success("批量导入成功！");
+                                FormUtil.resetForm("importOrderForm");
+                                doSearch();
+                                layer.close(index); //再执行关闭
+                            }
+                        }
+                    });
+            }
+        });
+});
+
+//执行查询
+function doSearch() {
+    $("#pageForm").submit();
+    top.progressbar(frameId);
+}
+
+//新增充值
+function openAddPage() {
+    index = layer.open({
+        type : 1,
+        title : '新增需求订单信息',
+        move : false,
+        area : [ '820px', '500px' ], // 宽高
+        content : $('#addCustOrder'),
+        btn : [ '确定', '关闭' ],
+        yes : function(index, layero) {
+            $("#addCustOrderForm").submit();
+        },
+        close: function(index, layero){
+            layer.close(index);
+        },
+        cancel : function(index) {
+            FormUtil.resetForm("addCustOrderForm");
+            custOrderAddValidate.resetForm();
+        }
+    });
+}
+
+
+//查看
+function viewPage(orderId){
+
+    if(Number(orderId)){
+        $.ajax({
+            url : ctx.path + '/manage/cust/order/viewCustOrder' + ctx.bizSuffix,
+            async : true,
+            dataType : 'json',
+            type : 'GET',
+            data : {orderId : orderId},
+            success : function(data) {
+                if (data.rs == -1) {
+                    top.toastr.error("获取数据信息失败");
+                    return false;
+                }
+                console.log("-------->"+JSON.stringify(data.data));
+                //返回的map对象参数
+                var dataRet = data.data;
+                var demandType = dataRet['demandType'];
+                if(demandType != undefined && demandType == 2){
+                    $("#viewDemandTypeTr").removeClass("hideTr");
+                    $(".taxEmpTh").removeClass("hideTr");
+                    $(".taxTh").addClass("hideTr");
+                }
+                for (var key in dataRet) {
+                    //对页面属性赋值（要求页面id与map的key值保持一致）
+                    $("#viewCustOrderForm #"+ key+"View").html(dataRet[key]);
+                }
+                parentIndex = layer.open({
+                    title : '查看需求订单信息',
+                    type : 1,
+                    area : [ '820px', '500px' ], //宽高
+                    content : $('#viewCustOrder'),
+                    btn : [ '关闭' ],
+                    cancel : function(index) {
+                    }
+                });
+            },
+            error : function(jqXHR, textStatus, errorThrown) {
+                top.toastr.error("操作失败");
+            }
+        });
+    } else {
+        top.toastr.error("数据异常！");
+    }
+
+}
+
+
+//编辑
+function editPage(orderId){
+
+    if(Number(orderId)){
+        $.ajax({
+            url : ctx.path + '/manage/cust/order/viewCustOrder' + ctx.bizSuffix,
+            async : true,
+            dataType : 'json',
+            type : 'GET',
+            data : {orderId : orderId},
+            success : function(data) {
+                if (data.rs == -1) {
+                    top.toastr.error("获取数据信息失败");
+                    return false;
+                }
+                console.log("-------->"+JSON.stringify(data.data));
+                //返回的map对象参数
+                var dataRet = data.data;
+                var custId = dataRet['custId'];
+                var demandType = dataRet['demandType'];
+                var platformType = dataRet['platformType'];
+                var orderCode = dataRet['orderCode'];
+                if(demandType != undefined && demandType == 2){
+                    $(".taxEmpTh").removeClass("hideTr");
+                    $(".taxTh").addClass("hideTr");
+                    $("#editDemandTypeTr").removeClass("hideTr");
+                }
+                $("#orderCodeEditPut").val(orderCode);
+                $("#custIdEdit").find("option[value='"+custId+"']").attr("selected",'selected');
+                $("#demandTypeEdit").find("option[value='"+demandType+"']").attr("selected",'selected');
+                $("#platformTypeEdit").find("option[value='"+platformType+"']").attr("selected",'selected');
+                //只做展示的字段
+                for (var key in dataRet) {
+                    if(key=='custId' || key=='demandType' || key=='platformType'){
+                        continue;
+                    }
+                    //对页面属性赋值（要求页面id与map的key值保持一致）
+                    $("#editCustOrderForm #"+ key+"Edit").html(dataRet[key]);
+                    $("#editCustOrderForm #"+ key+"Edit").val(dataRet[key]);
+                }
+
+                parentIndex = layer.open({
+                    title : '编辑需求订单信息',
+                    type : 1,
+                    area : [ '820px', '500px' ], //宽高
+                    content : $('#editCustOrder'),
+                    btn : [ '确定', '关闭' ],
+                    yes : function(index, layero) {
+                        $("#editCustOrderForm").submit();
+                    },
+                    close: function(index, layero){
+                        layer.close(index);
+                    },
+                    cancel : function() {
+                        FormUtil.resetForm("editCustOrderForm");
+                        custOrderEditValidate.resetForm();
+                    }
+                });
+            },
+            error : function(jqXHR, textStatus, errorThrown) {
+                top.toastr.error("操作失败");
+            }
+        });
+    } else {
+        top.toastr.error("数据异常！");
+    }
+
+}
+
+function openImportPage() {
+    index = layer.open({
+        type : 1,
+        title : '批量导入需求',
+        move : false,
+        area : [ '520px', '400px' ], // 宽高
+        content : $('#importCustOrder'),
+        btn : [ '保存', '关闭' ],
+        yes : function(index, layero) {
+            $("#importOrderForm").submit();
+        },
+        close: function(index, layero){
+            layer.close(index);
+        },
+        cancel : function(index) {
+            FormUtil.resetForm("importOrderForm");
+            custOrderImportValidate.resetForm();
+        }
+    });
+}
+
+
+function customerChange(custId){
+    $.ajax({
+        url:ctx.path + '/manage/customer/getCustomerInfo' + ctx.noAuthSuffix,
+        type:"get",
+        data:{
+            custId : custId
+        },
+        async:true,
+        cache:true,
+        complete:function(){},
+        traditional:false,
+        dataType:"json",
+        success:function(data){
+            $("#custCodeAdd").html(data['cust_code']);
+            $("#custCodeEdit").html(data['cust_code']);
+            $("#dollarRateAdd").html(data['dollar_rate']);
+            $("#dollarRateEdit").html(data['dollar_rate']);
+            changeMoneyEdit();
+            changeMoneyAdd();
+        },
+        error:function(){}
+    });
+}
+
+function demandTyepChange(type){
+    if(type == 2){
+        $("#demandTypeTr").removeClass('hideTr');
+        $("#editDemandTypeTr").removeClass('hideTr');
+        $(".taxTh").addClass('hideTr');
+        $(".taxEmpTh").removeClass('hideTr');
+    }else{
+        $("#demandTypeTr").addClass('hideTr');
+        $("#editDemandTypeTr").addClass('hideTr');
+        $(".taxTh").removeClass('hideTr');
+        $(".taxEmpTh").addClass('hideTr');
+    }
+}
+
+function itemIdChange(itemId){
+    $.ajax({
+        url:ctx.path + '/manage/custProduct/getCustProductByItemId' + ctx.noAuthSuffix,
+        type:"get",
+        data:{
+            itemId : itemId
+        },
+        async:true,
+        cache:true,
+        complete:function(){},
+        traditional:false,
+        dataType:"json",
+        success:function(data){
+            console.log(JSON.stringify(data));
+            $("#titleKeywordAdd").val(data['title_keyword']);
+            $("#titleKeywordEdit").val(data['title_keyword']);
+            $("#accountsNameAdd").val(data['accounts_name']);
+            $("#accountsNameEdit").val(data['accounts_name']);
+        },
+        error:function(){}
+    });
+}
+
+function changeMoneyAdd(){
+    let demandType = $('#demandTypeAdd option:selected').val();
+    let unitPrice = $("#unitPriceAdd").val();
+    let orderNum = $("#orderNumAdd").val();
+    let dollarRate = $("#dollarRateAdd").text();
+    let frequency = $("#frequencyAdd").val();
+    let cycle = $("#cycleAdd").val();
+
+    //获取需求类型
+    if(unitPrice != undefined && orderNum != undefined){
+        $("#taxAdd").html((unitPrice*orderNum*0.1).toFixed(2));
+    }
+
+    //采购
+    if(demandType == 1){
+        if(unitPrice != undefined && orderNum != undefined && dollarRate != null){
+            let totalMoney = (unitPrice*orderNum*1.1)*dollarRate;
+            $("#orderTotalMoneyAdd").html(totalMoney.toFixed(2));
+        }
+    }
+
+    //刷单
+    if(demandType == 2){
+        if(orderNum != undefined && unitPrice != undefined && dollarRate != undefined && frequency != undefined && cycle != undefined){
+            let totalMoney = orderNum*unitPrice*dollarRate*frequency*cycle;
+            $("#orderTotalMoneyAdd").html(totalMoney.toFixed(2));
+        }
+    }
+}
+
+function changeMoneyEdit(){
+    let demandType = $('#demandTypeEdit option:selected').val();
+    let unitPrice = $("#unitPriceEdit").val();
+    let orderNum = $("#orderNumEdit").val();
+    let dollarRate = $("#dollarRateEdit").text();
+    let frequency = $("#frequencyEdit").val();
+    let cycle = $("#cycleEdit").val();
+
+    //获取需求类型
+    console.log(unitPrice + ">>>" + orderNum)
+    console.log(dollarRate + "----" + frequency + "-----" + cycle)
+    if(unitPrice != undefined && orderNum != undefined){
+        $("#taxEdit").html((unitPrice*orderNum*0.1).toFixed(2));
+    }
+
+    //采购
+    if(demandType == 1){
+        if(unitPrice != undefined && orderNum != undefined && dollarRate != null){
+            let totalMoney = (unitPrice*orderNum*1.1)*dollarRate;
+            $("#orderTotalMoneyEdit").html(totalMoney.toFixed(2));
+        }
+    }
+
+    //刷单
+    if(demandType == 2){
+        if(orderNum != undefined && unitPrice != undefined && dollarRate != undefined && frequency != undefined && cycle != undefined){
+            let totalMoney = orderNum*unitPrice*dollarRate*frequency*cycle;
+            $("#orderTotalMoneyEdit").html(totalMoney.toFixed(2));
+        }
+    }
+}
+
+//取消
+function cancel(id, orderCode) {
+    if (Number(id)) {
+        var msg = "确定取消订单【" + orderCode + "】吗？";
+        layer.confirm(msg, {
+            icon : 3,
+            title : "提示信息"
+        }, function(index) {
+            $.get(ctx.path + "/manage/cust/order/cancel"+ ctx.bizSuffix + "?orderId=" + id + "&orderCode=" + orderCode, function(result) {
+                if (result.rs == 1) {
+                    top.toastr.success("取消订单【" + orderCode + "】成功！");
+                    doSearch();
+                    //刷新表单
+                }
+            }, "json");
+            layer.close(index);
+        });
+    } else {
+        top.toastr.error("数据异常！");
+    }
+}
+
+//删除
+function del(id, orderCode) {
+    if (Number(id)) {
+        var msg = "确定删除订单【" + orderCode + "】吗？";
+        layer.confirm(msg, {
+            icon : 3,
+            title : "提示信息"
+        }, function(index) {
+            $.get(ctx.path + "/manage/cust/order/del"+ ctx.bizSuffix + "?orderId=" + id + "&orderCode=" + orderCode, function(result) {
+                if (result.rs == 1) {
+                    top.toastr.success("删除订单【" + orderCode + "】成功！");
+                    doSearch();
+                    //刷新表单
+                }
+            }, "json");
+            layer.close(index);
+        });
+    } else {
+        top.toastr.error("数据异常！");
+    }
+}

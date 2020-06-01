@@ -1,0 +1,47 @@
+package com.samton.web.manage.cust.service;
+
+import com.samton.platform.common.service.ISuperIntegerService;
+import com.samton.platform.framework.mybatis.pagination.Pagination;
+import com.samton.web.manage.cust.bean.entity.TCustomer;
+import com.samton.web.manage.cust.bean.vo.CustomerVo;
+
+import java.nio.file.Watchable;
+import java.util.Map;
+
+/**
+ * @Description: 客户信息Service接口
+ * @Author: YangYangen
+ * @Date: 2020/4/13 11:01
+ * Copyright (c) 2020, Samton. All rights reserved
+*/
+public interface ICustomerService extends ISuperIntegerService<TCustomer> {
+    /**
+     * 客户信息分页查询
+     * @param paramBean
+     * @return
+     */
+    Pagination<CustomerVo> queryPageCustomerVoList(Pagination<CustomerVo> paramBean) throws Exception;
+
+    /**
+     * 客户账户管理导出
+     * @param paramBean
+     * @return
+     */
+    Pagination<Map<String, Object>> exportPageCustomerVoList(Pagination<CustomerVo> paramBean) throws Exception;
+    /**
+     * 新增客户信息
+     * @param customer
+     * @return
+     * @throws Exception
+     */
+    boolean insertCustomer(TCustomer customer) throws Exception;
+    /**
+     * 查询客户信息
+     * @param custId
+     * @return
+     * @throws Exception
+     */
+    CustomerVo findCustomerVoById(Integer custId) throws Exception;
+
+    Map<String, Object> selectCustAccountInfo(Integer custId) throws Exception;
+}

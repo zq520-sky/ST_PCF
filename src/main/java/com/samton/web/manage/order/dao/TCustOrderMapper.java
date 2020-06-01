@@ -1,0 +1,51 @@
+package com.samton.web.manage.order.dao;
+
+import com.samton.platform.common.dao.AutoMapperInteger;
+import com.samton.platform.framework.mybatis.pagination.Pagination;
+import com.samton.web.manage.order.bean.entity.TCustOrder;
+import com.samton.web.manage.order.bean.excel.CustOrderExcel;
+import com.samton.web.manage.order.bean.vo.CustOrderVo;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.RowBounds;
+
+import java.util.List;
+import java.util.Map;
+
+public interface TCustOrderMapper extends AutoMapperInteger<TCustOrder> {
+
+    /**
+     * 查询需求订单
+     * @author: wuzhiqiang
+     * @date: 2020/4/21
+     * @param paramBean:
+     * @param rowBounds:
+     * @return: java.util.List<com.samton.web.manage.order.bean.vo.CustOrderVo>
+     */
+    List<CustOrderVo> queryOrderPageList(Pagination<CustOrderVo> paramBean, RowBounds rowBounds) throws Exception;
+
+    /**
+     * 导出需求订单
+     * @author: wuzhiqiang
+     * @date: 2020/4/21
+     * @param paramBean:
+     * @param rowBounds:
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    List<CustOrderExcel> exportOrderPageList(Pagination<CustOrderVo> paramBean, RowBounds rowBounds) throws Exception;
+
+    /**
+     * 通过orderId查询订单详情
+     * @author: wuzhiqiang
+     * @date: 2020/4/21
+     * @param orderId:
+     * @return: com.samton.web.manage.order.bean.vo.CustOrderVo
+     */
+    CustOrderVo selectOrderById(@Param("orderId") Integer orderId);
+
+    /**
+     * 通过订单编号查询订单信息
+     * @param orderCode
+     * @return
+     */
+    TCustOrder selectCustOrderByOrderCode(String orderCode);
+}

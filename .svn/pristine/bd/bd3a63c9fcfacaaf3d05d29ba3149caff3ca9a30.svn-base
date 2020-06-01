@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.samton.web.manage.cust.dao.TCustProductMapper" >
+  <resultMap id="BaseResultMap" type="com.samton.web.manage.cust.bean.entity.TCustProduct" >
+    <id column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="cust_id" property="custId" jdbcType="INTEGER" />
+    <result column="platform_type" property="platformType" jdbcType="VARCHAR" />
+    <result column="accounts_name" property="accountsName" jdbcType="VARCHAR" />
+    <result column="item_id" property="itemId" jdbcType="VARCHAR" />
+    <result column="title_keyword" property="titleKeyword" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="is_del" property="isDel" jdbcType="INTEGER" />
+    <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="BIGINT" />
+    <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    product_id, cust_id, platform_type, accounts_name, item_id, title_keyword, remark, 
+    is_del, create_user_id, create_date, modify_user_id, modify_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from public.t_cust_product
+    where product_id = #{productId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from public.t_cust_product
+    where product_id = #{productId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.samton.web.manage.cust.bean.entity.TCustProduct" >
+    insert into public.t_cust_product (product_id, cust_id, platform_type, 
+      accounts_name, item_id, title_keyword, 
+      remark, is_del, create_user_id, 
+      create_date, modify_user_id, modify_date
+      )
+    values (#{productId,jdbcType=INTEGER}, #{custId,jdbcType=INTEGER}, #{platformType,jdbcType=VARCHAR}, 
+      #{accountsName,jdbcType=VARCHAR}, #{itemId,jdbcType=VARCHAR}, #{titleKeyword,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{isDel,jdbcType=INTEGER}, #{createUserId,jdbcType=BIGINT}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=BIGINT}, #{modifyDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.samton.web.manage.cust.bean.entity.TCustProduct" useGeneratedKeys="true" keyProperty="productId">
+    insert into public.t_cust_product
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="productId != null" >
+        product_id,
+      </if>
+      <if test="custId != null" >
+        cust_id,
+      </if>
+      <if test="platformType != null" >
+        platform_type,
+      </if>
+      <if test="accountsName != null" >
+        accounts_name,
+      </if>
+      <if test="itemId != null" >
+        item_id,
+      </if>
+      <if test="titleKeyword != null" >
+        title_keyword,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="isDel != null" >
+        is_del,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id,
+      </if>
+      <if test="modifyDate != null" >
+        modify_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="productId != null" >
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="custId != null" >
+        #{custId,jdbcType=INTEGER},
+      </if>
+      <if test="platformType != null" >
+        #{platformType,jdbcType=VARCHAR},
+      </if>
+      <if test="accountsName != null" >
+        #{accountsName,jdbcType=VARCHAR},
+      </if>
+      <if test="itemId != null" >
+        #{itemId,jdbcType=VARCHAR},
+      </if>
+      <if test="titleKeyword != null" >
+        #{titleKeyword,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyDate != null" >
+        #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.samton.web.manage.cust.bean.entity.TCustProduct" >
+    update public.t_cust_product
+    <set >
+      <if test="custId != null" >
+        cust_id = #{custId,jdbcType=INTEGER},
+      </if>
+      <if test="platformType != null" >
+        platform_type = #{platformType,jdbcType=VARCHAR},
+      </if>
+      <if test="accountsName != null" >
+        accounts_name = #{accountsName,jdbcType=VARCHAR},
+      </if>
+      <if test="itemId != null" >
+        item_id = #{itemId,jdbcType=VARCHAR},
+      </if>
+      <if test="titleKeyword != null" >
+        title_keyword = #{titleKeyword,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        is_del = #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyDate != null" >
+        modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where product_id = #{productId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.samton.web.manage.cust.bean.entity.TCustProduct" >
+    update public.t_cust_product
+    set cust_id = #{custId,jdbcType=INTEGER},
+      platform_type = #{platformType,jdbcType=VARCHAR},
+      accounts_name = #{accountsName,jdbcType=VARCHAR},
+      item_id = #{itemId,jdbcType=VARCHAR},
+      title_keyword = #{titleKeyword,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      is_del = #{isDel,jdbcType=INTEGER},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      modify_date = #{modifyDate,jdbcType=TIMESTAMP}
+    where product_id = #{productId,jdbcType=INTEGER}
+  </update>
+
+
+  <!-- 卖家产品管理分页查询 -->
+  <select id="queryPageList" parameterType="com.samton.platform.framework.mybatis.pagination.Pagination" resultType="com.samton.web.manage.cust.bean.vo.CustProductVo">
+    select
+    a.product_id, a.cust_id, a.platform_type, a.accounts_name, a.item_id, a.title_keyword, a.remark,b.cust_code,b.cust_name
+    from t_cust_product a inner join t_customer b on a.cust_id = b.cust_id
+    <where>
+      <include refid="queryPageList_where" />
+    </where>
+  </select>
+
+  <!-- 卖家产品管理页面导出 -->
+  <select id="exportPageList" parameterType="com.samton.platform.framework.mybatis.pagination.Pagination" resultType="java.util.Map">
+    select
+    a.product_id, a.cust_id, a.platform_type, a.accounts_name, a.item_id, a.title_keyword, a.remark,b.cust_code,b.cust_name
+    from t_cust_product a inner join t_customer b on a.cust_id = b.cust_id
+    <where>
+      <include refid="queryPageList_where" />
+    </where>
+  </select>
+
+  <!-- 客户产品管理分页查询where条件 -->
+  <sql id="queryPageList_where">
+    and is_del = 0
+    <if test="search != null">
+      <if test="search.custId !=null">
+        and a.cust_id = #{search.custId,javaType=INTEGER}
+      </if>
+      <if test="search.accountsName != null and search.accountsName != ''">
+        and accounts_name like '%'||#{search.accountsName,jdbcType=VARCHAR}||'%'
+      </if>
+      <if test="search.itemId != null and search.itemId != ''">
+        and item_id like '%'||#{search.itemId,jdbcType=VARCHAR}||'%'
+      </if>
+      <if test="search.platformType != null and search.platformType != ''">
+        and platform_type like '%'||#{search.platformType,jdbcType=VARCHAR}||'%'
+      </if>
+    </if>
+  </sql>
+
+  <!-- 卖家产品查看 -->
+  <select id="selectCustProductVoById" parameterType="java.lang.Integer" resultType="com.samton.web.manage.cust.bean.vo.CustProductVo">
+    select
+    a.product_id, a.cust_id, a.platform_type, a.accounts_name, a.item_id, a.title_keyword, a.remark,b.cust_code,b.cust_name
+    from t_cust_product a inner join t_customer b on a.cust_id = b.cust_id
+    where a.product_id = #{productId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectCustProductByItemId" resultType="java.util.Map">
+    select <include refid="Base_Column_List" /> from t_cust_product where item_id = #{itemId}
+  </select>
+
+  <select id="selectProductByItemId" resultType="com.samton.web.manage.cust.bean.vo.CustProductVo">
+    select <include refid="Base_Column_List" /> from t_cust_product where item_id = #{itemId}
+  </select>
+</mapper>

@@ -1,0 +1,138 @@
+package com.samton.web.manage.custLog.bean.entity;
+
+import java.io.Serializable;
+import java.util.Date;
+
+public class TCustLogLogin implements Serializable {
+    private Integer logId;
+
+    private Date loginDate;
+
+    private String loginIp;
+
+    private String loginDesc;
+
+    private Integer sysType;
+
+    private Integer proxyId;
+
+    private Integer custId;
+
+    private Long createUserId;
+
+    private String createUserName;
+
+    private Date createDate;
+
+    private Long modifyUserId;
+
+    private String modifyUserName;
+
+    private Date modifyDate;
+
+    private static final long serialVersionUID = 1L;
+
+    public Integer getLogId() {
+        return logId;
+    }
+
+    public void setLogId(Integer logId) {
+        this.logId = logId;
+    }
+
+    public Date getLoginDate() {
+        return loginDate;
+    }
+
+    public void setLoginDate(Date loginDate) {
+        this.loginDate = loginDate;
+    }
+
+    public String getLoginIp() {
+        return loginIp;
+    }
+
+    public void setLoginIp(String loginIp) {
+        this.loginIp = loginIp;
+    }
+
+    public String getLoginDesc() {
+        return loginDesc;
+    }
+
+    public void setLoginDesc(String loginDesc) {
+        this.loginDesc = loginDesc;
+    }
+
+    public Integer getSysType() {
+        return sysType;
+    }
+
+    public void setSysType(Integer sysType) {
+        this.sysType = sysType;
+    }
+
+    public Integer getProxyId() {
+        return proxyId;
+    }
+
+    public void setProxyId(Integer proxyId) {
+        this.proxyId = proxyId;
+    }
+
+    public Integer getCustId() {
+        return custId;
+    }
+
+    public void setCustId(Integer custId) {
+        this.custId = custId;
+    }
+
+    public Long getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(Long createUserId) {
+        this.createUserId = createUserId;
+    }
+
+    public String getCreateUserName() {
+        return createUserName;
+    }
+
+    public void setCreateUserName(String createUserName) {
+        this.createUserName = createUserName;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Long getModifyUserId() {
+        return modifyUserId;
+    }
+
+    public void setModifyUserId(Long modifyUserId) {
+        this.modifyUserId = modifyUserId;
+    }
+
+    public String getModifyUserName() {
+        return modifyUserName;
+    }
+
+    public void setModifyUserName(String modifyUserName) {
+        this.modifyUserName = modifyUserName;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+}

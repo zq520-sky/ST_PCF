@@ -1,0 +1,54 @@
+.taskset{
+    padding: 20px 30px;
+}
+
+.search_btncon{
+    padding: 20px 20px 20px 130px;
+}
+.list-group-item{
+     display: table-row !important;
+     /*padding:0;*/
+}
+.add_taskset{
+    display: inline-block;display: inline-block;top: 8px;position: relative;
+}
+.add_tasksetmanage{
+    padding-top: 10px;
+}
+.taskweekend{
+    text-align: center;
+}
+.taskweekendinput{
+    margin: 0;
+}
+.taskweekendtr{
+    text-align: left;
+}
+.taskalloction{
+    margin-left: 50px;
+}
+.add_value_task{
+    float: left;
+    max-width: 360px;
+    margin-left: 146px;
+    font-size: 12px;
+    line-height: 35px;
+}
+.taskem{
+    padding-left: 17px;
+    font-size: 12px;
+    position: relative;
+    color: #4c4d4d;
+    vertical-align: top;
+    bottom: 9px;
+}
+input[type=checkbox], input[type=radio]{
+    margin: 0 !important;
+}
+.btn i {
+    margin-top: 2px !important;
+    margin-right: 6px;
+}
+.checkbox, .radio{
+    margin-top: 8px !important;
+}

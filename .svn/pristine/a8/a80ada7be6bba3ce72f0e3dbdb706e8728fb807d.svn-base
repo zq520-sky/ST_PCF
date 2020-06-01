@@ -1,0 +1,46 @@
+package com.samton.web.manage.finance.service;
+
+import com.samton.platform.common.service.ISuperIntegerService;
+import com.samton.platform.framework.mybatis.pagination.Pagination;
+import com.samton.web.manage.finance.bean.entity.TCustAccount;
+import com.samton.web.manage.finance.bean.excel.CustAccountEntity;
+import com.samton.web.manage.finance.bean.vo.CustAccountVo;
+
+import java.util.Map;
+
+/**
+ * @Description: 客户账户Service接口
+ * @Author: YangYangen
+ * @Date: 2020/4/15 15:19
+ * Copyright (c) 2020, Samton. All rights reserved
+*/
+public interface ICustAccountService extends ISuperIntegerService<TCustAccount> {
+    /**
+     * 客户账户分页查询
+     * @param paramBean
+     * @return
+     */
+    Pagination<CustAccountVo> queryPageCustAccountVoList(Pagination<CustAccountVo> paramBean) throws Exception;
+
+    /**
+     * 客户账户导出
+     * @param paramBean
+     * @return
+     */
+    Pagination<CustAccountEntity> exportPageCustAccountVoList(Pagination<CustAccountVo> paramBean) throws Exception;
+
+    /**
+     * 查询客户账户
+     * @param accountId
+     * @return
+     * @throws Exception
+     */
+    CustAccountVo findCustAccountVoById(Integer accountId) throws Exception;
+
+    /**
+     * 修改客户账户：1-充值、2-授信、3-调整汇率、4-还款
+     * @param custAccountVo
+     * @return
+     */
+    boolean editCustAccount(CustAccountVo custAccountVo) throws Exception;
+}

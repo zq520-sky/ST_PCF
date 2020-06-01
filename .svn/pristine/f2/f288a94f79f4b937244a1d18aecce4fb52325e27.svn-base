@@ -1,0 +1,215 @@
+.taskset{
+    padding: 20px 30px;
+}
+
+.search_btncon{
+    padding: 20px 20px 20px 130px;
+}
+.list-group-item{
+     display: table-row !important;
+     /*padding:0;*/
+}
+.add_taskset{
+    display: inline-block;display: inline-block;top: 8px;position: relative;
+}
+.add_tasksetmanage{
+    padding-top: 10px;
+    display: flex;
+}
+.taskweekend{
+    text-align: center;
+    /*padding-left:20px;*/
+}
+
+.taskweekendtr{
+    text-align: left;
+}
+.taskalloction{
+    /*margin-left: 50px;*/
+    width: 100px;
+    text-align: center;
+}
+.add_value_task{
+    float: left;
+    max-width: 360px;
+    margin-left: 146px;
+    font-size: 12px;
+    line-height: 35px;
+}
+.taskem{
+    padding-left: 7px;
+    font-size: 12px;
+    position: relative;
+    color: #4c4d4d;
+    vertical-align: top;
+    font-weight: normal;
+    /*bottom: 9px;*/
+}
+/*.checkbox{*/
+/*    margin: 0 !important;*/
+/*    top: 9px;*/
+/*    width: 14px;*/
+/*    border-radius: 2px;*/
+/*    outline: none;*/
+/*    -webkit-appearance:none;*/
+
+/*}*/
+/*input[type=file]:focus, input[type=checkbox]:focus, input[type=radio]:focus{*/
+/*    outline: transparent;*/
+/*}*/
+.tasksetinput input[type=checkbox]{
+    margin: 0 !important;
+}
+.btn i {
+    margin-top: 2px !important;
+    margin-right: 6px !important;
+}
+/*.task_set .checkbox{*/
+/*    margin-top: -6px !important;*/
+/*    margin: 0;display: inline-block;position: inherit;*/
+/*}*/
+
+
+
+.contain_content{
+    padding: 0 20px;overflow-y: scroll;height: 100%;font-size: 14px;
+}
+.contain_content_top{
+    border: 1px solid #333;font-size: 14px;margin: 10px 0;
+}
+.contain_content_text{
+    display: flex;height: 30px;line-height: 30px;padding: 0 20px;border-bottom: 1px solid #333;
+}
+.contain_content_textright{
+    margin-left: auto;
+}
+.containers {
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    /*font-size: 14px;*/
+}
+
+.containers .contain {
+    display: flex;
+    width: 100%;
+}
+
+.containers .conta {
+    padding: 5px 10px 5px 10px;
+    display: flex;
+    width: 50%;
+}
+
+.connerber {
+    padding: 5px 10px 5px 10px;
+    display: flex;
+}
+
+.contner {
+    width: 40%;
+    text-align: right;
+    color: #959795;
+}
+.contain_open{
+    text-align: center;
+    padding-left: 20px;
+}
+
+.contnered {
+    width: 20%;
+    color: #959795;
+    text-align: right;
+}
+
+.contenttext {
+    padding: 5px 10px 5px 10px;
+    width: 50%;
+    display: flex;
+}
+
+.conflex {
+    flex: 1;
+    padding-left: 15px;
+}
+
+.texthalf {
+    display: flex;
+    width: 100%;
+}
+
+.containimg {
+    padding: 0 10px 0 0;
+}
+
+/*.btn-default {*/
+/*    color: #333 !important;*/
+/*    background-color: #fff !important;*/
+/*    border-color: #ccc !important;*/
+
+/*}*/
+/*.add_btn, .export_button {*/
+/*    background-color: #15a5fb !important;*/
+/*}*/
+
+
+/* .chk_1 {*/
+/*     display: none;*/
+/* }*/
+
+/*.chk_1 + label {*/
+/*    background-color: #fff;*/
+/*    border: 1px solid #c1caca;*/
+/*    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);*/
+/*    padding: 9px;*/
+/*    border-radius: 5px;*/
+/*    display: inline-block;*/
+/*    position: relative;*/
+/*    vertical-align: middle;*/
+/*}*/
+/*.chk_1 + label:active {*/
+/*    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px 1px 3px rgba(0, 0, 0, 0.1);*/
+/*}*/
+
+/*.chk_1:checked + label {*/
+/*    background-color: #ecf2f7;*/
+/*    border: 1px solid #92a1ac;*/
+/*    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05), inset 15px 10px -12px rgba(255, 255, 255, 0.1);*/
+/*    color: #243441;*/
+/*}*/
+
+/*.chk_1:checked + label:after {*/
+/*    content: "\2714";*/
+/*    position: absolute;*/
+/*    top: -6px;*/
+/*    left: 0px;*/
+/*    color: #758794;*/
+/*    width: 100%;*/
+/*    text-align: center;*/
+/*    font-size: 1.2em;*/
+/*    padding: 1px 0 0 0;*/
+/*    vertical-align: text-top;*/
+/*}*/
+
+.task_set input[type=checkbox]{
+    margin: 0 !important;
+}
+.task_set label{
+ margin-bottom: 0 !important;
+    font-weight: normal !important;
+}
+.task_setweek label{
+    margin-bottom: 0 !important;
+    font-weight: normal !important;
+}
+.task_setweek input[type=checkbox]{
+margin: 2px 0 0 0;
+}
+.table>thead>tr>th {
+    vertical-align: bottom;
+    border-bottom:none;
+}
+
+
+
+

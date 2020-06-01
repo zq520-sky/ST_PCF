@@ -1,0 +1,67 @@
+package com.samton.web.manage.order.service;
+
+import com.samton.platform.common.service.ISuperIntegerService;
+import com.samton.platform.framework.mybatis.pagination.Pagination;
+import com.samton.web.manage.cust.bean.vo.CustomerVo;
+import com.samton.web.manage.order.bean.entity.TCustOrder;
+import com.samton.web.manage.order.bean.vo.CustOrderDto;
+import com.samton.web.manage.order.bean.vo.CustOrderVo;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+
+import java.util.Map;
+
+/**
+ * @ClassName: ICustOrderService
+ * @Description:
+ * @Author: wuzhiqiang
+ * @Date: 2020-04-16 18:10
+ * @Copyright (c) 2020, Samton. All rights reserved
+ **/
+public interface ICustOrderService extends ISuperIntegerService<TCustOrder> {
+
+    /**
+     * 查询需求订单
+     * @author: wuzhiqiang
+     * @date: 2020/4/21
+     * @param paramBean:
+     * @return: com.samton.platform.framework.mybatis.pagination.Pagination<com.samton.web.manage.order.bean.vo.CustOrderVo>
+     */
+    Pagination<CustOrderVo> queryOrderPageList(Pagination<CustOrderVo> paramBean) throws Exception;
+
+    /**
+     * 导出需求订单
+     * @author: wuzhiqiang
+     * @date: 2020/4/21
+     * @param paramBean:
+     * @return: com.samton.platform.framework.mybatis.pagination.Pagination<com.samton.web.manage.order.bean.vo.CustOrderVo>
+     */
+    Pagination<Map<String, Object>> exportOrderPageList(Pagination<CustOrderVo> paramBean) throws Exception;
+
+    /**
+     *
+     * @author: wuzhiqiang
+     * @date: 2020/4/21
+     * @param orderId:
+     * @return: com.samton.web.manage.order.bean.vo.CustOrderVo
+     */
+    CustOrderVo selectCustOrderById(Integer orderId) throws Exception;
+    
+    /**
+     *
+     * @author: wuzhiqiang
+     * @date: 2020/4/21
+     * @param file: 
+     * @return: void
+     */
+    void importOrders(CommonsMultipartFile file) throws Exception;
+
+    /**
+     *
+     * @author: wuzhiqiang
+     * @date: 2020/4/22
+     * @param custOrderDto: 
+     * @return: java.lang.String
+     */
+    String addCustOrder(CustOrderDto custOrderDto) throws  Exception;
+
+}

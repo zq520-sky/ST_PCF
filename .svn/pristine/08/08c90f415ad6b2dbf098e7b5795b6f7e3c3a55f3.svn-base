@@ -1,0 +1,129 @@
+package com.samton.web.manage.finance.bean.entity;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
+
+public class TCustAccountReturn implements Serializable {
+    private Integer returnId;
+
+    private Integer accountId;
+
+    private Integer custId;
+
+    private BigDecimal returnMoney;
+
+    private BigDecimal beforeReturnMoney;
+
+    private BigDecimal afterReturnMoney;
+
+    private Date returnTime;
+
+    private String remark;
+
+    private Long createUserId;
+
+    private Date createDate;
+
+    private Long modifyUserId;
+
+    private Date modifyDate;
+
+    private static final long serialVersionUID = 1L;
+
+    public Integer getReturnId() {
+        return returnId;
+    }
+
+    public void setReturnId(Integer returnId) {
+        this.returnId = returnId;
+    }
+
+    public Integer getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(Integer accountId) {
+        this.accountId = accountId;
+    }
+
+    public Integer getCustId() {
+        return custId;
+    }
+
+    public void setCustId(Integer custId) {
+        this.custId = custId;
+    }
+
+    public BigDecimal getReturnMoney() {
+        return returnMoney;
+    }
+
+    public void setReturnMoney(BigDecimal returnMoney) {
+        this.returnMoney = returnMoney;
+    }
+
+    public BigDecimal getBeforeReturnMoney() {
+        return beforeReturnMoney;
+    }
+
+    public void setBeforeReturnMoney(BigDecimal beforeReturnMoney) {
+        this.beforeReturnMoney = beforeReturnMoney;
+    }
+
+    public BigDecimal getAfterReturnMoney() {
+        return afterReturnMoney;
+    }
+
+    public void setAfterReturnMoney(BigDecimal afterReturnMoney) {
+        this.afterReturnMoney = afterReturnMoney;
+    }
+
+    public Date getReturnTime() {
+        return returnTime;
+    }
+
+    public void setReturnTime(Date returnTime) {
+        this.returnTime = returnTime;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public Long getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(Long createUserId) {
+        this.createUserId = createUserId;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Long getModifyUserId() {
+        return modifyUserId;
+    }
+
+    public void setModifyUserId(Long modifyUserId) {
+        this.modifyUserId = modifyUserId;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+}

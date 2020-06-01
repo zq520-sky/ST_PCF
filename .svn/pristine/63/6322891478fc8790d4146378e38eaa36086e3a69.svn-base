@@ -1,0 +1,347 @@
+package com.samton.web.manage.finance.controller;
+
+import com.samton.platform.framework.base.BaseController;
+import com.samton.platform.framework.constant.WebConstant;
+import com.samton.platform.framework.exception.ServiceException;
+import com.samton.platform.framework.mybatis.pagination.Pagination;
+import com.samton.platform.framework.util.CurrentUtil;
+import com.samton.platform.pm.bean.entity.TSysLog;
+import com.samton.platform.pm.constant.PmStateConstant;
+import com.samton.platform.pm.service.ILogService;
+import com.samton.web.manage.finance.bean.entity.TCustDepositOrder;
+import com.samton.web.manage.finance.bean.excel.CustDepositOrderEntity;
+import com.samton.web.manage.finance.bean.vo.CustAccountVo;
+import com.samton.web.manage.finance.bean.vo.CustDepositOrderVo;
+import com.samton.web.manage.finance.constant.CustAccountExpCodeConstant;
+import com.samton.web.manage.finance.enums.ApproveStateEnums;
+import com.samton.web.manage.finance.enums.PayTypeEnums;
+import com.samton.web.manage.finance.service.ICustDepositOrderService;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Map;
+
+/**
+ * @Description: 客户充值记录Controller
+ * @Author: ZhongShengbin
+ * @Date: 2020/04/10 1600
+ * Copyright (c) 2019, Samton. All rights reserved
+ */
+@Controller
+@RequestMapping("/manage/finance/")
+public class CustDepositOrderController extends BaseController {
+
+    @Resource
+    private ICustDepositOrderService iCustDepositOrderService;
+
+    @Resource
+    private ILogService logService;
+
+    /**
+     * 客户充值信息管理分页
+     * @param paramBean
+     * @param custDepositOrderVo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("queryOrderInfoList" + WebConstant.PAGE_SUFFIX)
+    public String queryFinanceInfoList(Pagination<CustDepositOrderVo> paramBean, CustDepositOrderVo custDepositOrderVo) throws Exception{
+        SimpleDateFormat sdfBegin = new SimpleDateFormat("yyyy-MM-01");
+        SimpleDateFormat sdfEnd = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdfParse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if (custDepositOrderVo.getPayTimeBegin() == null) {
+            custDepositOrderVo.setPayTimeBegin(sdfParse.parse(sdfBegin.format(System.currentTimeMillis()) + " 00:00:00"));
+        }
+        if (custDepositOrderVo.getPayTimeEnd()== null) {
+            custDepositOrderVo.setPayTimeEnd(sdfParse.parse(sdfEnd.format(System.currentTimeMillis()) + " 23:59:59"));
+        }
+        paramBean.setSearch(custDepositOrderVo);
+        Pagination<CustDepositOrderVo> pageData = iCustDepositOrderService.queryChargePageList(paramBean);
+        this.addAttr("pageData", pageData);
+        return "finance/custFinanceManage";
+    }
+
+    /**
+     * 客户充值信息管理导出
+     * @param paramBean
+     * @param custDepositOrderVo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/exportOrderInfoList" + WebConstant.BUSINESS_SUFFIX)
+    public String exportFinanceInfoList(Pagination<TCustDepositOrder> paramBean, CustDepositOrderVo custDepositOrderVo) throws Exception {
+        SimpleDateFormat sdfBegin = new SimpleDateFormat("yyyy-MM-01");
+        SimpleDateFormat sdfEnd = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdfParse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if (custDepositOrderVo.getPayTimeBegin() == null) {
+            custDepositOrderVo.setPayTimeBegin(sdfParse.parse(sdfBegin.format(System.currentTimeMillis()) + " 00:00:00"));
+        }
+        if (custDepositOrderVo.getPayTimeEnd()== null) {
+            custDepositOrderVo.setPayTimeEnd(sdfParse.parse(sdfEnd.format(System.currentTimeMillis()) + " 23:59:59"));
+        }
+        paramBean.setSearch(custDepositOrderVo);
+        Pagination<CustDepositOrderEntity> list = iCustDepositOrderService.exportOrderPageList(paramBean);
+        logService.addLog(new TSysLog("客户充值记录-导出", "导出客户充值记录！", PmStateConstant.LOG_PLATFORM));
+        this.export(response, "客户充值记录" + String.format("%1$tY%1$tm%1$td", new Date()), CustDepositOrderEntity.class, list.getData());
+        return null;
+    }
+
+    /**
+     * 客户充值信息查看
+     * @param orderId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/viewOrderInfoList" + WebConstant.BUSINESS_SUFFIX)
+    @ResponseBody
+    public Map<String, Object> viewFinance(Integer orderId) throws Exception {
+        CustDepositOrderVo custDepositOrderVo = iCustDepositOrderService.selectFinanceVoById(orderId);
+        custDepositOrderVo.setPayTypeCN(PayTypeEnums.getDescByType(custDepositOrderVo.getPayType()));
+        custDepositOrderVo.setApproveStateCN(ApproveStateEnums.getDescByState(custDepositOrderVo.getApproveState()));
+        return this.getResultMap(true, custDepositOrderVo);
+    }
+
+
+    /**
+     * 客户充值申请管理分页
+     * @param paramBean
+     * @param custDepositOrderVo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("queryRechargeApplicationList" + WebConstant.PAGE_SUFFIX)
+    public String queryRechargeInfoList(Pagination<CustDepositOrderVo> paramBean, CustDepositOrderVo custDepositOrderVo) throws Exception{
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdfParse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        if (custDepositOrderVo.getPayTimeBegin() == null) {
+            Calendar calendar = Calendar.getInstance();
+            Date date = new Date();
+            calendar.setTime(date);
+            calendar.add(Calendar.DAY_OF_YEAR,-7);
+            Date reDate = calendar.getTime();
+            custDepositOrderVo.setPayTimeBegin(sdfParse.parse(sdf.format(reDate) + " 00:00"));
+        }
+        if (custDepositOrderVo.getPayTimeEnd()== null) {
+            custDepositOrderVo.setPayTimeEnd(sdfParse.parse(sdf.format(System.currentTimeMillis()) + " 23:59"));
+        }
+        paramBean.setSearch(custDepositOrderVo);
+        Pagination<CustDepositOrderVo> pageData = iCustDepositOrderService.queryChargePageList(paramBean);
+        pageData.getData().stream().forEach(custDepositOrderVo1 -> {
+            custDepositOrderVo1.setPayTypeCN(PayTypeEnums.getDescByType(custDepositOrderVo1.getPayType()));
+            custDepositOrderVo1.setApproveStateCN(ApproveStateEnums.getDescByState(custDepositOrderVo1.getApproveState()));
+        });
+        this.addAttr("pageData", pageData);
+        return "finance/custRechargeManage";
+    }
+
+    /**
+     * 客户充值申请管理导出
+     * @param paramBean
+     * @param custDepositOrderVo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/exportRechargeApplicationList" + WebConstant.BUSINESS_SUFFIX)
+    public String exportRechargeApplicationList(Pagination<TCustDepositOrder> paramBean, CustDepositOrderVo custDepositOrderVo) throws Exception {
+        SimpleDateFormat sdfBegin = new SimpleDateFormat("yyyy-MM-01");
+        SimpleDateFormat sdfEnd = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdfParse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if (custDepositOrderVo.getPayTimeBegin() == null) {
+            custDepositOrderVo.setPayTimeBegin(sdfParse.parse(sdfBegin.format(System.currentTimeMillis()) + " 00:00:00"));
+        }
+        if (custDepositOrderVo.getPayTimeEnd()== null) {
+            custDepositOrderVo.setPayTimeEnd(sdfParse.parse(sdfEnd.format(System.currentTimeMillis()) + " 23:59:59"));
+        }
+        paramBean.setSearch(custDepositOrderVo);
+        Pagination<CustDepositOrderEntity> list = iCustDepositOrderService.exportOrderPageList(paramBean);
+        logService.addLog(new TSysLog("客户充值申请-导出", "导出客户充值申请！", PmStateConstant.LOG_PLATFORM));
+        this.export(response, "客户充值申请" + String.format("%1$tY%1$tm%1$td", new Date()), CustDepositOrderEntity.class, list.getData());
+        return null;
+    }
+
+    /**
+     *
+     * @Author: wuzhiqiang
+     * @Description: 添加充值申请
+     * @Date: 2020/3/16
+     * @Param cfgBannerVo:
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @RequestMapping("addCustRegisterOrder" + WebConstant.BUSINESS_SUFFIX)
+    @ResponseBody
+    public Map<String, Object> addCustRegisterOrder(CustDepositOrderVo custDepositOrderVo) throws Exception {
+        if(StringUtils.isBlank(custDepositOrderVo.getFile())){
+            throw new ServiceException(CustAccountExpCodeConstant.CUST_ACCOUNT_ADD_FILE_EMPTY);
+        }
+        String orderCode = iCustDepositOrderService.addCustRegisterOrder(custDepositOrderVo);
+        if (StringUtils.isNotBlank(orderCode)) {
+            logService.addLog(new TSysLog(3, "账户充值申请-新增", "新增账户充值【"+orderCode+"】成功 ！"));
+        } else {
+            logService.addLog(new TSysLog(3, "账户充值申请-新增", "新增账户充值【"+orderCode+"】失败 ！"));
+        }
+        if (StringUtils.isBlank(orderCode)) {
+            throw new ServiceException(CustAccountExpCodeConstant.CUST_ACCOUNT_ADD_ERROR);
+        }
+        return this.getResultMap(true, orderCode);
+    }
+    /**
+     * 客户充值信息管理分页(客户端)
+     * @param paramBean
+     * @param custDepositOrderVo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("queryOrderInfoListByCustId" + WebConstant.PAGE_SUFFIX)
+    public String queryFinanceInfoListByCustId(Pagination<CustDepositOrderVo> paramBean, CustDepositOrderVo custDepositOrderVo) throws Exception{
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdfParse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        if (custDepositOrderVo.getPayTimeBegin() == null) {
+            Calendar calendar = Calendar.getInstance();
+            Date date = new Date();
+            calendar.setTime(date);
+            calendar.add(Calendar.DAY_OF_YEAR,-7);
+            Date reDate = calendar.getTime();
+            custDepositOrderVo.setPayTimeBegin(sdfParse.parse(sdf.format(reDate) + " 00:00"));
+        }
+        if (custDepositOrderVo.getPayTimeEnd()== null) {
+            custDepositOrderVo.setPayTimeEnd(sdfParse.parse(sdf.format(System.currentTimeMillis()) + " 23:59"));
+        }
+        custDepositOrderVo.setCustId(CurrentUtil.getCurrentUser().getEnterpriseId());
+        paramBean.setSearch(custDepositOrderVo);
+        Pagination<CustDepositOrderVo> pageData = iCustDepositOrderService.queryChargePageList(paramBean);
+        this.addAttr("pageData", pageData);
+        return "finance/custChargeManage";
+    }
+
+    /**
+     * 客户充值信息管理导出（客户端）
+     * @param paramBean
+     * @param custDepositOrderVo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/exportOrderInfoListByCustId" + WebConstant.BUSINESS_SUFFIX)
+    public String exportFinanceInfoListByCustId(Pagination<TCustDepositOrder> paramBean, CustDepositOrderVo custDepositOrderVo) throws Exception {
+        SimpleDateFormat sdfBegin = new SimpleDateFormat("yyyy-MM-01");
+        SimpleDateFormat sdfEnd = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdfParse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if (custDepositOrderVo.getPayTimeBegin() == null) {
+            custDepositOrderVo.setPayTimeBegin(sdfParse.parse(sdfBegin.format(System.currentTimeMillis()) + " 00:00:00"));
+        }
+        if (custDepositOrderVo.getPayTimeEnd()== null) {
+            custDepositOrderVo.setPayTimeEnd(sdfParse.parse(sdfEnd.format(System.currentTimeMillis()) + " 23:59:59"));
+        }
+        custDepositOrderVo.setCustId(CurrentUtil.getCurrentUser().getEnterpriseId());
+        paramBean.setSearch(custDepositOrderVo);
+        Pagination<CustDepositOrderEntity> list = iCustDepositOrderService.exportOrderPageList(paramBean);
+        logService.addLog(new TSysLog(3,"客户充值记录-导出", "导出客户充值记录！"));
+//        String title = "客户编号,客户名称,所属公司,操作前账户余额,操作后账户余额,充值金额(元),充值方式,充值时间,备注";
+//        List<String> colNames = new ArrayList<String>();
+//        colNames.add("cust_code");
+//        colNames.add("cust_name");
+//        colNames.add("company_name");
+//        colNames.add("before_account_money");
+//        colNames.add("after_account_money");
+//        colNames.add("recharge_money");
+//        colNames.add("repay_type");
+//        colNames.add("pay_time");
+//        colNames.add("remark");
+//        this.export(response,"客户充值记录" + String.format("%1$tY%1$tm%1$td", new Date()), title, colNames, pageData);
+        return null;
+    }
+
+    /**
+     * 客户充值信息查看（客户端）
+     * @param orderId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/viewOrderInfoListByCustId" + WebConstant.BUSINESS_SUFFIX)
+    @ResponseBody
+    public Map<String, Object> viewFinanceByCustId(Integer orderId) throws Exception {
+        CustDepositOrderVo custDepositOrderVo = iCustDepositOrderService.selectFinanceVoById(orderId);
+        custDepositOrderVo.setPayTypeCN(PayTypeEnums.getDescByType(custDepositOrderVo.getPayType()));
+        custDepositOrderVo.setApproveStateCN(ApproveStateEnums.getDescByState(custDepositOrderVo.getApproveState()));
+        return this.getResultMap(true, custDepositOrderVo);
+    }
+
+    /**
+     * 客户充值审核管理分页
+     * @param paramBean
+     * @param custDepositOrderVo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("queryRechargeVerifyList" + WebConstant.PAGE_SUFFIX)
+    public String queryRechargeVerifyList(Pagination<CustDepositOrderVo> paramBean, CustDepositOrderVo custDepositOrderVo) throws Exception{
+
+        SimpleDateFormat sdfBegin = new SimpleDateFormat("yyyy-MM-01");
+        SimpleDateFormat sdfEnd = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdfParse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if (custDepositOrderVo.getPayTimeBegin() == null) {
+            custDepositOrderVo.setPayTimeBegin(sdfParse.parse(sdfBegin.format(System.currentTimeMillis()) + " 00:00:00"));
+        }
+        if (custDepositOrderVo.getPayTimeEnd()== null) {
+            custDepositOrderVo.setPayTimeEnd(sdfParse.parse(sdfEnd.format(System.currentTimeMillis()) + " 23:59:59"));
+        }
+        paramBean.setSearch(custDepositOrderVo);
+        Pagination<CustDepositOrderVo> pageData = iCustDepositOrderService.queryChargePageList(paramBean);
+        pageData.getData().stream().forEach(custDepositOrderVo1 -> {
+            custDepositOrderVo1.setPayTypeCN(PayTypeEnums.getDescByType(custDepositOrderVo1.getPayType()));
+            custDepositOrderVo1.setApproveStateCN(ApproveStateEnums.getDescByState(custDepositOrderVo1.getApproveState()));
+        });
+        this.addAttr("pageData", pageData);
+        return "finance/custRechargeVerifyManage";
+    }
+
+    /**
+     *
+     * @author: wuzhiqiang
+     * @date: 2020/4/21
+     * @param custDepositOrderVo:
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @RequestMapping("verifyRechargeOrder" + WebConstant.BUSINESS_SUFFIX)
+    @ResponseBody
+    public Map<String, Object> verifyRechargeOrder(CustDepositOrderVo custDepositOrderVo) throws Exception{
+        boolean result = iCustDepositOrderService.updateRegisterOrder(custDepositOrderVo);
+        if (result) {
+            logService.addLog(new TSysLog("客户充值审核-审核", "客户充值审核【"+custDepositOrderVo.getOrderCode()+"】成功 ！", PmStateConstant.LOG_PLATFORM));
+        } else {
+            logService.addLog(new TSysLog("客户充值审核-审核", "客户充值审核【"+custDepositOrderVo.getOrderCode()+"】失败 ！", PmStateConstant.LOG_PLATFORM));
+            throw new ServiceException(CustAccountExpCodeConstant.CUST_ACCOUNT_VERIFY_ERROR);
+        }
+        return this.getResultMap(true, result);
+    }
+
+
+    /**
+     * 我的账户查询（客户端）
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("queryAccountByCustId" + WebConstant.PAGE_SUFFIX)
+    public String queryAccountByCustId() throws Exception{
+        CustAccountVo custAccountVo = iCustDepositOrderService.findCustAccountByCustId();
+        this.addAttr("data", custAccountVo);
+        return "finance/custMineAccount";
+    }
+    /**
+     * 我的账户信息查看（客户端）
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/viewAccount" + WebConstant.BUSINESS_SUFFIX)
+    @ResponseBody
+    public Map<String, Object> viewAccount() throws Exception {
+        CustAccountVo custAccountVo = iCustDepositOrderService.findCustAccountByCustId();
+        return this.getResultMap(true, custAccountVo);
+    }
+
+}

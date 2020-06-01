@@ -1,0 +1,63 @@
+<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%@ include file="/resources/platform/inc.jsp"%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<script src="${ctx.path}/resources/js/common/DataForm.js?v=1.0"></script>
+		<script src="${ctx.path}/resources/script/cust/custInfoManage.js?v=1.1"></script>
+		<script type="text/javascript">
+			$(function() {
+				loadCriteria();
+			});
+			//加载查询条件
+			function loadCriteria() {
+			}
+		</script>
+	</head>
+	<body>
+		<!-- 编辑 -->
+		<div id="editId" name="editName" class="add_box mCustomScrollbar_y" data-mcs-theme="dark">
+			<form method="post" id="editForm" action="${ctx.path}/manage/task/editCustTaskSet${ctx.bizSuffix}">
+				<input type="hidden" id="taskSetId" name="taskSetId" />
+				<div class="add_list">
+					<h5>工作日分配比例设定：</h5>
+					<div class="add_value">
+						<button class="operationbtn" type="button" onclick="workdaySet(${custTaskSet.taskSetId});">
+							<span>任务比例设定</span>
+						</button>
+					</div>
+				</div>
+				<div class="add_list">
+					<h5>周末负责人：：</h5>
+					<div class="add_value">
+						<span id="loginNameEdit"></span>
+						<button class="operationbtn" type="button" onclick="workdaySet(${custTaskSet.taskSetId});">
+							<span>任务比例设定</span>
+						</button>
+					</div>
+				</div>
+				<div class="add_list">
+					<h5>部门负责人：</h5>
+					<div class="add_value">
+						<select class="select" name="managerUserId" id="managerUserId" type="select">
+							<option value="" selected>请选择</option>
+							<option value="5">5天内未使用</option>
+							<option value="4">4天内未使用</option>
+							<option value="3">3天内未使用</option>
+							<option value="2">2天内未使用</option>
+							<option value="1">1天内未使用</option>
+						</select>
+					</div>
+				</div>
+				<div class="add_list">
+					<h5>买家账号操作次数：</h5>
+					<div class="add_value">
+						<label class="checkbox"><input type="checkbox" name="" id=""><em>是否优先使用操作次数少的</em></label>
+					</div>
+				</div>
+			</form>
+		</div>
+	</body>
+</html>
+

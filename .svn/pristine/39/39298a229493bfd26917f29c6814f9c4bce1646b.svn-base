@@ -1,0 +1,59 @@
+package com.samton.web.manage.finance.dao;
+
+import com.samton.platform.common.dao.AutoMapperInteger;
+import com.samton.platform.framework.mybatis.pagination.Pagination;
+import com.samton.web.manage.finance.bean.entity.TCustAccount;
+import com.samton.web.manage.finance.bean.excel.CustAccountEntity;
+import com.samton.web.manage.finance.bean.vo.CustAccountVo;
+import org.apache.ibatis.session.RowBounds;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @Description: 客户账户Mapper接口
+ * @Author: YangYangen
+ * @Date: 2020/4/15 14:41
+ * Copyright (c) 2020, Samton. All rights reserved
+*/
+public interface TCustAccountMapper extends AutoMapperInteger<TCustAccount> {
+    /**
+     * 客户账户分页查询
+     * @param paramBean
+     * @param rowBounds
+     * @return
+     */
+    List<CustAccountVo> queryPageCustAccountVoList(Pagination<CustAccountVo> paramBean, RowBounds rowBounds) throws Exception;
+
+    /**
+     * 客户账户导出
+     * @param paramBean
+     * @param rowBounds
+     * @return
+     */
+    List<CustAccountEntity> exportPageCustAccountVoList(Pagination<CustAccountVo> paramBean, RowBounds rowBounds) throws Exception;
+
+    /**
+     * 查询客户账户
+     * @param custId
+     * @return
+     * @throws Exception
+     */
+    CustAccountVo selectCustAccountVoById(Integer custId) throws Exception;
+
+    /**
+     * 修改客户账户：1-充值、2-授信、3-调整汇率、4-还款
+     * @param jsonStr
+     * @return
+     */
+    Integer updateCustAccount(String jsonStr);
+
+    /**
+     *
+     * @author: wuzhiqiang
+     * @date: 2020/4/20
+     * @param custId:
+     * @return: com.samton.web.manage.finance.bean.vo.CustAccountVo
+     */
+    CustAccountVo selectByCustId(Integer custId);
+}

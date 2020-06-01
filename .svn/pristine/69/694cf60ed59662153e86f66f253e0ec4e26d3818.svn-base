@@ -1,0 +1,109 @@
+var index = null;
+var frameId = window.frameElement && window.frameElement.id || '';
+var editValidate;
+$(function() {
+
+    $("#buyerOprNum").click(function () {
+        if($(this).is(":checked")){
+            $(this).val("1");
+        }
+        else{
+            $(this).val("0");
+        }
+    });
+    //编辑校验
+    editValidate = $("#editForm").validate({
+        rules : {
+        },
+        messages : {
+        },
+        submitHandler : function(form) {
+            $(form).ajaxSubmit({
+                //表单提交成功后的回调
+                success : function(responseText, statusText, xhr, $form) {
+                    if (responseText.rs > 0) {
+                        top.toastr.success("分配规则设置成功！");
+                        //FormUtil.resetForm("editForm");
+                        reloadInfo();
+                        layer.close(index); //再执行关闭
+                    }
+                }
+            });
+        }
+    });
+});
+
+//执行查询
+function reloadInfo() {
+    //$("#pageForm").submit();
+    /*var path = ctx.path + '/manage/task/viewCustTaskSet' + ctx.pageSuffix ;
+    $('#pageForm').attr("action", path).submit();
+    top.progressbar(frameId);*/
+
+    $.get(ctx.path + "/manage/task/viewCustTaskSet"+ ctx.pageSuffix ,function(result) {
+    }, "");
+}
+//打开工作日分配比例设定
+function taskRateSet() {
+    //iframe层
+    layer.open({
+        type: 2,
+        title: '工作日分配比例设定',
+        shadeClose: true,
+        area: ['600px', '400px'],
+        btn: ['确定', '返回'],
+        yes: function(index, layero){
+            var iframeWin = window[layero.find('iframe')[0]['name']];
+            iframeWin.setUser();
+        },
+        content: ctx.path + '/manage/task/taskSet' + ctx.noAuthSuffix +"?oprType=1", //iframe的url，
+    });
+}
+
+/*
+* oprType 1:工作日分配比例设定 2:工作日分配比例设定
+ */
+function setTaskList(userIds,userNames,userRates,oprType){
+    var ids = userIds.substring(0,userIds.lastIndexOf(","));
+    var names = userNames.substring(0,userNames.lastIndexOf(","));
+    if(1==oprType){
+        var rates = userRates.substring(0,userRates.lastIndexOf(","));
+        $("#workdayUsers").val(ids);
+        $("#workdayUsersName").val(names);
+        $("#workdayUsersRate").val(rates);
+    }
+    else{
+        $("#weekendUsers").val(ids);
+        $("#weekendUsersName").val(names);
+        $("#weekendUserNamesSpan").html(names);
+    }
+}
+
+
+
+//打开周末负责人
+function taskWeekendSet(){
+    //iframe层
+    layer.open({
+        type: 2,
+        title: '周末负责人设定',
+        shadeClose: true,
+        area: ['400px', '300px'],
+        btn: ['确定', '返回'],
+        yes: function(index, layero){
+            var iframeWin = window[layero.find('iframe')[0]['name']];
+            iframeWin.setUser();
+        },
+        content: ctx.path + '/manage/task/taskSet' + ctx.noAuthSuffix +"?oprType=2", //iframe的url，
+    });
+}
+
+/*
+function checkValue() {
+    if($(this).is(":checked")){
+        $(this).val("1")
+    }
+    else{
+        $(this).val("0")
+    }
+}*/

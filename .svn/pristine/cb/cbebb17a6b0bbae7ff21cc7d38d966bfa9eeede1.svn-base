@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.samton.web.manage.cust.dao.TCustomerMapper" >
+  <resultMap id="BaseResultMap" type="com.samton.web.manage.cust.bean.entity.TCustomer" >
+    <id column="cust_id" property="custId" jdbcType="INTEGER" />
+    <result column="cust_code" property="custCode" jdbcType="VARCHAR" />
+    <result column="cust_name" property="custName" jdbcType="VARCHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="contact_tel" property="contactTel" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="is_forbid" property="isForbid" jdbcType="INTEGER" />
+    <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="BIGINT" />
+    <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    cust_id, cust_code, cust_name, company_name, contact_tel, email, is_forbid, create_user_id, 
+    create_date, modify_user_id, modify_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from public.t_customer
+    where cust_id = #{custId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from public.t_customer
+    where cust_id = #{custId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.samton.web.manage.cust.bean.entity.TCustomer" >
+    <!-- 返回主键 -->
+    <selectKey keyProperty="custId" order="AFTER" resultType="java.lang.Integer" >
+      select currval('t_customer_cust_id_seq');
+    </selectKey>
+    insert into public.t_customer (cust_id, cust_code, cust_name, 
+      company_name, contact_tel, email, 
+      is_forbid, create_user_id, create_date, 
+      modify_user_id, modify_date)
+    values (#{custId,jdbcType=INTEGER}, #{custCode,jdbcType=VARCHAR}, #{custName,jdbcType=VARCHAR}, 
+      #{companyName,jdbcType=VARCHAR}, #{contactTel,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{isForbid,jdbcType=INTEGER}, #{createUserId,jdbcType=BIGINT}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{modifyUserId,jdbcType=BIGINT}, #{modifyDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.samton.web.manage.cust.bean.entity.TCustomer" >
+    <!-- 返回主键 -->
+    <selectKey keyProperty="custId" order="AFTER" resultType="java.lang.Integer" >
+      select currval('t_customer_cust_id_seq');
+    </selectKey>
+    insert into public.t_customer
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="custId != null" >
+        cust_id,
+      </if>
+      <if test="custCode != null" >
+        cust_code,
+      </if>
+      <if test="custName != null" >
+        cust_name,
+      </if>
+      <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="contactTel != null" >
+        contact_tel,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="isForbid != null" >
+        is_forbid,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id,
+      </if>
+      <if test="modifyDate != null" >
+        modify_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="custId != null" >
+        #{custId,jdbcType=INTEGER},
+      </if>
+      <if test="custCode != null" >
+        #{custCode,jdbcType=VARCHAR},
+      </if>
+      <if test="custName != null" >
+        #{custName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactTel != null" >
+        #{contactTel,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="isForbid != null" >
+        #{isForbid,jdbcType=INTEGER},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyDate != null" >
+        #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.samton.web.manage.cust.bean.entity.TCustomer" >
+    update public.t_customer
+    <set >
+      <if test="custCode != null" >
+        cust_code = #{custCode,jdbcType=VARCHAR},
+      </if>
+      <if test="custName != null" >
+        cust_name = #{custName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactTel != null" >
+        contact_tel = #{contactTel,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="isForbid != null" >
+        is_forbid = #{isForbid,jdbcType=INTEGER},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyDate != null" >
+        modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where cust_id = #{custId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.samton.web.manage.cust.bean.entity.TCustomer" >
+    update public.t_customer
+    set cust_code = #{custCode,jdbcType=VARCHAR},
+      cust_name = #{custName,jdbcType=VARCHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      contact_tel = #{contactTel,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      is_forbid = #{isForbid,jdbcType=INTEGER},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      modify_date = #{modifyDate,jdbcType=TIMESTAMP}
+    where cust_id = #{custId,jdbcType=INTEGER}
+  </update>
+
+  <!-- 客户信息管理分页查询where条件 -->
+  <sql id="queryPageCustomerVoList_where">
+    <if test="search != null">
+      <if test="search.custName != null and search.custName != ''">
+        and a.cust_name like '%'||#{search.custName,jdbcType=VARCHAR}||'%'
+      </if>
+      <if test="search.companyName != null and search.companyName != ''">
+        and a.company_name like '%'||#{search.companyName,jdbcType=VARCHAR}||'%'
+      </if>
+      <if test="search.contactTel != null and search.contactTel != ''">
+        and a.contact_tel like '%'||#{search.contactTel,jdbcType=VARCHAR}||'%'
+      </if>
+      <if test="search.isForbid != null">
+        and a.is_forbid = #{search.isForbid,jdbcType=INTEGER}
+      </if>
+    </if>
+  </sql>
+
+  <sql id="Base_Column_List_Vo" >
+    a.cust_id, a.cust_code, a.cust_name, a.company_name, a.contact_tel, a.email, a.is_forbid, a.create_user_id,
+    a.create_date, a.modify_user_id, a.modify_date
+  </sql>
+
+  <!-- 客户信息管理分页查询 -->
+  <select id="queryPageCustomerVoList" parameterType="com.samton.platform.framework.mybatis.pagination.Pagination" resultType="com.samton.web.manage.cust.bean.vo.CustomerVo">
+    select
+        <include refid="Base_Column_List_Vo"/>, b.user_id, b.login_name, c.dollar_rate,
+        case a.is_forbid when 0 then '正常' when 1 then '已禁用' end as is_forbid_cn
+    from t_customer a
+   inner join t_sys_pm_user b on a.cust_id = b.cust_id and b.is_manager = 1
+    inner join t_cust_account c on a.cust_id = c.cust_id
+    <where>
+      <include refid="queryPageCustomerVoList_where" />
+    </where>
+  </select>
+
+  <!-- 客户信息管理页面导出 -->
+  <select id="exportPageCustomerVoList" parameterType="com.samton.platform.framework.mybatis.pagination.Pagination" resultType="java.util.Map">
+    select
+        <include refid="Base_Column_List_Vo"/>, b.user_id, b.login_name, c.dollar_rate,
+        case a.is_forbid when 0 then '正常' when 1 then '已禁用' end as is_forbid_cn
+    from t_customer a
+    inner join t_sys_pm_user b on a.cust_id = b.cust_id and b.is_manager = 1
+    inner join t_cust_account c on a.cust_id = c.cust_id
+    <where>
+      <include refid="queryPageCustomerVoList_where" />
+    </where>
+  </select>
+
+  <!-- 新增客户 -->
+  <select id="insertCustomer" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select f_opr_customer_add from f_opr_customer_add( #{jsonStr , jdbcType=VARCHAR  }::json )
+  </select>
+
+  <!-- 客户信息查看 -->
+  <select id="selectCustomerVoById" parameterType="java.lang.Integer" resultType="com.samton.web.manage.cust.bean.vo.CustomerVo">
+    select
+        <include refid="Base_Column_List_Vo"/>, b.user_id, b.login_name, c.dollar_rate,
+        case a.is_forbid when 0 then '正常' when 1 then '已禁用' end as is_forbid_cn
+    from t_customer a
+    inner join t_sys_pm_user b on a.cust_id = b.cust_id and b.is_manager = 1
+    inner join t_cust_account c on a.cust_id = c.cust_id
+    where a.cust_id = #{custId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectCustAccountInfo" resultType="java.util.Map">
+    SELECT
+        tc.cust_id,
+        tc.cust_name,
+        tc.cust_code,
+        tca.dollar_rate
+    FROM
+        t_customer tc
+        LEFT JOIN t_cust_account tca ON tc.cust_id = tca.cust_id
+    WHERE
+        tc.cust_id = #{custId}
+  </select>
+
+  <select id="selectByCustName" resultType="com.samton.web.manage.cust.bean.entity.TCustomer">
+    select <include refid="Base_Column_List"/> from t_customer where cust_name = #{custName}
+  </select>
+</mapper>

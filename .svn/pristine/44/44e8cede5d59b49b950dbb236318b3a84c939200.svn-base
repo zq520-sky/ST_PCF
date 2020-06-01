@@ -1,0 +1,99 @@
+<%@ include file="/resources/platform/inc.jsp"%>
+<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <title>Title</title>
+    <script type="text/javascript">
+    function taskinput() {
+
+    }
+    $(function() {
+        $("#inputtasked").hide();
+
+    });
+    function diag()
+    {
+        if(value='20%'){
+            // $("#taskweed").click(function(){
+            // $('input[type=checkbox]').change(function() {
+                $("#inputtask").hide();
+                $("#inputtasked").show();
+                // var t=document.getElementById("inputed");
+                // t.value="www.jb51.net 修改文本内容"
+            // });
+        }
+        else{
+            // $('input[type=checkbox]').change(function() {
+            //     $("#inputtask").hide();
+            // $("#inputtasked").show();
+                $("#inputtasked").hide();
+                $("#inputtask").show();
+            // });
+        }
+
+
+
+
+    }
+
+    </script>
+</head>
+<body>
+<div>
+    <table class="table table-hover" >
+        <thead>
+        <tr >
+            <th class="taskweekend">负责人</th>
+            <th class="taskweekend">分配比例</th>
+        </tr>
+        </thead>
+
+        <tbody class="taskweekend">
+        <tr class="list-group-item disabled">
+            <td >
+                <input type="checkbox" class="taskweekendinput">
+                陈1豪</td>
+            <td >20%</td>
+        </tr>
+        <tr>
+            <td>
+                <input type="checkbox" class="taskweekendinput" onclick="diag()" id="taskweed">
+                陈1豪</td>
+            <td id="inputtask" >20%</td>
+            <td id="inputtasked">
+                <input value="20%" class="taskalloction" id="inputed"/>
+            </td>
+
+
+        </tr>
+        <tr>
+            <td>
+                <input type="checkbox" class="taskweekendinput">
+                陈1豪</td>
+            <td>20%</td>
+        </tr>
+        <tr>
+            <td>
+                <input type="checkbox" class="taskweekendinput">
+                陈1豪</td>
+            <td>20%</td>
+        </tr>
+        <tr>
+            <td>
+                <input type="checkbox" class="taskweekendinput">
+                陈1豪</td>
+            <td >
+                <input value="1111" class="taskalloction"/>
+            </td>
+        </tr>
+
+
+        </tbody>
+    </table>
+
+
+</div>
+
+</body>
+</html>

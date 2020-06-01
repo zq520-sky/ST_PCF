@@ -1,0 +1,185 @@
+package com.samton.web.manage.cust.controller;
+
+import com.samton.platform.framework.base.BaseController;
+import com.samton.platform.framework.constant.WebConstant;
+import com.samton.platform.framework.exception.ServiceException;
+import com.samton.platform.framework.mybatis.pagination.Pagination;
+import com.samton.platform.framework.util.CurrentUtil;
+import com.samton.platform.pm.bean.entity.TSysLog;
+import com.samton.platform.pm.constant.PmStateConstant;
+import com.samton.platform.pm.service.ILogService;
+import com.samton.web.manage.cust.bean.entity.TCustProduct;
+import com.samton.web.manage.cust.bean.vo.CustProductVo;
+import com.samton.web.manage.cust.constant.CustProductExpCodeConstant;
+import com.samton.web.manage.cust.service.ICustProductService;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @Description: 卖家产品管理 Controller
+ * @Author: Huangqiuping
+ * @Date: 2020/4/13 14:05
+ * Copyright (c) 2019, Samton. All rights reserved
+*/
+@Controller
+@RequestMapping("/manage/custProduct/")
+public class CustProductController extends BaseController {
+
+    @Resource
+    private ICustProductService custProductService;
+    @Resource
+    private ILogService logService;
+
+    /**
+     * 卖家产品管理分页
+     * @param paramBean
+     * @param custProductVo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("queryList" + WebConstant.PAGE_SUFFIX)
+    public String queryList(Pagination<TCustProduct> paramBean, CustProductVo custProductVo) throws Exception{
+        paramBean.setSearch(custProductVo);
+        Pagination<TCustProduct> pageData = custProductService.queryPageList(paramBean);
+        this.addAttr("pageData", pageData);
+        return "cust/custProductManage";
+    }
+
+    /**
+     * 卖家产品管理导出
+     * @param paramBean
+     * @param custProductVo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("exportList" + WebConstant.BUSINESS_SUFFIX)
+    public String exportList(Pagination<TCustProduct> paramBean, CustProductVo custProductVo) throws Exception {
+        paramBean.setSearch(custProductVo);
+        Pagination<Map<String, Object>> pageData = custProductService.exportPageList(paramBean);
+        logService.addLog(new TSysLog("卖家产品管理-导出", "导出卖家产品信息！", PmStateConstant.LOG_PLATFORM));
+        String title = "客户编号,客户名称,电商平台,卖家账号(店铺名称),产品ID,标题/关键词";
+        List<String> colNames = new ArrayList<String>();
+        colNames.add("cust_code");
+        colNames.add("cust_name");
+        colNames.add("platform_type");
+        colNames.add("accounts_name");
+        colNames.add("item_id");
+        colNames.add("title_keyword");
+        this.export(response,"卖家产品管理" + String.format("%1$tY%1$tm%1$td", new Date()), title, colNames, pageData);
+        return null;
+    }
+
+    /**
+     * 卖家产品信息查看
+     * @param productId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("viewCustProduct" + WebConstant.BUSINESS_SUFFIX)
+    @ResponseBody
+    public Map<String, Object> viewCustProduct(Integer productId) throws Exception {
+        CustProductVo custProductVo = custProductService.selectCustProductVoById(productId);
+        return this.getResultMap(true, custProductVo);
+    }
+
+
+    /**
+     * 卖家产品编辑
+     * @param tCustProduct
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("editCustProduct" + WebConstant.BUSINESS_SUFFIX)
+    @ResponseBody
+    public Map<String, Object> editCustProduct(TCustProduct tCustProduct) throws Exception {
+        //校验主键ID
+        if(tCustProduct.getProductId() == null){
+            throw new ServiceException(CustProductExpCodeConstant.CUSTPRODUCT_EDIT_ID_ERROR);
+        }
+        //执行编辑
+        boolean result = custProductService.updateSelectiveById(tCustProduct);
+        if (result) {
+            logService.addLog(new TSysLog("卖家产品管理-编辑", "编辑产品ID【" + tCustProduct.getItemId() + "】成功 ！", PmStateConstant.LOG_PLATFORM));
+        } else {
+            logService.addLog(new TSysLog("卖家产品管理-编辑", "编辑产品ID【" + tCustProduct.getItemId() + "】 失败！", PmStateConstant.LOG_PLATFORM));
+        }
+        if (!result) {
+            throw new ServiceException(CustProductExpCodeConstant.CUSTPRODUCT_EDIT_COLUMN_ERROR);
+        }
+        return this.getResultMap(true, result);
+    }
+
+    @RequestMapping("/getCustProductByItemId"+WebConstant.NO_AUTH_SUFFIX)
+    @ResponseBody
+    public Object getCustProductByItemId(String itemId) throws Exception {
+        if(StringUtils.isBlank(itemId)){
+            return null;
+        }
+        return custProductService.selectCustProductByItemId(itemId);
+    }
+
+
+    /**
+     * 卖家产品管理分页(客户端)
+     * @param paramBean
+     * @param custProductVo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("queryListByCustId" + WebConstant.PAGE_SUFFIX)
+    public String queryListByCustId(Pagination<TCustProduct> paramBean, CustProductVo custProductVo) throws Exception{
+        custProductVo.setCustId(CurrentUtil.getCurrentUser().getEnterpriseId());
+        paramBean.setSearch(custProductVo);
+        Pagination<TCustProduct> pageData = custProductService.queryPageList(paramBean);
+        this.addAttr("pageData", pageData);
+        return "cust/custProductManageCust";
+    }
+
+    /**
+     * 卖家产品管理导出(客户端)
+     * @param paramBean
+     * @param custProductVo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("exportListByCustId" + WebConstant.BUSINESS_SUFFIX)
+    public String exportListByCustId(Pagination<TCustProduct> paramBean, CustProductVo custProductVo) throws Exception {
+        custProductVo.setCustId(CurrentUtil.getCurrentUser().getEnterpriseId());
+        paramBean.setSearch(custProductVo);
+        Pagination<Map<String, Object>> pageData = custProductService.exportPageList(paramBean);
+        logService.addLog(new TSysLog("卖家产品管理-导出", "导出卖家产品信息！", PmStateConstant.LOG_PLATFORM));
+        String title = "客户编号,客户名称,电商平台,卖家账号(店铺名称),产品ID,标题/关键词";
+        List<String> colNames = new ArrayList<String>();
+        colNames.add("cust_code");
+        colNames.add("cust_name");
+        colNames.add("platform_type");
+        colNames.add("accounts_name");
+        colNames.add("item_id");
+        colNames.add("title_keyword");
+        this.export(response,"卖家产品管理" + String.format("%1$tY%1$tm%1$td", new Date()), title, colNames, pageData);
+        return null;
+    }
+
+    /**
+     * 卖家产品信息查看(客户端)
+     * @param productId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("viewCustProductByCustId" + WebConstant.BUSINESS_SUFFIX)
+    @ResponseBody
+    public Map<String, Object> viewCustProductByCustId(Integer productId) throws Exception {
+        CustProductVo custProductVo = custProductService.selectCustProductVoById(productId);
+        return this.getResultMap(true, custProductVo);
+    }
+
+
+}

@@ -1,0 +1,39 @@
+package com.samton.web.manage.finance.dao;
+
+import com.samton.platform.common.dao.AutoMapperInteger;
+import com.samton.platform.framework.mybatis.pagination.Pagination;
+import com.samton.web.manage.finance.bean.entity.TCustAccountCredit;
+import com.samton.web.manage.finance.bean.entity.TCustAccountReturn;
+import com.samton.web.manage.finance.bean.vo.CustAccountCreditVo;
+import com.samton.web.manage.finance.bean.vo.CustAccountReturnVo;
+import org.apache.ibatis.session.RowBounds;
+
+import java.util.List;
+import java.util.Map;
+
+public interface TCustAccountReturnMapper extends AutoMapperInteger<TCustAccountReturn> {
+
+    /**
+     * 客户还款记录查询
+     * @param paramBean
+     * @param rowBounds
+     * @return
+     */
+    List<CustAccountReturnVo> queryPageReturnList(Pagination<CustAccountReturnVo> paramBean, RowBounds rowBounds)throws Exception;
+
+    /**
+     * 客户还款记录查询
+     * @param paramBean
+     * @param rowBounds
+     * @return
+     */
+    List<Map<String,Object>> exportReturnInfoList(Pagination<CustAccountReturnVo> paramBean, RowBounds rowBounds)throws Exception;
+
+    /**
+     * 查询还款记录信息
+     * @param returnId
+     * @return
+     * @throws Exception
+     */
+    public CustAccountReturnVo selectReturnVoById(Integer returnId) throws Exception;
+}

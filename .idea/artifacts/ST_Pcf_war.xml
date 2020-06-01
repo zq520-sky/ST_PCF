@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="ST_Pcf:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>ST_Pcf</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="ST_Pcf.war">
+      <element id="artifact" artifact-name="ST_Pcf:war exploded" />
+    </root>
+  </artifact>
+</component>

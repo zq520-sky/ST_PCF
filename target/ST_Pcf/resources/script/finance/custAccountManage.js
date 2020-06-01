@@ -1,0 +1,191 @@
+var index = null;
+var frameId = window.frameElement && window.frameElement.id || '';
+var editValidate;
+$(function() {
+    //新增校验
+    editValidate = $("#editForm").validate({
+        rules : {
+            oprMoney : {
+                required : true,
+                money : true
+            },
+            dollarRate : {
+                required : true,
+                money : true
+            }
+        },
+        messages : {
+            oprMoney : {
+                required : "请输入金额！",
+                money : "请输入正确的金额！"
+            },
+            dollarRate : {
+                required : "请输入汇率！",
+                money : "请输入正确的汇率！"
+            }
+        },
+        submitHandler : function(form) {
+            $(form).ajaxSubmit({
+                //表单提交成功后的回调
+                success : function(responseText, statusText, xhr, $form) {
+                    if (responseText.rs > 0) {
+                        if($("#oprType").val() == 1){
+                            top.toastr.success("客户【" + $("#custNameEdit").text() + "】充值【"+ $("#oprMoney").val() +"元】成功！");
+                        }else if($("#oprType").val() == 2){
+                            top.toastr.success("客户【" + $("#custNameEdit").text() + "】授信【"+ $("#oprMoney").val() +"元】成功！");
+                        }else if($("#oprType").val() == 3){
+                            top.toastr.success("客户【" + $("#custNameEdit").text() + "】设置汇率【"+ $("#dollarRateEdit").val() +"】成功！");
+                        }else if($("#oprType").val() == 4){
+                            top.toastr.success("客户【" + $("#custNameEdit").text() + "】还款【"+ $("#oprMoney").val() +"元】成功！");
+                        }
+
+                        FormUtil.resetForm("editForm");
+                        doSearch();
+                        layer.close(index); //再执行关闭
+                    }
+                }
+            });
+        }
+    });
+
+});
+
+//执行查询
+function doSearch() {
+	$("#pageForm").submit();
+	top.progressbar(frameId);
+}
+
+
+//打开查看页面
+function viewPage(id) {
+    if (Number(id)) {
+        $.ajax({
+            url : ctx.path + '/manage/finance/viewCustAccount' + ctx.bizSuffix,
+            async : true,
+            dataType : 'json',
+            type : 'POST',
+            data : {accountId : id},
+            success : function(data) {
+                if (data.rs== -1) {
+                    top.toastr.error("获取数据信息失败");
+                    return false;
+                }
+                //返回的map对象参数
+                var dataRet = data.data;
+                for (var key in dataRet) {
+                    //对页面属性赋值（要求页面id与map的key值保持一致）
+                    $("#viewForm #"+ key +"View").html(dataRet[key]);
+                }
+                parentIndex = layer.open({
+                    title : '查看账户信息',
+                    type : 1,
+                    area : [ '450px', '400px' ], //宽高
+                    content : $('#viewId'),
+                    btn : [ '关闭' ],
+                    cancel : function(index) {
+                    }
+                });
+            },
+            error : function(jqXHR, textStatus, errorThrown) {
+                top.toastr.error("操作失败");
+            }
+        });
+    } else {
+        top.toastr.error("数据异常！");
+    }
+
+}
+
+
+//打开编辑页面
+function editPage(id, oprType, oprName) {
+	if (Number(id)) {
+		$.ajax({
+			url : ctx.path + '/manage/finance/viewCustAccount' + ctx.bizSuffix,
+			async : true,
+			dataType : 'json',
+			type : 'POST',
+			data : {
+                accountId : id
+			},
+			success : function(data) {
+				if (data.rs == -1) {
+					top.toastr.error("操作失败");
+					return false;
+				}
+				//控制页面显示
+                $("#oprType").val(oprType);
+                $("#oprMoneyCn").val(oprType == 3 ? "汇率" : "金额");
+                if(oprType == 1){ //充值
+                    $("#dollarRateEditDivId").attr("style", "display:none;");
+                    $("#accountMoneyEditId").removeAttr("style");
+                    $("#creditMoneyEditDivId").attr("style", "display:none;");
+                    $("#oprMoneyDivId").removeAttr("style");
+                    $("#oprMoneyDivId h5").html("<em style=\"color: red;\">*</em>充值金额（元）：");
+                    $("#remarkEditDivId").removeAttr("style");
+                }else if(oprType == 2){ //授信
+                    $("#dollarRateEditDivId").attr("style", "display:none;");
+                    $("#accountMoneyEditId").attr("style", "display:none;");
+                    $("#creditMoneyEditDivId").removeAttr("style");
+                    $("#oprMoneyDivId").removeAttr("style");
+                    $("#oprMoneyDivId h5").html("<em style=\"color: red;\">*</em>授信金额（元）：");
+                    $("#remarkEditDivId").removeAttr("style");
+                }else if(oprType == 3){ //设置汇率
+                    $("#dollarRateEditDivId").removeAttr("style");
+                    $("#accountMoneyEditId").attr("style", "display:none;");
+                    $("#creditMoneyEditDivId").attr("style", "display:none;");
+                    $("#oprMoneyDivId").attr("style", "display:none;");
+                    $("#remarkEditDivId").attr("style", "display:none;");
+                }else if(oprType == 4){ //还款
+                    $("#dollarRateEditDivId").attr("style", "display:none;");
+                    $("#accountMoneyEditId").attr("style", "display:none;");
+                    $("#creditMoneyEditDivId").attr("style", "display:none;");
+                    $("#oprMoneyDivId").removeAttr("style");
+                    $("#oprMoneyDivId h5").html("<em style=\"color: red;\">*</em>还款金额（元）：");
+                    $("#remarkEditDivId").removeAttr("style");
+                }else if(oprType == 5){ //设置运单费
+                    $("#dollarRateEditDivId").attr("style", "display:none;");
+                    $("#accountMoneyEditId").attr("style", "display:none;");
+                    $("#creditMoneyEditDivId").attr("style", "display:none;");
+                    $("#oprMoneyDivId").attr("style", "display:none;");
+                    $("#oprFreignMoneyDivId").removeAttr("style");
+                    $("#oprFreignMoneyDivId h5").html("<em style=\"color: red;\">*</em>运单费用（元）：");
+                }
+
+                var dataRet = data.data;
+                for (var key in dataRet) {
+                    //对页面属性赋值（要求页面id与map的key值保持一致）
+                    $("#editForm #"+ key +"Edit").html(dataRet[key]);
+                }
+				$("#editForm").find("#accountId").val(id);
+                $("#editForm").find("#dollarRateEdit").val(dataRet.dollarRate);
+                $("#editForm").find("#custNameEditHid").val(dataRet.custName);
+
+
+				parentIndex = layer.open({
+					title : oprName,
+					type : 1,
+					area : [ '450px', '400px' ], //宽高
+					btn : [ '保存', '关闭' ],
+					yes : function(index, layero) {
+						$("#editForm").submit();
+					},
+					content : $('#editId'),
+					cancel : function(index) {
+						FormUtil.resetForm("editForm");
+						editValidate.resetForm();
+					}
+				});
+			},
+			error : function(jqXHR, textStatus, errorThrown) {
+				top.toastr.error("操作失败");
+			}
+		});
+	} else {
+		top.toastr.error("数据异常！");
+	}
+}
+
+
+

@@ -1,0 +1,169 @@
+package com.samton.web.manage.buyer.controller;
+
+import com.samton.platform.framework.base.BaseController;
+import com.samton.platform.framework.constant.WebConstant;
+import com.samton.platform.framework.exception.ServiceException;
+import com.samton.platform.framework.mybatis.pagination.Pagination;
+import com.samton.platform.pm.bean.entity.TSysLog;
+import com.samton.platform.pm.constant.PmStateConstant;
+import com.samton.platform.pm.service.ILogService;
+import com.samton.web.manage.buyer.bean.entity.TBuyers;
+import com.samton.web.manage.buyer.bean.entity.TBuyersRecord;
+import com.samton.web.manage.buyer.bean.vo.BuyersVo;
+import com.samton.web.manage.buyer.constant.BuyerExpCodeConstant;
+import com.samton.web.manage.buyer.service.IBuyerAccountService;
+import com.samton.web.manage.cust.bean.entity.TCustomer;
+import com.samton.web.manage.cust.constant.CustProductExpCodeConstant;
+import com.samton.web.manage.cust.constant.CustomerExpCodeConstant;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @Description: 买家账号管理 Controller
+ * @Author: Huangqiuping
+ * @Date: 2020/4/13 14:05
+ * Copyright (c) 2019, Samton. All rights reserved
+*/
+@Controller
+@RequestMapping("/manage/buyerAccount/")
+public class BuyerAccountController extends BaseController {
+
+    @Resource
+    private IBuyerAccountService buyerAccountService;
+    @Resource
+    private ILogService logService;
+
+    /**
+     * 买家账号管理分页
+     * @param paramBean
+     * @param buyersVo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("queryList" + WebConstant.PAGE_SUFFIX)
+    public String queryList(Pagination<BuyersVo> paramBean, BuyersVo buyersVo) throws Exception{
+        if(buyersVo!=null&&buyersVo.getAccountMoneyOprType()==null){
+            buyersVo.setIsForbid(1);
+        }
+        paramBean.setSearch(buyersVo);
+        Pagination<BuyersVo> pageData = buyerAccountService.queryPageBuyerVoList(paramBean);
+        this.addAttr("pageData", pageData);
+        return "buyer/buyerAccountManage";
+    }
+
+    /**
+     * 买家账号管理导出
+     * @param paramBean
+     * @param buyersVo
+     * @return
+     * @throws Exception
+     *
+     * 电商平台	账号代码	账户名称	买家姓名	地址	城市	州	邮编	历史余额	刷单充值	采购充值	充值总额	单月可用额度	刷单次数	采购次数	刷单总额	采购总额	余额	禁用状态
+     */
+    @RequestMapping("exportList" + WebConstant.BUSINESS_SUFFIX)
+    public String exportList(Pagination<BuyersVo> paramBean, BuyersVo buyersVo) throws Exception {
+        paramBean.setSearch(buyersVo);
+        Pagination<Map<String, Object>> pageData = buyerAccountService.exportPageBuyerVoList(paramBean);
+        logService.addLog(new TSysLog("买家账号管理-导出", "导出买家账号信息！", PmStateConstant.LOG_PLATFORM));
+        String title = "电商平台,账号代码,账户名称,买家姓名,地址,城市,州,邮编,历史余额,刷单充值,采购充值,充值总额,单月可用额度,刷单次数,采购次数,刷单总额,采购总额,余额,禁用状态";
+        List<String> colNames = new ArrayList<String>();
+        colNames.add("platform_type");
+        colNames.add("buyer_code");
+        colNames.add("buyer_name");
+        colNames.add("user_name");
+        colNames.add("address");
+        colNames.add("city");
+        colNames.add("province");
+
+        colNames.add("postcode");
+        colNames.add("account_money_his");
+        colNames.add("brush_recharge");
+        colNames.add("purchase_recharge");
+        colNames.add("recharge_total");
+        colNames.add("quota_month");
+
+        colNames.add("brush_num");
+        colNames.add("purchase_num");
+        colNames.add("brush_total_money");
+        colNames.add("purchase_total_money");
+        colNames.add("account_money");
+        colNames.add("is_forbid_cn");
+        this.export(response,"买家账号管理" + String.format("%1$tY%1$tm%1$td", new Date()), title, colNames, pageData);
+        return null;
+    }
+
+    /**
+     * 买家账号信息查看
+     * @param recordId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("viewAccount" + WebConstant.BUSINESS_SUFFIX)
+    @ResponseBody
+    public Map<String, Object> viewAccount(Integer recordId) throws Exception {
+        BuyersVo tBuyers = buyerAccountService.selectBuyerAccountByRecordId(recordId);
+        return this.getResultMap(true, tBuyers);
+    }
+
+
+    /**
+     * 买家账号编辑
+     * @param tBuyers
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("editAccount" + WebConstant.BUSINESS_SUFFIX)
+    @ResponseBody
+    public Map<String, Object> editAccount(TBuyers tBuyers, TBuyersRecord tBuyersRecord) throws Exception {
+        //校验主键ID
+        if(tBuyers.getBuyerId() == null||tBuyersRecord.getRecordId()==null){
+            throw new ServiceException(BuyerExpCodeConstant.ACCOUNT_EDIT_ID_ERROR);
+        }
+        //执行编辑
+        boolean result = buyerAccountService.updateBuyerAccount(tBuyers,tBuyersRecord);
+        if (result) {
+            logService.addLog(new TSysLog("买家账号管理-编辑", "编辑买家账号代码【" + tBuyers.getBuyerCode() + "】成功 ！", PmStateConstant.LOG_PLATFORM));
+        } else {
+            logService.addLog(new TSysLog("买家账号管理-编辑", "编辑买家账号代码【" + tBuyers.getBuyerCode() + "】 失败！", PmStateConstant.LOG_PLATFORM));
+        }
+        if (!result) {
+            throw new ServiceException(BuyerExpCodeConstant.ACCOUNT_EDIT_COLUMN_ERROR);
+        }
+        return this.getResultMap(true, result);
+    }
+
+    /**
+     * 买家账号信息禁用/启用
+     * @param tBuyers
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("setAccount" + WebConstant.BUSINESS_SUFFIX)
+    @ResponseBody
+    public Map<String, Object> setAccount(TBuyers tBuyers) throws Exception {
+        //校验主键ID
+        if(tBuyers.getBuyerId() == null){
+            throw new ServiceException(BuyerExpCodeConstant.ACCOUNT_EDIT_COLUMN_ERROR);
+        }
+        //执行编辑
+        boolean result = buyerAccountService.updateSelectiveById(tBuyers);
+        String headStr = tBuyers.getIsForbid() == 0 ? "启用" : "禁用";
+        if (result) {
+            logService.addLog(new TSysLog("买家账号信息管理-禁用/启用", headStr+"买家账号代码【" + tBuyers.getBuyerCode() + "】成功 ！", PmStateConstant.LOG_PLATFORM));
+        } else {
+            logService.addLog(new TSysLog("买家账号信息管理-禁用/启用", headStr+"买家账号代码【" + tBuyers.getBuyerCode() + "】 失败！", PmStateConstant.LOG_PLATFORM));
+        }
+        if (!result) {
+            throw new ServiceException(CustomerExpCodeConstant.CUST_EDIT_COLUMN_ERROR);
+        }
+        return this.getResultMap(true, result);
+    }
+
+}

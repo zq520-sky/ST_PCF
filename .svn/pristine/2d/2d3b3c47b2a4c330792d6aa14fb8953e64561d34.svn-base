@@ -1,0 +1,73 @@
+package com.samton.web.manage.task.dao;
+
+import com.samton.platform.common.dao.AutoMapperInteger;
+import com.samton.platform.framework.mybatis.pagination.Pagination;
+import com.samton.web.manage.task.bean.entity.TCustTask;
+import com.samton.web.manage.task.bean.vo.CustTaskInfoVo;
+import com.samton.web.manage.task.bean.vo.CustTaskVo;
+import org.apache.ibatis.session.RowBounds;
+
+import java.util.List;
+import java.util.Map;
+
+public interface TCustTaskMapper extends AutoMapperInteger<TCustTask> {
+
+    /**
+     * 客户消费记录查询
+     * @param paramBean
+     * @param rowBounds
+     * @return
+     */
+    List<CustTaskVo> queryPageTaskList(Pagination<CustTaskVo> paramBean, RowBounds rowBounds)throws Exception;
+
+    /**
+     * 客户消费记录查询
+     * @param paramBean
+     * @param rowBounds
+     * @return
+     */
+    List<Map<String,Object>> exportTaskInfoList(Pagination<CustTaskVo> paramBean, RowBounds rowBounds)throws Exception;
+
+    /**
+     * 查询消费记录信息
+     * @param taskId
+     * @return
+     * @throws Exception
+     */
+    public CustTaskVo selectTaskVoById(Integer taskId,Integer productId) throws Exception;
+
+
+    /**
+     * 任务信息分页查询
+     * @param paramBean
+     * @param rowBounds
+     * @return
+     */
+    List<CustTaskInfoVo> queryPageCustTaskInfoList(Pagination<CustTaskInfoVo> paramBean, RowBounds rowBounds)throws Exception;
+
+    /**
+     * 任务信息导出
+     * @param paramBean
+     * @param rowBounds
+     * @return
+     */
+    List<Map<String,Object>> exportPageCustTaskInfoList(Pagination<CustTaskInfoVo> paramBean, RowBounds rowBounds)throws Exception;
+
+    /**
+     * 任务信息查看
+     * @param taskId
+     * @return
+     * @throws Exception
+     */
+    CustTaskInfoVo selectCustTaskInfoById(Integer taskId) throws Exception;
+
+
+    /**
+     * @Author ZhongShengbin
+     * @Description //查询到所有相同custCode的报告
+     * @Date 2020/4/27 0027
+     * @Param [taskCode]
+     * @return java.util.List<com.samton.web.manage.task.bean.vo.CustTaskVo>
+     **/
+    List<TCustTask> selectTaskByCode(String taskCode) throws Exception;
+}

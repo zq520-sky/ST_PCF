@@ -1,0 +1,127 @@
+.taskset{
+    padding: 20px 30px;
+}
+
+.search_btncon{
+    padding: 20px 20px 20px 130px;
+}
+.list-group-item{
+     display: table-row !important;
+     /*padding:0;*/
+}
+.add_taskset{
+    display: inline-block;display: inline-block;top: 8px;position: relative;
+}
+.add_tasksetmanage{
+    padding-top: 10px;
+}
+.taskweekend{
+    text-align: center;
+}
+.taskweekendinput{
+    margin: 0;
+}
+.taskweekendtr{
+    text-align: left;
+}
+.taskalloction{
+    margin-left: 50px;
+}
+.add_value_task{
+    float: left;
+    max-width: 360px;
+    margin-left: 146px;
+    font-size: 12px;
+    line-height: 35px;
+}
+.taskem{
+    padding-left: 17px;
+    font-size: 12px;
+    position: relative;
+    color: #4c4d4d;
+    vertical-align: top;
+    bottom: 9px;
+}
+input[type=checkbox], input[type=radio]{
+    margin: 0 !important;
+}
+.btn i {
+    margin-top: 2px !important;
+    margin-right: 6px;
+}
+.checkbox, .radio{
+    margin-top: 8px !important;
+}
+
+
+
+.contain_content{
+    padding: 0 20px;overflow-y: scroll;height: 100%;font-size: 14px;
+}
+.contain_content_top{
+    border: 1px solid #333;font-size: 14px;margin: 10px 0;
+}
+.contain_content_text{
+    display: flex;height: 30px;line-height: 30px;padding: 0 20px;border-bottom: 1px solid #333;
+}
+.contain_content_textright{
+    margin-left: auto;
+}
+.containers {
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    /*font-size: 14px;*/
+}
+
+.containers .contain {
+    display: flex;
+    width: 100%;
+}
+
+.containers .conta {
+    padding: 5px 10px 5px 10px;
+    display: flex;
+    width: 50%;
+}
+
+.connerber {
+    padding: 5px 10px 5px 10px;
+    display: flex;
+}
+
+.contner {
+    width: 40%;
+    text-align: right;
+    color: #959795;
+}
+.contain_open{
+    text-align: center;
+    padding-left: 20px;
+}
+
+.contnered {
+    width: 20%;
+    color: #959795;
+    text-align: right;
+}
+
+.contenttext {
+    padding: 5px 10px 5px 10px;
+    width: 50%;
+    display: flex;
+}
+
+.conflex {
+    flex: 1;
+    padding-left: 15px;
+}
+
+.texthalf {
+    display: flex;
+    width: 100%;
+}
+
+.containimg {
+    padding: 0 10px 0 0;
+}

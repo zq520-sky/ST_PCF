@@ -1,0 +1,6 @@
+package com.samton.web.manage.task.bean.vo;
+
+import com.samton.web.manage.task.bean.entity.TCustTaskSet;
+
+public class CustTaskSetVo extends TCustTaskSet {
+}

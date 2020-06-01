@@ -1,0 +1,218 @@
+<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%@ include file="/resources/platform/inc.jsp"%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<link href="${ctx.path}/resources/components/bootstrap/bootstrap-theme.min.css?v=2.2" rel="stylesheet" />
+		<link rel="stylesheet" href="${ctx.path}/resources/css/task/taskSetManage.css?v=1.2" rel="stylesheet" />
+		<script src="${ctx.path}/resources/js/common/DataForm.js?v=1.0"></script>
+		<script type="text/javascript">
+			var editValidate;
+			function checkSubmit() {
+				$("#editForm").submit();
+
+			}
+
+			function taskall(){
+				layer.open({
+					type: 1,
+					skin: 'layui-layer-rim', //加上边框
+					title: '任何分配比例设定',
+					area: ['620px', '420px'], //宽高
+					content: $('#tasksetmanage'),
+					// fixed: true,
+					btn: ['确定','取消'], //按钮
+					yes: function(index, layero){
+						//按钮【按钮一】的回调
+					}
+					,btn2: function(index, layero){
+						//按钮【按钮二】的回调
+						//return false 开启该代码可禁止点击该按钮关闭
+					}
+				});
+			}
+
+			function taskweedend(){
+				layer.open({
+					type:1,
+					skin: 'layui-layer-rim', //加上边框
+					title: '选择周末负责人',
+					area: ['420px', ''], //宽高
+					// fixed: true,
+					btn: ['确定','取消'], //按钮
+					yes: function(index, layero){
+						//按钮【按钮一】的回调
+					}
+					,btn2: function(index, layero){
+						//按钮【按钮二】的回调
+						//return false 开启该代码可禁止点击该按钮关闭
+					},
+					content: $('#taskweedmanager').html(),
+				});
+			}
+			function diag() {
+				if(value='20%'){
+					$("#inputtask").hide();
+					$("#inputtasked").show();
+				}
+				else{
+					$("#inputtasked").hide();
+					$("#inputtask").show();
+				}
+			}
+
+		</script>
+	</head>
+	<body>
+
+		<!-- 编辑 -->
+		<div class="taskset">
+		<div id="editId" name="editName" class="add_box mCustomScrollbar_y" data-mcs-theme="dark">
+			<form method="post" id="editForm" action="${ctx.path}/manage/task/editCustTaskSet${ctx.bizSuffix}">
+				<input type="hidden" id="taskSetId" name="taskSetId" value="${custTaskSet.taskSetId}" />
+				<div class="add_list">
+					<h5 style="width: 140px;line-height: 30px;">工作日分配比例设定：</h5>
+					<div class="add_value_task">
+						<input type="hidden" name="workdayUsers" value="" id="workdayUsers" value="${custTaskSet.workdayUsers}">
+						<input type="hidden" name="workdayUsersRate" id="workdayUsersRate" value="${custTaskSet.workdayUsersRate}">
+						<div>
+							<button type="button" class="btn btn-default"  >
+								<span onclick="taskall()">设定</span>
+							</button>
+						</div>
+
+					</div>
+				</div>
+				<div class="add_list">
+					<h5 style="width: 140px;line-height: 30px;">周末负责人：</h5>
+					<div class="add_value_task">
+						<input type="hidden" name="weekendUsers" id="weekendUsers" value="${custTaskSet.weekendUsers}">
+						<span id="weekendUserNamesId" class="add_taskset">${custTaskSet.weekendUsersName}</span>
+						<button type="button" class="btn btn-default"  >
+							<span onclick="taskweedend()">设定</span>
+						</button>
+					</div>
+				</div>
+				<div class="add_list">
+					<h5 style="width: 140px;line-height: 30px;">部门负责人：</h5>
+					<div class="add_value_task">
+						<div class="add_tasksetmanage">
+						<select class="select" name="buyerFrequency" id="buyerFrequency" type="select">
+							<option value="">请选择</option>
+							<option value="5" <c:if test="${custTaskSet.buyerFrequency == 5}">selected</c:if> >5天内未使用</option>
+							<option value="4" <c:if test="${custTaskSet.buyerFrequency == 4}">selected</c:if> >4天内未使用</option>
+							<option value="3" <c:if test="${custTaskSet.buyerFrequency == 3}">selected</c:if> >3天内未使用</option>
+							<option value="2" <c:if test="${custTaskSet.buyerFrequency == 2}">selected</c:if> >2天内未使用</option>
+							<option value="1" <c:if test="${custTaskSet.buyerFrequency == 1}">selected</c:if> >1天内未使用</option>
+						</select>
+						</div>
+					</div>
+				</div>
+				<div class="add_list">
+					<h5 style="width: 140px;line-height: 30px;">买家账号操作次数：</h5>
+					<div class="add_value_task">
+						<div class="add_tasksetmanage">
+						<label class="checkbox"><c:if test="${custTaskSet.buyerOprNum == 1}">checked</c:if><em class="taskem">是否优先使用操作次数少的</em></label>
+					</div>
+					</div>
+				</div>
+
+				<div class="search_btncon">
+					<button type="button" class="btn add_btn" onClick="checkSubmit()">
+						<i class="minicon search_icon"></i>
+						<span>确定</span>
+					</button>
+
+				</div>
+			</form>
+		</div>
+		</div>
+		<div id="tasksetmanage">
+			<table class="table table-hover" >
+				<thead>
+				<tr >
+					<th class="taskweekend">负责人</th>
+					<th class="taskweekend">分配比例</th>
+				</tr>
+				</thead>
+
+				<tbody class="taskweekend">
+				<tr class="list-group-item disabled">
+					<td>
+						<input type="checkbox" class="taskweekendinput">
+						陈1豪</td>
+					<td >20%</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="checkbox" class="taskweekendinput" onclick="diag()" id="taskweed">
+						陈1豪</td>
+					<td id="inputtask" >20%</td>
+					<td id="inputtasked">
+						<input value="20%" class="taskalloction" id="inputed"/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="checkbox" class="taskweekendinput">
+						陈1豪</td>
+					<td>20%</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="checkbox" class="taskweekendinput">
+						陈1豪</td>
+					<td>20%</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="checkbox" class="taskweekendinput">
+						陈1豪</td>
+					<td >
+						<input value="1111" class="taskalloction"/>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div id="taskweedmanager" data-mcs-theme="dark">
+			<table class="table table-hover" >
+				<tbody class="taskweekend" >
+				<tr  class="taskweekendtr">
+					<td>
+						<input type="checkbox" class="taskweekendinput" >
+						陈1豪</td>
+				</tr>
+				<tr class="taskweekendtr">
+					<td>
+						<input type="checkbox" class="taskweekendinput">
+						陈1豪</td>
+
+				</tr>
+				<tr class="taskweekendtr">
+					<td>
+						<input type="checkbox" class="taskweekendinput">
+						陈1豪</td>
+				</tr>
+				<tr class="taskweekendtr">
+					<td>
+						<input type="checkbox" class="taskweekendinput">
+						陈1豪</td>
+				</tr>
+				<tr class="taskweekendtr">
+					<td>
+						<input type="checkbox" class="taskweekendinput">
+						陈1豪</td>
+
+				</tr>
+
+				</tbody>
+			</table>
+
+
+		</div>
+	</body>
+</html>
+

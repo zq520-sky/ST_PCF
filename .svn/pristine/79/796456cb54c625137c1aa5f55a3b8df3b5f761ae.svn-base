@@ -1,0 +1,48 @@
+package com.samton.web.manage.finance.dao;
+
+import com.samton.platform.common.dao.AutoMapperInteger;
+import com.samton.platform.framework.mybatis.pagination.Pagination;
+import com.samton.web.manage.finance.bean.entity.TCustTask;
+import com.samton.web.manage.finance.bean.vo.CustTaskVo;
+import org.apache.ibatis.session.RowBounds;
+
+import java.util.List;
+import java.util.Map;
+
+public interface TCustTaskMapper extends AutoMapperInteger<TCustTask> {
+    int deleteByPrimaryKey(Integer taskId);
+
+    int insert(TCustTask record);
+
+    int insertSelective(TCustTask record);
+
+    TCustTask selectByPrimaryKey(Integer taskId);
+
+    int updateByPrimaryKeySelective(TCustTask record);
+
+    int updateByPrimaryKey(TCustTask record);
+
+    /**
+     * 客户消费记录查询
+     * @param paramBean
+     * @param rowBounds
+     * @return
+     */
+    List<TCustTask> queryPageTaskList(Pagination<TCustTask> paramBean, RowBounds rowBounds)throws Exception;
+
+    /**
+     * 客户消费记录查询
+     * @param paramBean
+     * @param rowBounds
+     * @return
+     */
+    List<Map<String,Object>> exportTaskInfoList(Pagination<TCustTask> paramBean, RowBounds rowBounds)throws Exception;
+
+    /**
+     * 查询消费记录信息
+     * @param taskId
+     * @return
+     * @throws Exception
+     */
+    public CustTaskVo selectTaskVoById(Integer taskId,Integer productId) throws Exception;
+}

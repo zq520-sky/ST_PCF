@@ -1,0 +1,59 @@
+package com.samton.web.manage.task.service;
+
+import com.samton.platform.common.service.ISuperIntegerService;
+import com.samton.platform.framework.mybatis.pagination.Pagination;
+import com.samton.web.manage.task.bean.entity.TCustTask;
+import com.samton.web.manage.task.bean.vo.CustTaskInfoVo;
+import com.samton.web.manage.task.bean.vo.CustTaskVo;
+
+import java.util.Map;
+
+/**
+ * @Description: 客户消费记录Service
+ * @Author: ZhongShengbin
+ * @Date: 2020/04/15 16:28
+ * Copyright (c) 2019, Samton. All rights reserved
+ */
+public interface ICustTaskService extends ISuperIntegerService<TCustTask> {
+
+    /**
+     * 客户消费记录分页查询
+     * @param paramBean
+     * @return
+     */
+    public Pagination<TCustTask> queryTaskPageList(Pagination<TCustTask> paramBean) throws Exception;
+
+    /**
+     * 客户消费记录导出
+     * @param paramBean
+     */
+    public Pagination<Map<String, Object>> exportTaskPageList(Pagination<TCustTask> paramBean) throws Exception;
+
+
+    /**
+     * 客户消费记录查看
+     * @param taskId
+     */
+    public CustTaskVo selectTaskVoById(Integer taskId,Integer productId) throws Exception;
+
+    /**
+     * 任务信息分页查询
+     * @param paramBean
+     * @return
+     */
+    Pagination<CustTaskInfoVo> queryPageCustTaskInfoList(Pagination<CustTaskInfoVo> paramBean) throws Exception;
+
+    /**
+     * 任务信息导出
+     * @param paramBean
+     */
+    Pagination<Map<String, Object>> exportPageCustTaskInfoList(Pagination<CustTaskInfoVo> paramBean) throws Exception;
+
+
+    /**
+     * 任务信息查看
+     * @param taskId
+     */
+    CustTaskInfoVo findCustTaskInfoById(Integer taskId) throws Exception;
+
+}

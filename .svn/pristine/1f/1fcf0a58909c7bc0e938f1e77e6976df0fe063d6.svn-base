@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.samton.web.manage.custLog.dao.TCustLogLoginMapper" >
+  <resultMap id="BaseResultMap" type="com.samton.web.manage.custLog.bean.entity.TCustLogLogin" >
+    <id column="log_id" property="logId" jdbcType="INTEGER" />
+    <result column="login_date" property="loginDate" jdbcType="TIMESTAMP" />
+    <result column="login_ip" property="loginIp" jdbcType="VARCHAR" />
+    <result column="login_desc" property="loginDesc" jdbcType="VARCHAR" />
+    <result column="sys_type" property="sysType" jdbcType="INTEGER" />
+    <result column="proxy_id" property="proxyId" jdbcType="INTEGER" />
+    <result column="cust_id" property="custId" jdbcType="INTEGER" />
+    <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
+    <result column="create_user_name" property="createUserName" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="BIGINT" />
+    <result column="modify_user_name" property="modifyUserName" jdbcType="VARCHAR" />
+    <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    log_id, login_date, login_ip, login_desc, sys_type, proxy_id, cust_id, create_user_id, 
+    create_user_name, create_date, modify_user_id, modify_user_name, modify_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from public.t_sys_log_login
+    where log_id = #{logId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from public.t_sys_log_login
+    where log_id = #{logId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.samton.web.manage.custLog.bean.entity.TCustLogLogin" >
+    insert into public.t_sys_log_login (log_id, login_date, login_ip, 
+      login_desc, sys_type, proxy_id, 
+      cust_id, create_user_id, create_user_name, 
+      create_date, modify_user_id, modify_user_name, 
+      modify_date)
+    values (#{logId,jdbcType=INTEGER}, #{loginDate,jdbcType=TIMESTAMP}, #{loginIp,jdbcType=VARCHAR}, 
+      #{loginDesc,jdbcType=VARCHAR}, #{sysType,jdbcType=INTEGER}, #{proxyId,jdbcType=INTEGER}, 
+      #{custId,jdbcType=INTEGER}, #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=BIGINT}, #{modifyUserName,jdbcType=VARCHAR}, 
+      #{modifyDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.samton.web.manage.custLog.bean.entity.TCustLogLogin" >
+    insert into public.t_sys_log_login
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="logId != null" >
+        log_id,
+      </if>
+      <if test="loginDate != null" >
+        login_date,
+      </if>
+      <if test="loginIp != null" >
+        login_ip,
+      </if>
+      <if test="loginDesc != null" >
+        login_desc,
+      </if>
+      <if test="sysType != null" >
+        sys_type,
+      </if>
+      <if test="proxyId != null" >
+        proxy_id,
+      </if>
+      <if test="custId != null" >
+        cust_id,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createUserName != null" >
+        create_user_name,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id,
+      </if>
+      <if test="modifyUserName != null" >
+        modify_user_name,
+      </if>
+      <if test="modifyDate != null" >
+        modify_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="logId != null" >
+        #{logId,jdbcType=INTEGER},
+      </if>
+      <if test="loginDate != null" >
+        #{loginDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginIp != null" >
+        #{loginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="loginDesc != null" >
+        #{loginDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="sysType != null" >
+        #{sysType,jdbcType=INTEGER},
+      </if>
+      <if test="proxyId != null" >
+        #{proxyId,jdbcType=INTEGER},
+      </if>
+      <if test="custId != null" >
+        #{custId,jdbcType=INTEGER},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserName != null" >
+        #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyUserName != null" >
+        #{modifyUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyDate != null" >
+        #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.samton.web.manage.custLog.bean.entity.TCustLogLogin" >
+    update public.t_sys_log_login
+    <set >
+      <if test="loginDate != null" >
+        login_date = #{loginDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginIp != null" >
+        login_ip = #{loginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="loginDesc != null" >
+        login_desc = #{loginDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="sysType != null" >
+        sys_type = #{sysType,jdbcType=INTEGER},
+      </if>
+      <if test="proxyId != null" >
+        proxy_id = #{proxyId,jdbcType=INTEGER},
+      </if>
+      <if test="custId != null" >
+        cust_id = #{custId,jdbcType=INTEGER},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserName != null" >
+        create_user_name = #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyUserName != null" >
+        modify_user_name = #{modifyUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyDate != null" >
+        modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where log_id = #{logId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.samton.web.manage.custLog.bean.entity.TCustLogLogin" >
+    update public.t_sys_log_login
+    set login_date = #{loginDate,jdbcType=TIMESTAMP},
+      login_ip = #{loginIp,jdbcType=VARCHAR},
+      login_desc = #{loginDesc,jdbcType=VARCHAR},
+      sys_type = #{sysType,jdbcType=INTEGER},
+      proxy_id = #{proxyId,jdbcType=INTEGER},
+      cust_id = #{custId,jdbcType=INTEGER},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      modify_user_name = #{modifyUserName,jdbcType=VARCHAR},
+      modify_date = #{modifyDate,jdbcType=TIMESTAMP}
+    where log_id = #{logId,jdbcType=INTEGER}
+  </update>
+  <!-- 客户账户分页查询where条件 -->
+  <sql id="queryPageCustLogLoginVoList_where">
+        and g.sys_type = 3
+    <if test="search != null">
+      <if test="search.custName != null and search.custName != ''">
+        and tc.cust_name like '%'||#{search.custName,jdbcType=VARCHAR}||'%'
+      </if>
+      <if test="search.loginDateBegin != null">
+        <![CDATA[ and g.login_date >= #{search.loginDateBegin,jdbcType=TIMESTAMP} ]]>
+      </if>
+      <if test="search.loginDateEnd != null">
+        <![CDATA[ and g.login_date <= #{search.loginDateEnd,jdbcType=TIMESTAMP} ]]>
+      </if>
+    </if>
+  </sql>
+
+  <sql id="Base_Column_List_Vo" >
+    g.log_id, g.login_date, g.login_ip, g.login_desc, g.sys_type, g.proxy_id, g.cust_id, g.create_user_id,
+    g.create_user_name, g.create_date, g.modify_user_id, g.modify_user_name, g.modify_date
+  </sql>
+
+  <!-- 客户账户分页查询 -->
+  <select id="queryPageCustLogLoginList" parameterType="com.samton.platform.framework.mybatis.pagination.Pagination" resultType="com.samton.web.manage.custLog.bean.vo.CustLogLoginVo">
+    select
+    <include refid="Base_Column_List_Vo"/>,tc.cust_name
+    from t_sys_log_login g
+    inner join t_customer tc on g.cust_id = tc.cust_id
+    <where>
+      <include refid="queryPageCustLogLoginVoList_where" />
+    </where>
+  </select>
+
+  <!-- 客户账户页面导出 -->
+  <select id="/exportCustLogLoginInfoList" parameterType="com.samton.platform.framework.mybatis.pagination.Pagination" resultType="java.util.Map">
+    select
+    <include refid="Base_Column_List_Vo"/>,tc.cust_name
+    from t_sys_log_login g
+    inner join t_customer tc on g.cust_id = tc.cust_id
+    <where>
+      <include refid="queryPageCustLogLoginVoList_where" />
+    </where>
+  </select>
+
+</mapper>

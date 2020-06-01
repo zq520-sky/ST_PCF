@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.samton.web.manage.task.dao.TCustTaskSetMapper" >
+  <resultMap id="BaseResultMap" type="com.samton.web.manage.task.bean.entity.TCustTaskSet" >
+    <id column="task_set_id" property="taskSetId" jdbcType="INTEGER" />
+    <result column="workday_users" property="workdayUsers" jdbcType="VARCHAR" />
+    <result column="workday_users_name" property="workdayUsersName" jdbcType="VARCHAR" />
+    <result column="workday_users_rate" property="workdayUsersRate" jdbcType="VARCHAR" />
+    <result column="weekend_users" property="weekendUsers" jdbcType="VARCHAR" />
+    <result column="weekend_users_name" property="weekendUsersName" jdbcType="VARCHAR" />
+    <result column="weekend_users_rate" property="weekendUsersRate" jdbcType="VARCHAR" />
+    <result column="buyer_frequency" property="buyerFrequency" jdbcType="INTEGER" />
+    <result column="buyer_opr_num" property="buyerOprNum" jdbcType="INTEGER" />
+    <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="BIGINT" />
+    <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    task_set_id, workday_users, workday_users_name, workday_users_rate, weekend_users, 
+    weekend_users_name, weekend_users_rate, buyer_frequency, buyer_opr_num, create_user_id, 
+    create_date, modify_user_id, modify_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from public.t_cust_task_set
+    where task_set_id = #{taskSetId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from public.t_cust_task_set
+    where task_set_id = #{taskSetId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.samton.web.manage.task.bean.entity.TCustTaskSet" >
+    insert into public.t_cust_task_set (task_set_id, workday_users, workday_users_name, 
+      workday_users_rate, weekend_users, weekend_users_name, 
+      weekend_users_rate, buyer_frequency, buyer_opr_num, 
+      create_user_id, create_date, modify_user_id, 
+      modify_date)
+    values (#{taskSetId,jdbcType=INTEGER}, #{workdayUsers,jdbcType=VARCHAR}, #{workdayUsersName,jdbcType=VARCHAR}, 
+      #{workdayUsersRate,jdbcType=VARCHAR}, #{weekendUsers,jdbcType=VARCHAR}, #{weekendUsersName,jdbcType=VARCHAR}, 
+      #{weekendUsersRate,jdbcType=VARCHAR}, #{buyerFrequency,jdbcType=INTEGER}, #{buyerOprNum,jdbcType=INTEGER}, 
+      #{createUserId,jdbcType=BIGINT}, #{createDate,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=BIGINT}, 
+      #{modifyDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.samton.web.manage.task.bean.entity.TCustTaskSet" >
+    insert into public.t_cust_task_set
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="taskSetId != null" >
+        task_set_id,
+      </if>
+      <if test="workdayUsers != null" >
+        workday_users,
+      </if>
+      <if test="workdayUsersName != null" >
+        workday_users_name,
+      </if>
+      <if test="workdayUsersRate != null" >
+        workday_users_rate,
+      </if>
+      <if test="weekendUsers != null" >
+        weekend_users,
+      </if>
+      <if test="weekendUsersName != null" >
+        weekend_users_name,
+      </if>
+      <if test="weekendUsersRate != null" >
+        weekend_users_rate,
+      </if>
+      <if test="buyerFrequency != null" >
+        buyer_frequency,
+      </if>
+      <if test="buyerOprNum != null" >
+        buyer_opr_num,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id,
+      </if>
+      <if test="modifyDate != null" >
+        modify_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="taskSetId != null" >
+        #{taskSetId,jdbcType=INTEGER},
+      </if>
+      <if test="workdayUsers != null" >
+        #{workdayUsers,jdbcType=VARCHAR},
+      </if>
+      <if test="workdayUsersName != null" >
+        #{workdayUsersName,jdbcType=VARCHAR},
+      </if>
+      <if test="workdayUsersRate != null" >
+        #{workdayUsersRate,jdbcType=VARCHAR},
+      </if>
+      <if test="weekendUsers != null" >
+        #{weekendUsers,jdbcType=VARCHAR},
+      </if>
+      <if test="weekendUsersName != null" >
+        #{weekendUsersName,jdbcType=VARCHAR},
+      </if>
+      <if test="weekendUsersRate != null" >
+        #{weekendUsersRate,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerFrequency != null" >
+        #{buyerFrequency,jdbcType=INTEGER},
+      </if>
+      <if test="buyerOprNum != null" >
+        #{buyerOprNum,jdbcType=INTEGER},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyDate != null" >
+        #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.samton.web.manage.task.bean.entity.TCustTaskSet" >
+    update public.t_cust_task_set
+    <set >
+      <if test="workdayUsers != null" >
+        workday_users = #{workdayUsers,jdbcType=VARCHAR},
+      </if>
+      <if test="workdayUsersName != null" >
+        workday_users_name = #{workdayUsersName,jdbcType=VARCHAR},
+      </if>
+      <if test="workdayUsersRate != null" >
+        workday_users_rate = #{workdayUsersRate,jdbcType=VARCHAR},
+      </if>
+      <if test="weekendUsers != null" >
+        weekend_users = #{weekendUsers,jdbcType=VARCHAR},
+      </if>
+      <if test="weekendUsersName != null" >
+        weekend_users_name = #{weekendUsersName,jdbcType=VARCHAR},
+      </if>
+      <if test="weekendUsersRate != null" >
+        weekend_users_rate = #{weekendUsersRate,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerFrequency != null" >
+        buyer_frequency = #{buyerFrequency,jdbcType=INTEGER},
+      </if>
+      <if test="buyerOprNum != null" >
+        buyer_opr_num = #{buyerOprNum,jdbcType=INTEGER},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyDate != null" >
+        modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where task_set_id = #{taskSetId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.samton.web.manage.task.bean.entity.TCustTaskSet" >
+    update public.t_cust_task_set
+    set workday_users = #{workdayUsers,jdbcType=VARCHAR},
+      workday_users_name = #{workdayUsersName,jdbcType=VARCHAR},
+      workday_users_rate = #{workdayUsersRate,jdbcType=VARCHAR},
+      weekend_users = #{weekendUsers,jdbcType=VARCHAR},
+      weekend_users_name = #{weekendUsersName,jdbcType=VARCHAR},
+      weekend_users_rate = #{weekendUsersRate,jdbcType=VARCHAR},
+      buyer_frequency = #{buyerFrequency,jdbcType=INTEGER},
+      buyer_opr_num = #{buyerOprNum,jdbcType=INTEGER},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      modify_date = #{modifyDate,jdbcType=TIMESTAMP}
+    where task_set_id = #{taskSetId,jdbcType=INTEGER}
+  </update>
+</mapper>

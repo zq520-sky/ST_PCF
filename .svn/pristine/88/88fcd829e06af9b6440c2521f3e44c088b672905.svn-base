@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.samton.web.manage.finance.dao.TCustDepositOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.samton.web.manage.finance.bean.entity.TCustDepositOrder" >
+    <id column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="order_code" property="orderCode" jdbcType="VARCHAR" />
+    <result column="account_id" property="accountId" jdbcType="INTEGER" />
+    <result column="cust_id" property="custId" jdbcType="INTEGER" />
+    <result column="recharge_type" property="rechargeType" jdbcType="INTEGER" />
+    <result column="pay_type" property="payType" jdbcType="INTEGER" />
+    <result column="recharge_money" property="rechargeMoney" jdbcType="NUMERIC" />
+    <result column="before_account_money" property="beforeAccountMoney" jdbcType="NUMERIC" />
+    <result column="after_account_money" property="afterAccountMoney" jdbcType="NUMERIC" />
+    <result column="pay_status" property="payStatus" jdbcType="INTEGER" />
+    <result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
+    <result column="pay_image" property="payImage" jdbcType="VARCHAR" />
+    <result column="approve_state" property="approveState" jdbcType="INTEGER" />
+    <result column="approve_user_id" property="approveUserId" jdbcType="INTEGER" />
+    <result column="approve_user_name" property="approveUserName" jdbcType="VARCHAR" />
+    <result column="approve_time" property="approveTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="BIGINT" />
+    <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    order_id, order_code, account_id, cust_id, recharge_type, pay_type, recharge_money, 
+    before_account_money, after_account_money, pay_status, pay_time, pay_image, approve_state, 
+    approve_user_id, approve_user_name, approve_time, remark, create_user_id, create_date, 
+    modify_user_id, modify_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from public.t_cust_deposit_order
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from public.t_cust_deposit_order
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.samton.web.manage.finance.bean.entity.TCustDepositOrder" >
+    insert into public.t_cust_deposit_order (order_id, order_code, account_id, 
+      cust_id, recharge_type, pay_type, 
+      recharge_money, before_account_money, after_account_money, 
+      pay_status, pay_time, pay_image, 
+      approve_state, approve_user_id, approve_user_name, 
+      approve_time, remark, create_user_id, 
+      create_date, modify_user_id, modify_date
+      )
+    values (#{orderId,jdbcType=INTEGER}, #{orderCode,jdbcType=VARCHAR}, #{accountId,jdbcType=INTEGER}, 
+      #{custId,jdbcType=INTEGER}, #{rechargeType,jdbcType=INTEGER}, #{payType,jdbcType=INTEGER}, 
+      #{rechargeMoney,jdbcType=NUMERIC}, #{beforeAccountMoney,jdbcType=NUMERIC}, #{afterAccountMoney,jdbcType=NUMERIC}, 
+      #{payStatus,jdbcType=INTEGER}, #{payTime,jdbcType=TIMESTAMP}, #{payImage,jdbcType=VARCHAR}, 
+      #{approveState,jdbcType=INTEGER}, #{approveUserId,jdbcType=INTEGER}, #{approveUserName,jdbcType=VARCHAR}, 
+      #{approveTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=BIGINT}, #{modifyDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.samton.web.manage.finance.bean.entity.TCustDepositOrder" >
+    insert into public.t_cust_deposit_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="orderCode != null" >
+        order_code,
+      </if>
+      <if test="accountId != null" >
+        account_id,
+      </if>
+      <if test="custId != null" >
+        cust_id,
+      </if>
+      <if test="rechargeType != null" >
+        recharge_type,
+      </if>
+      <if test="payType != null" >
+        pay_type,
+      </if>
+      <if test="rechargeMoney != null" >
+        recharge_money,
+      </if>
+      <if test="beforeAccountMoney != null" >
+        before_account_money,
+      </if>
+      <if test="afterAccountMoney != null" >
+        after_account_money,
+      </if>
+      <if test="payStatus != null" >
+        pay_status,
+      </if>
+      <if test="payTime != null" >
+        pay_time,
+      </if>
+      <if test="payImage != null" >
+        pay_image,
+      </if>
+      <if test="approveState != null" >
+        approve_state,
+      </if>
+      <if test="approveUserId != null" >
+        approve_user_id,
+      </if>
+      <if test="approveUserName != null" >
+        approve_user_name,
+      </if>
+      <if test="approveTime != null" >
+        approve_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id,
+      </if>
+      <if test="modifyDate != null" >
+        modify_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="orderCode != null" >
+        #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="accountId != null" >
+        #{accountId,jdbcType=INTEGER},
+      </if>
+      <if test="custId != null" >
+        #{custId,jdbcType=INTEGER},
+      </if>
+      <if test="rechargeType != null" >
+        #{rechargeType,jdbcType=INTEGER},
+      </if>
+      <if test="payType != null" >
+        #{payType,jdbcType=INTEGER},
+      </if>
+      <if test="rechargeMoney != null" >
+        #{rechargeMoney,jdbcType=NUMERIC},
+      </if>
+      <if test="beforeAccountMoney != null" >
+        #{beforeAccountMoney,jdbcType=NUMERIC},
+      </if>
+      <if test="afterAccountMoney != null" >
+        #{afterAccountMoney,jdbcType=NUMERIC},
+      </if>
+      <if test="payStatus != null" >
+        #{payStatus,jdbcType=INTEGER},
+      </if>
+      <if test="payTime != null" >
+        #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payImage != null" >
+        #{payImage,jdbcType=VARCHAR},
+      </if>
+      <if test="approveState != null" >
+        #{approveState,jdbcType=INTEGER},
+      </if>
+      <if test="approveUserId != null" >
+        #{approveUserId,jdbcType=INTEGER},
+      </if>
+      <if test="approveUserName != null" >
+        #{approveUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="approveTime != null" >
+        #{approveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyDate != null" >
+        #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.samton.web.manage.finance.bean.entity.TCustDepositOrder" >
+    update public.t_cust_deposit_order
+    <set >
+      <if test="orderCode != null" >
+        order_code = #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="accountId != null" >
+        account_id = #{accountId,jdbcType=INTEGER},
+      </if>
+      <if test="custId != null" >
+        cust_id = #{custId,jdbcType=INTEGER},
+      </if>
+      <if test="rechargeType != null" >
+        recharge_type = #{rechargeType,jdbcType=INTEGER},
+      </if>
+      <if test="payType != null" >
+        pay_type = #{payType,jdbcType=INTEGER},
+      </if>
+      <if test="rechargeMoney != null" >
+        recharge_money = #{rechargeMoney,jdbcType=NUMERIC},
+      </if>
+      <if test="beforeAccountMoney != null" >
+        before_account_money = #{beforeAccountMoney,jdbcType=NUMERIC},
+      </if>
+      <if test="afterAccountMoney != null" >
+        after_account_money = #{afterAccountMoney,jdbcType=NUMERIC},
+      </if>
+      <if test="payStatus != null" >
+        pay_status = #{payStatus,jdbcType=INTEGER},
+      </if>
+      <if test="payTime != null" >
+        pay_time = #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payImage != null" >
+        pay_image = #{payImage,jdbcType=VARCHAR},
+      </if>
+      <if test="approveState != null" >
+        approve_state = #{approveState,jdbcType=INTEGER},
+      </if>
+      <if test="approveUserId != null" >
+        approve_user_id = #{approveUserId,jdbcType=INTEGER},
+      </if>
+      <if test="approveUserName != null" >
+        approve_user_name = #{approveUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="approveTime != null" >
+        approve_time = #{approveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyDate != null" >
+        modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.samton.web.manage.finance.bean.entity.TCustDepositOrder" >
+    update public.t_cust_deposit_order
+    set order_code = #{orderCode,jdbcType=VARCHAR},
+      account_id = #{accountId,jdbcType=INTEGER},
+      cust_id = #{custId,jdbcType=INTEGER},
+      recharge_type = #{rechargeType,jdbcType=INTEGER},
+      pay_type = #{payType,jdbcType=INTEGER},
+      recharge_money = #{rechargeMoney,jdbcType=NUMERIC},
+      before_account_money = #{beforeAccountMoney,jdbcType=NUMERIC},
+      after_account_money = #{afterAccountMoney,jdbcType=NUMERIC},
+      pay_status = #{payStatus,jdbcType=INTEGER},
+      pay_time = #{payTime,jdbcType=TIMESTAMP},
+      pay_image = #{payImage,jdbcType=VARCHAR},
+      approve_state = #{approveState,jdbcType=INTEGER},
+      approve_user_id = #{approveUserId,jdbcType=INTEGER},
+      approve_user_name = #{approveUserName,jdbcType=VARCHAR},
+      approve_time = #{approveTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      modify_date = #{modifyDate,jdbcType=TIMESTAMP}
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+
+  <sql id="Base_Column_List_Vo" >
+    o.order_id, o.order_code, o.account_id, o.cust_id, o.recharge_type, o.pay_type, o.recharge_money,
+    o.before_account_money, o.after_account_money, o.pay_status, o.pay_time, o.remark, o.create_user_id,
+    o.create_date, o.modify_user_id, o.modify_date
+  </sql>
+  <!-- 客户信息管理分页查询where条件 -->
+  <sql id="queryPageList_where">
+    <if test="search != null">
+      <if test="search.custName != null and search.custName != ''">
+        and tc.cust_name like '%'||#{search.custName,jdbcType=VARCHAR}||'%'
+      </if>
+      <if test="search.companyName != null and search.companyName != ''">
+        and tc.company_name like '%'||#{search.companyName,jdbcType=VARCHAR}||'%'
+      </if>
+      <if test="search.payTimeBegin != null">
+        <![CDATA[ and o.pay_time >= #{search.payTimeBegin,jdbcType=TIMESTAMP} ]]>
+      </if>
+      <if test="search.payTimeEnd != null">
+        <![CDATA[ and o.pay_time <= #{search.payTimeEnd,jdbcType=TIMESTAMP} ]]>
+      </if>
+      <if test="search.payType != null">
+        and o.pay_type = #{search.payType,jdbcType=INTEGER}
+      </if>
+    </if>
+  </sql>
+
+  <!-- 客户充值记录分页查询 -->
+  <select id="queryPageChargeList" parameterType="com.samton.platform.framework.mybatis.pagination.Pagination" resultType="com.samton.web.manage.finance.bean.vo.CustDepositOrderVo">
+    SELECT <include refid="Base_Column_List_Vo" />,
+    case o.pay_type when 1 then '微信' when 2 then '支付宝' else '其他' end as repay_type,
+    tc.cust_code,
+    tc.cust_name,
+    tc.company_name
+    FROM
+    t_cust_deposit_order o
+    INNER JOIN t_customer tc ON o.cust_id = tc.cust_id
+    <where>
+      <include refid="queryPageList_where" />
+    </where>
+  </select>
+
+  <!-- 客户信息管理页面导出 -->
+  <select id="exportOrderInfoList" parameterType="com.samton.platform.framework.mybatis.pagination.Pagination" resultType="java.util.Map">
+    SELECT <include refid="Base_Column_List_Vo" />,
+    case o.pay_type when 1 then '微信' when 2 then '支付宝' else '其他' end as repay_type,
+    tc.cust_code,
+    tc.cust_name,
+    tc.company_name
+    FROM
+    t_cust_deposit_order o
+    INNER JOIN t_customer tc ON o.cust_id = tc.cust_id
+    <where>
+      <include refid="queryPageList_where" />
+    </where>
+  </select>
+
+  <!-- 客户充值记录查看-->
+  <select id="selectFinanceVoById" parameterType="java.lang.Integer" resultType="com.samton.web.manage.finance.bean.vo.CustDepositOrderVo">
+    select
+    <include refid="Base_Column_List_Vo"/>,
+    tc.cust_code,
+    tc.cust_name,
+    a.dollar_rate,
+    tc.company_name
+    from t_cust_deposit_order o
+    INNER join t_cust_account a on o.cust_id = a.cust_id
+    INNER join t_customer tc on o.cust_id = tc.cust_id
+    where o.cust_id = #{custId,jdbcType=INTEGER}
+  </select>
+
+
+</mapper>

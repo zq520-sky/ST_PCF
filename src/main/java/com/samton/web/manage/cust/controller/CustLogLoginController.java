@@ -1,0 +1,90 @@
+package com.samton.web.manage.cust.controller;
+
+import com.samton.platform.framework.base.BaseController;
+import com.samton.platform.framework.constant.WebConstant;
+import com.samton.platform.framework.mybatis.pagination.Pagination;
+import com.samton.platform.pm.bean.entity.TSysLog;
+import com.samton.platform.pm.constant.PmStateConstant;
+import com.samton.platform.pm.service.ILogService;
+import com.samton.web.manage.cust.bean.entity.TCustLogLogin;
+import com.samton.web.manage.cust.bean.vo.CustLogLoginVo;
+import com.samton.web.manage.cust.service.ICustLogLoginService;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @Description: 客户登录日志控制类
+ * @Author: ZhongShengbin
+ * @Date: 2020/04/14 19:14
+ * Copyright (c) 2019, Samton. All rights reserved
+ */
+@Controller
+@RequestMapping("/manage/log")
+public class CustLogLoginController extends BaseController {
+
+    @Resource
+    ICustLogLoginService custLogLoginService;
+
+    @Resource
+    ILogService logService;
+
+    private SimpleDateFormat sdfBegin = new SimpleDateFormat("yyyy-MM-01");
+    private SimpleDateFormat sdfEnd = new SimpleDateFormat("yyyy-MM-dd");
+    private SimpleDateFormat sdfParse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    /**
+     * 客户登录日志分页
+     *
+     * @param paramBean
+     * @param custLogLoginVo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("queryCustLogLoginInfoList" + WebConstant.PAGE_SUFFIX)
+    public String queryTaskInfoList(Pagination<TCustLogLogin> paramBean, CustLogLoginVo custLogLoginVo) throws Exception {
+        if (custLogLoginVo.getLoginDateBegin() == null) {
+            custLogLoginVo.setLoginDateBegin(sdfParse.parse(sdfBegin.format(System.currentTimeMillis()) + " 00:00:00"));
+        }
+        if (custLogLoginVo.getLoginDateEnd() == null) {
+            custLogLoginVo.setLoginDateEnd(sdfParse.parse(sdfEnd.format(System.currentTimeMillis()) + " 23:59:59"));
+        }
+        paramBean.setSearch(custLogLoginVo);
+        Pagination<TCustLogLogin> pageData = custLogLoginService.queryCustLogLoginPageList(paramBean);
+
+        this.addAttr("pageData", pageData);
+        return "custLogLogin/custLogLoginManage";
+    }
+    /**
+     * 客户登录日志导出
+     * @param paramBean
+     * @param custLogLoginVo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/exportCustLogLoginInfoList" + WebConstant.BUSINESS_SUFFIX)
+    public String exportReturnInfoList(Pagination<TCustLogLogin> paramBean, CustLogLoginVo custLogLoginVo) throws Exception {
+        if (custLogLoginVo.getLoginDateBegin() == null) {
+            custLogLoginVo.setLoginDateBegin(sdfParse.parse(sdfBegin.format(System.currentTimeMillis()) + " 00:00:00"));
+        }
+        if (custLogLoginVo.getLoginDateEnd() == null) {
+            custLogLoginVo.setLoginDateEnd(sdfParse.parse(sdfEnd.format(System.currentTimeMillis()) + " 23:59:59"));
+        }
+        paramBean.setSearch(custLogLoginVo);
+        Pagination<Map<String, Object>> pageData = custLogLoginService.exportCustLogLoginPageList(paramBean);
+        logService.addLog(new TSysLog("客户登录日志-导出", "导出客户登录日志！", PmStateConstant.LOG_PLATFORM));
+        String title = "客户名称,ip地址,登录时间";
+        List<String> colNames = new ArrayList<String>();
+        colNames.add("cust_name");
+        colNames.add("login_ip");
+        colNames.add("login_date");
+        this.export(response,"客户登录日志" + String.format("%1$tY%1$tm%1$td", new Date()), title, colNames, pageData);
+        return null;
+    }
+}

@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.samton.web.manage.order.dao.TCustOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.samton.web.manage.order.bean.entity.TCustOrder" >
+    <id column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="order_code" property="orderCode" jdbcType="VARCHAR" />
+    <result column="cust_id" property="custId" jdbcType="INTEGER" />
+    <result column="demand_type" property="demandType" jdbcType="INTEGER" />
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="unit_price" property="unitPrice" jdbcType="NUMERIC" />
+    <result column="order_num" property="orderNum" jdbcType="INTEGER" />
+    <result column="tax" property="tax" jdbcType="NUMERIC" />
+    <result column="frequency" property="frequency" jdbcType="INTEGER" />
+    <result column="cycle" property="cycle" jdbcType="INTEGER" />
+    <result column="dollar_rate" property="dollarRate" jdbcType="NUMERIC" />
+    <result column="order_total_money" property="orderTotalMoney" jdbcType="NUMERIC" />
+    <result column="task_start_date" property="taskStartDate" jdbcType="DATE" />
+    <result column="order_state" property="orderState" jdbcType="INTEGER" />
+    <result column="task_end_date" property="taskEndDate" jdbcType="DATE" />
+    <result column="release_user_id" property="releaseUserId" jdbcType="INTEGER" />
+    <result column="release_time" property="releaseTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="BIGINT" />
+    <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    order_id, order_code, cust_id, demand_type, product_id, address, unit_price, order_num,
+    tax, frequency, cycle, dollar_rate, order_total_money, task_start_date, order_state,
+    task_end_date, release_user_id, release_time, remark, create_user_id, create_date,
+    modify_user_id, modify_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from public.t_cust_order
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from public.t_cust_order
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.samton.web.manage.order.bean.entity.TCustOrder" >
+    insert into public.t_cust_order (order_id, order_code, cust_id,
+      demand_type, product_id, address,
+      unit_price, order_num, tax,
+      frequency, cycle, dollar_rate,
+      order_total_money, task_start_date, order_state,
+      task_end_date, release_user_id, release_time,
+      remark, create_user_id, create_date,
+      modify_user_id, modify_date)
+    values (#{orderId,jdbcType=INTEGER}, #{orderCode,jdbcType=VARCHAR}, #{custId,jdbcType=INTEGER},
+      #{demandType,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR},
+      #{unitPrice,jdbcType=NUMERIC}, #{orderNum,jdbcType=INTEGER}, #{tax,jdbcType=NUMERIC},
+      #{frequency,jdbcType=INTEGER}, #{cycle,jdbcType=INTEGER}, #{dollarRate,jdbcType=NUMERIC},
+      #{orderTotalMoney,jdbcType=NUMERIC}, #{taskStartDate,jdbcType=DATE}, #{orderState,jdbcType=INTEGER},
+      #{taskEndDate,jdbcType=DATE}, #{releaseUserId,jdbcType=INTEGER}, #{releaseTime,jdbcType=TIMESTAMP},
+      #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createDate,jdbcType=TIMESTAMP},
+      #{modifyUserId,jdbcType=BIGINT}, #{modifyDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.samton.web.manage.order.bean.entity.TCustOrder" >
+    insert into public.t_cust_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="orderCode != null" >
+        order_code,
+      </if>
+      <if test="custId != null" >
+        cust_id,
+      </if>
+      <if test="demandType != null" >
+        demand_type,
+      </if>
+      <if test="productId != null" >
+        product_id,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="unitPrice != null" >
+        unit_price,
+      </if>
+      <if test="orderNum != null" >
+        order_num,
+      </if>
+      <if test="tax != null" >
+        tax,
+      </if>
+      <if test="frequency != null" >
+        frequency,
+      </if>
+      <if test="cycle != null" >
+        cycle,
+      </if>
+      <if test="dollarRate != null" >
+        dollar_rate,
+      </if>
+      <if test="orderTotalMoney != null" >
+        order_total_money,
+      </if>
+      <if test="taskStartDate != null" >
+        task_start_date,
+      </if>
+      <if test="orderState != null" >
+        order_state,
+      </if>
+      <if test="taskEndDate != null" >
+        task_end_date,
+      </if>
+      <if test="releaseUserId != null" >
+        release_user_id,
+      </if>
+      <if test="releaseTime != null" >
+        release_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id,
+      </if>
+      <if test="modifyDate != null" >
+        modify_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="orderCode != null" >
+        #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="custId != null" >
+        #{custId,jdbcType=INTEGER},
+      </if>
+      <if test="demandType != null" >
+        #{demandType,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null" >
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPrice != null" >
+        #{unitPrice,jdbcType=NUMERIC},
+      </if>
+      <if test="orderNum != null" >
+        #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="tax != null" >
+        #{tax,jdbcType=NUMERIC},
+      </if>
+      <if test="frequency != null" >
+        #{frequency,jdbcType=INTEGER},
+      </if>
+      <if test="cycle != null" >
+        #{cycle,jdbcType=INTEGER},
+      </if>
+      <if test="dollarRate != null" >
+        #{dollarRate,jdbcType=NUMERIC},
+      </if>
+      <if test="orderTotalMoney != null" >
+        #{orderTotalMoney,jdbcType=NUMERIC},
+      </if>
+      <if test="taskStartDate != null" >
+        #{taskStartDate,jdbcType=DATE},
+      </if>
+      <if test="orderState != null" >
+        #{orderState,jdbcType=INTEGER},
+      </if>
+      <if test="taskEndDate != null" >
+        #{taskEndDate,jdbcType=DATE},
+      </if>
+      <if test="releaseUserId != null" >
+        #{releaseUserId,jdbcType=INTEGER},
+      </if>
+      <if test="releaseTime != null" >
+        #{releaseTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyDate != null" >
+        #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.samton.web.manage.order.bean.entity.TCustOrder" >
+    update public.t_cust_order
+    <set >
+      <if test="orderCode != null" >
+        order_code = #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="custId != null" >
+        cust_id = #{custId,jdbcType=INTEGER},
+      </if>
+      <if test="demandType != null" >
+        demand_type = #{demandType,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null" >
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPrice != null" >
+        unit_price = #{unitPrice,jdbcType=NUMERIC},
+      </if>
+      <if test="orderNum != null" >
+        order_num = #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="tax != null" >
+        tax = #{tax,jdbcType=NUMERIC},
+      </if>
+      <if test="frequency != null" >
+        frequency = #{frequency,jdbcType=INTEGER},
+      </if>
+      <if test="cycle != null" >
+        cycle = #{cycle,jdbcType=INTEGER},
+      </if>
+      <if test="dollarRate != null" >
+        dollar_rate = #{dollarRate,jdbcType=NUMERIC},
+      </if>
+      <if test="orderTotalMoney != null" >
+        order_total_money = #{orderTotalMoney,jdbcType=NUMERIC},
+      </if>
+      <if test="taskStartDate != null" >
+        task_start_date = #{taskStartDate,jdbcType=DATE},
+      </if>
+      <if test="orderState != null" >
+        order_state = #{orderState,jdbcType=INTEGER},
+      </if>
+      <if test="taskEndDate != null" >
+        task_end_date = #{taskEndDate,jdbcType=DATE},
+      </if>
+      <if test="releaseUserId != null" >
+        release_user_id = #{releaseUserId,jdbcType=INTEGER},
+      </if>
+      <if test="releaseTime != null" >
+        release_time = #{releaseTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyDate != null" >
+        modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.samton.web.manage.order.bean.entity.TCustOrder" >
+    update public.t_cust_order
+    set order_code = #{orderCode,jdbcType=VARCHAR},
+      cust_id = #{custId,jdbcType=INTEGER},
+      demand_type = #{demandType,jdbcType=INTEGER},
+      product_id = #{productId,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      unit_price = #{unitPrice,jdbcType=NUMERIC},
+      order_num = #{orderNum,jdbcType=INTEGER},
+      tax = #{tax,jdbcType=NUMERIC},
+      frequency = #{frequency,jdbcType=INTEGER},
+      cycle = #{cycle,jdbcType=INTEGER},
+      dollar_rate = #{dollarRate,jdbcType=NUMERIC},
+      order_total_money = #{orderTotalMoney,jdbcType=NUMERIC},
+      task_start_date = #{taskStartDate,jdbcType=DATE},
+      order_state = #{orderState,jdbcType=INTEGER},
+      task_end_date = #{taskEndDate,jdbcType=DATE},
+      release_user_id = #{releaseUserId,jdbcType=INTEGER},
+      release_time = #{releaseTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      modify_date = #{modifyDate,jdbcType=TIMESTAMP}
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+
+
+  <sql id="queryPageList_where">
+    <if test="search != null">
+      <if test="search.custNameOrOrderCode != null and search.custNameOrOrderCode != ''">
+        and (tco.order_code like '%'||#{search.custNameOrOrderCode,jdbcType=VARCHAR}||'%' or tc.cust_name like '%'||#{search.custNameOrOrderCode,jdbcType=VARCHAR}||'%')
+      </if>
+      <if test="search.releaseUserName != null and search.releaseUserName != ''">
+        and tspu.user_name like '%'||#{search.releaseUserName,jdbcType=VARCHAR}||'%'
+      </if>
+      <if test="search.accountsName != null and search.accountsName != ''">
+        and tcp.accounts_name like '%'||#{search.accountsName,jdbcType=VARCHAR}||'%'
+      </if>
+      <if test="search.itemId != null and search.itemId != ''">
+        and tcp.item_id like '%'||#{search.itemId,jdbcType=VARCHAR}||'%'
+      </if>
+      <if test="search.platformType != null and search.platformType != ''">
+        and tcp.platform_type = #{search.platformType,jdbcType=VARCHAR}
+      </if>
+      <if test="search.demandType != null and search.demandType != ''">
+        and tco.demand_type = #{search.demandType}
+      </if>
+      <if test="search.orderState != null and search.orderState != ''">
+        and tco.order_state = #{search.orderState}
+      </if>
+      <if test="search.custId != null ">
+        and tco.cust_id = #{search.custId}
+      </if>
+      <if test="search.releaseTimeBegin != null">
+        and date_trunc('DAY', tco.release_time) <![CDATA[>=]]> to_date( #{search.releaseTimeBegin},'yyyy-MM-dd')
+      </if>
+      <if test="search.releaseTimeEnd != null">
+        and date_trunc('DAY', tco.release_time) <![CDATA[<=]]> to_date( #{search.releaseTimeEnd},'yyyy-MM-dd')
+      </if>
+      <if test="search.taskStartDateBegin != null">
+        and date_trunc('DAY', tco.task_start_date) <![CDATA[>=]]> to_date( #{search.taskStartDateBegin},'yyyy-MM-dd')
+      </if>
+      <if test="search.taskStartDateEnd != null">
+        and date_trunc('DAY', tco.task_start_date) <![CDATA[<=]]> to_date( #{search.taskStartDateEnd},'yyyy-MM-dd')
+      </if>
+    </if>
+  </sql>
+
+  <select id="queryOrderPageList" parameterType="com.samton.platform.framework.mybatis.pagination.Pagination"
+          resultType="com.samton.web.manage.order.bean.vo.CustOrderVo">
+    SELECT
+      tco.order_id, tco.order_code, tco.cust_id, tco.demand_type, tco.product_id, tco.address, tco.unit_price,
+      tco.order_num, tco.tax, tco.frequency, tco.cycle, tco.dollar_rate, tco.order_total_money, tco.task_start_date,
+      tco.order_state, tco.task_end_date, tco.release_user_id, tco.release_time, tco.remark, tco.create_user_id,
+      tco.create_date, tco.modify_user_id, tco.modify_date,
+      tc.cust_name,
+      tcp.platform_type,
+      tcp.accounts_name,
+      tcp.item_id,
+      tcp.title_keyword,
+      tspu.user_name as release_user_name
+    FROM
+      t_cust_order tco
+      INNER JOIN t_customer tc ON tco.cust_id = tc.cust_id
+      INNER JOIN t_cust_product tcp ON tco.product_id = tcp.product_id
+      INNER JOIN t_sys_pm_user tspu ON tco.release_user_id = tspu.user_id
+    <where>
+      <include refid="queryPageList_where" />
+    </where>
+    order by tco.release_time, tco.task_start_date desc
+  </select>
+
+  <select id="exportOrderPageList" parameterType="com.samton.platform.framework.mybatis.pagination.Pagination"
+          resultType="com.samton.web.manage.order.bean.excel.CustOrderExcel">
+    SELECT
+      tco.order_id, tco.order_code, tco.cust_id, tco.demand_type, tco.product_id, tco.address, tco.unit_price,
+      tco.order_num, tco.tax, tco.frequency, tco.cycle, tco.dollar_rate, tco.order_total_money, tco.task_start_date,
+      tco.order_state, tco.task_end_date, tco.release_user_id, tco.release_time, tco.remark, tco.create_user_id,
+      tco.create_date, tco.modify_user_id, tco.modify_date,
+      tc.cust_name,
+      tcp.platform_type,
+      tcp.accounts_name,
+      tcp.item_id,case tco.order_state when 0 then '未开始' when 1 then '进行中' when 2 then '已完成' when 3 then '已取消' end as reorder_state,
+      tcp.title_keyword,case tco.demand_type when 1 then '采购' when 2 then '刷单' end as redemand_type,
+      tspu.user_name as release_user_name,case tco.demand_type when 1 then (tco.order_num*tco.unit_price+tco.tax)*tco.dollar_rate when 2 then tco.order_num*tco.unit_price*tco.dollar_rate*tco.cycle*tco.frequency end as count_price
+    FROM
+      t_cust_order tco
+      INNER JOIN t_customer tc ON tco.cust_id = tc.cust_id
+      INNER JOIN t_cust_product tcp ON tco.product_id = tcp.product_id
+      INNER JOIN t_sys_pm_user tspu ON tco.release_user_id = tspu.user_id
+    <where>
+      <include refid="queryPageList_where" />
+    </where>
+    order by tco.release_time, tco.task_start_date desc
+  </select>
+
+  <select id="selectOrderById" resultType="com.samton.web.manage.order.bean.vo.CustOrderVo">
+    SELECT
+      tco.order_id, tco.order_code, tco.cust_id, tco.demand_type, tco.product_id, tco.address, tco.unit_price,
+      tco.order_num, tco.tax, tco.frequency, tco.cycle, tco.dollar_rate, tco.order_total_money, tco.task_start_date,
+      tco.order_state, tco.task_end_date, tco.release_user_id, tco.release_time, tco.remark, tco.create_user_id,
+      tco.create_date, tco.modify_user_id, tco.modify_date,
+      tc.cust_name,
+      tc.cust_code,
+      tcp.platform_type,
+      tcp.accounts_name,
+      tcp.item_id,
+      tcp.title_keyword,
+      tspu.user_name as release_user_name
+    FROM
+      t_cust_order tco
+      INNER JOIN t_customer tc ON tco.cust_id = tc.cust_id
+      INNER JOIN t_cust_product tcp ON tco.product_id = tcp.product_id
+      INNER JOIN t_sys_pm_user tspu ON tco.release_user_id = tspu.user_id
+    WHERE tco.order_id=#{orderId}
+  </select>
+
+  <!-- 通过订单编号查询订单信息 -->
+  <select id="selectCustOrderByOrderCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from public.t_cust_order
+    where order_code = #{orderCode,jdbcType=VARCHAR}
+    and order_state = 0
+  </select>
+</mapper>

@@ -1,0 +1,83 @@
+package com.samton.web.manage.finance.bean.vo;
+
+import com.samton.web.manage.finance.bean.entity.TCustTask;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
+
+/**
+ * @Description: 客户消费记录搜索
+ * @Author: ZhongShengbin
+ * @Date: 2020/04/15 15:18
+ * Copyright (c) 2019, Samton. All rights reserved
+ */
+public class CustTaskVo extends TCustTask {
+
+    //客户名称
+    private String custName;
+
+    //电商平台
+    private String platformType;
+
+    //需求类型
+    private String demandType;
+
+    //任务结束
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date taskEndDateBegin;
+
+    //任务结束
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date taskEndDateEnd;
+
+    //还款状态
+    private Integer isClose;
+
+    public String getCustName() {
+        return custName;
+    }
+
+    public void setCustName(String custName) {
+        this.custName = custName;
+    }
+
+    public String getDemandType() {
+        return demandType;
+    }
+
+    public void setDemandType(String demandType) {
+        this.demandType = demandType;
+    }
+
+    public Date getTaskEndDateBegin() {
+        return taskEndDateBegin;
+    }
+
+    public void setTaskEndDateBegin(Date taskEndDateBegin) {
+        this.taskEndDateBegin = taskEndDateBegin;
+    }
+
+    public Date getTaskEndDateEnd() {
+        return taskEndDateEnd;
+    }
+
+    public void setTaskEndDateEnd(Date taskEndDateEnd) {
+        this.taskEndDateEnd = taskEndDateEnd;
+    }
+
+    public Integer getIsClose() {
+        return isClose;
+    }
+
+    public void setIsClose(Integer isClose) {
+        this.isClose = isClose;
+    }
+
+    public String getPlatformType() {
+        return platformType;
+    }
+
+    public void setPlatformType(String platformType) {
+        this.platformType = platformType;
+    }
+}

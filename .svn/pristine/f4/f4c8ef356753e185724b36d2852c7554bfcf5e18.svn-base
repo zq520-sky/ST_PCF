@@ -1,0 +1,49 @@
+package com.samton.web.manage.finance.dao;
+
+import com.samton.platform.common.dao.AutoMapperInteger;
+import com.samton.platform.framework.mybatis.pagination.Pagination;
+import com.samton.web.manage.finance.bean.entity.TCustAccountCredit;
+import com.samton.web.manage.finance.bean.vo.CustAccountCreditVo;
+import org.apache.ibatis.session.RowBounds;
+
+import java.util.List;
+import java.util.Map;
+
+public interface TCustAccountCreditMapper extends AutoMapperInteger<TCustAccountCredit> {
+    int deleteByPrimaryKey(Integer creditId);
+
+    int insert(TCustAccountCredit record);
+
+    int insertSelective(TCustAccountCredit record);
+
+    TCustAccountCredit selectByPrimaryKey(Integer creditId);
+
+    int updateByPrimaryKeySelective(TCustAccountCredit record);
+
+    int updateByPrimaryKey(TCustAccountCredit record);
+
+    /**
+     * 客户授信记录查询
+     * @param paramBean
+     * @param rowBounds
+     * @return
+     */
+    List<TCustAccountCredit> queryPageCreditList(Pagination<TCustAccountCredit> paramBean, RowBounds rowBounds)throws Exception;
+
+    /**
+     * 客户授信记录查询
+     * @param paramBean
+     * @param rowBounds
+     * @return
+     */
+    List<Map<String,Object>> exportCreditInfoList(Pagination<TCustAccountCredit> paramBean,RowBounds rowBounds)throws Exception;
+
+    /**
+     * 查询客户授信信息
+     * @param custId
+     * @return
+     * @throws Exception
+     */
+    public CustAccountCreditVo selectCreditVoById(Integer custId) throws Exception;
+
+}

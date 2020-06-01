@@ -1,0 +1,115 @@
+package com.samton.web.manage.task.bean.vo;
+
+import com.samton.web.manage.task.bean.entity.TCustTask;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
+
+/**
+ * @Description: 任务管理实体类，客户消费记录搜索
+ * @Author: ZhongShengbin
+ * @Date: 2020/04/15 15:18
+ * Copyright (c) 2019, Samton. All rights reserved
+ */
+public class CustTaskVo extends TCustTask {
+
+    //客户名称
+    private String custName;
+
+    //电商平台
+    private String platformType;
+
+    //需求类型
+    private Integer demandType;
+
+    private String redemandType;
+
+    private String reisClose;
+
+    private String itemId;
+
+    //任务结束
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date taskEndDateBegin;
+
+    //任务结束
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date taskEndDateEnd;
+
+    //还款状态
+    private Integer isClose;
+
+    public String getCustName() {
+        return custName;
+    }
+
+    public void setCustName(String custName) {
+        this.custName = custName;
+    }
+
+    public Date getTaskEndDateBegin() {
+        return taskEndDateBegin;
+    }
+
+    public void setTaskEndDateBegin(Date taskEndDateBegin) {
+        this.taskEndDateBegin = taskEndDateBegin;
+    }
+
+    public Date getTaskEndDateEnd() {
+        return taskEndDateEnd;
+    }
+
+    public void setTaskEndDateEnd(Date taskEndDateEnd) {
+        this.taskEndDateEnd = taskEndDateEnd;
+    }
+
+    public Integer getIsClose() {
+        return isClose;
+    }
+
+    public void setIsClose(Integer isClose) {
+        this.isClose = isClose;
+    }
+
+    public String getPlatformType() {
+        return platformType;
+    }
+
+    public void setPlatformType(String platformType) {
+        this.platformType = platformType;
+    }
+
+    public void setDemandType(Integer demandType) {
+        this.demandType = demandType;
+    }
+
+    public String getRedemandType() {
+        return redemandType;
+    }
+
+    public void setRedemandType(String redemandType) {
+        this.redemandType = redemandType;
+    }
+
+    public Integer getDemandType() {
+        return demandType;
+    }
+
+    public String getReisClose() {
+        return reisClose;
+    }
+
+    public void setReisClose(String reisClose) {
+        this.reisClose = reisClose;
+    }
+
+    public String getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
+    }
+
+
+}

@@ -1,0 +1,21 @@
+package com.samton.web.manage.order.service.impl;
+
+import com.samton.platform.common.service.impl.SuperServiceIntegerImpl;
+import com.samton.web.manage.order.bean.entity.TCustOrder;
+import com.samton.web.manage.order.dao.TCustOrderMapper;
+import com.samton.web.manage.order.service.CustOrderService;
+import org.springframework.stereotype.Service;
+
+/**
+ * @ClassName: CustOrderServiceImpl
+ * @Description:
+ * @Author: wuzhiqiang
+ * @Date: 2020-04-16 18:10
+ * @Copyright (c) 2020, Samton. All rights reserved
+ **/
+@Service
+public class CustOrderServiceImpl extends SuperServiceIntegerImpl<TCustOrderMapper, TCustOrder> implements CustOrderService {
+
+
+
+}

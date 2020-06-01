@@ -1,0 +1,128 @@
+package com.samton.web.manage.finance.service.impl;
+
+import com.samton.platform.common.service.impl.SuperServiceIntegerImpl;
+import com.samton.platform.common.util.IdGen;
+import com.samton.platform.framework.bean.UserCacheBean;
+import com.samton.platform.framework.mybatis.pagination.PageContext;
+import com.samton.platform.framework.mybatis.pagination.Pagination;
+import com.samton.platform.framework.util.BASE64DecodedMultipartFile;
+import com.samton.platform.framework.util.CurrentUtil;
+import com.samton.platform.framework.util.FileUtils;
+import com.samton.platform.pm.bean.entity.TSysPmUser;
+import com.samton.platform.pm.dao.TSysPmUserMapper;
+import com.samton.web.manage.finance.bean.entity.TCustAccount;
+import com.samton.web.manage.finance.bean.entity.TCustDepositOrder;
+import com.samton.web.manage.finance.bean.excel.CustDepositOrderEntity;
+import com.samton.web.manage.finance.bean.excel.CustRechargeApplicationEntity;
+import com.samton.web.manage.finance.bean.vo.CustAccountVo;
+import com.samton.web.manage.finance.bean.vo.CustDepositOrderVo;
+import com.samton.web.manage.finance.dao.TCustAccountMapper;
+import com.samton.web.manage.finance.dao.TCustDepositOrderMapper;
+import com.samton.web.manage.finance.service.ICustDepositOrderService;
+import org.springframework.stereotype.Service;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @Description: 客户充值记录Impl
+ * @Author: ZhongShengbin
+ * @Date: 2020/04/10 16:01
+ * Copyright (c) 2019, Samton. All rights reserved
+ */
+@Service("custDepositOrderService")
+public class CustDepositOrderServiceImpl extends SuperServiceIntegerImpl<TCustDepositOrderMapper, TCustDepositOrder> implements ICustDepositOrderService {
+
+    @Resource
+    private TCustAccountMapper tCustAccountMapper;
+    /**
+     *客户账户管理分页查询
+     * @param paramBean
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public Pagination<CustDepositOrderVo> queryChargePageList(Pagination<CustDepositOrderVo> paramBean) throws Exception {
+        Pagination<CustDepositOrderVo> pagination = PageContext.initialize(paramBean.getPage(), paramBean.getRows());
+        List<CustDepositOrderVo> list = mapper.queryPageChargeList(paramBean, pagination.getRowBounds());
+        pagination.setData(list);
+        return pagination;
+    }
+
+    @Override
+    public Pagination<CustDepositOrderEntity> exportOrderPageList(Pagination<TCustDepositOrder> paramBean) throws Exception {
+        Pagination<CustDepositOrderEntity> pagination = PageContext.initialize(paramBean.getPage(), paramBean.getRows());
+        List<CustDepositOrderEntity> list = mapper.exportOrderInfoList(paramBean, pagination.getRowBounds());
+        pagination.setData(list);
+        return pagination;
+    }
+
+    @Override
+    public CustDepositOrderVo selectFinanceVoById(Integer orderId) throws Exception {
+            return this.mapper.selectFinanceVoById(orderId);
+    }
+
+    @Override
+    public String addCustRegisterOrder(CustDepositOrderVo custDepositOrderVo) throws Exception {
+        MultipartFile multipartFile = BASE64DecodedMultipartFile.base64ToMultipart(custDepositOrderVo.getFile());
+        Map<String, String> imageData = FileUtils.imageTo(multipartFile, "payImage");
+        custDepositOrderVo.setPayImage(imageData.get("attachmentPath"));
+        custDepositOrderVo.setOrderCode(IdGen.getBusinessCode("CZ"));
+        custDepositOrderVo.setRechargeType(0);
+        custDepositOrderVo.setApproveState(0);
+        custDepositOrderVo.setPayStatus(0);
+        UserCacheBean currentUser = CurrentUtil.getCurrentUser();
+        Date currentDate = new Date();
+        custDepositOrderVo.setCreateUserId(currentUser.getUserId());
+        custDepositOrderVo.setCreateDate(currentDate);
+        custDepositOrderVo.setModifyUserId(currentUser.getUserId());
+        custDepositOrderVo.setModifyDate(currentDate);
+        custDepositOrderVo.setCustId(currentUser.getEnterpriseId());
+        CustAccountVo custAccountVo = tCustAccountMapper.selectByCustId(currentUser.getEnterpriseId());
+        BigDecimal accountMoney = custAccountVo.getAccountMoney();
+        custDepositOrderVo.setAccountId(custAccountVo.getAccountId());
+        custDepositOrderVo.setBeforeAccountMoney(accountMoney);
+        custDepositOrderVo.setAfterAccountMoney(accountMoney.add(custDepositOrderVo.getRechargeMoney()));
+        int insert = mapper.insertSelective(custDepositOrderVo);
+        return insert > 0 ? custDepositOrderVo.getOrderCode() : "";
+    }
+
+    @Override
+    public synchronized boolean updateRegisterOrder(CustDepositOrderVo custDepositOrderVo) throws Exception {
+        UserCacheBean currentUser = CurrentUtil.getCurrentUser();
+        custDepositOrderVo.setPayStatus(1);
+        custDepositOrderVo.setApproveUserId(Integer.parseInt(String.valueOf(currentUser.getUserId())));
+        custDepositOrderVo.setApproveUserName(currentUser.getUserName());
+        custDepositOrderVo.setApproveTime(new Date());
+        int update = mapper.updateByPrimaryKeySelective(custDepositOrderVo);
+        //更新客户账户余额
+        TCustDepositOrder tCustDepositOrder = mapper.selectByPrimaryKey(custDepositOrderVo.getOrderId());
+        Integer accountId = tCustDepositOrder.getAccountId();
+        TCustAccount tCustAccount = tCustAccountMapper.selectByPrimaryKey(accountId);
+        tCustAccount.setAccountMoney(tCustDepositOrder.getRechargeMoney().add(tCustAccount.getAccountMoney()));
+        int accountUpdate = tCustAccountMapper.updateByPrimaryKeySelective(tCustAccount);
+        return update > 0 && accountUpdate > 0;
+    }
+
+    /**
+     * 获取我的账户信息
+     * @return
+     */
+    @Override
+    public CustAccountVo findCustAccountByCustId() throws Exception{
+        return tCustAccountMapper.selectCustAccountVoById( CurrentUtil.getCurrentUser().getEnterpriseId());
+    }
+
+    @Override
+    public Pagination<CustRechargeApplicationEntity> exportRechargePageList(Pagination<TCustDepositOrder> paramBean) throws Exception {
+        Pagination<CustRechargeApplicationEntity> pagination = PageContext.initialize(paramBean.getPage(), paramBean.getRows());
+        List<CustRechargeApplicationEntity> list = mapper.exportRechargeInfoList(paramBean, pagination.getRowBounds());
+        pagination.setData(list);
+        return pagination;
+    }
+}

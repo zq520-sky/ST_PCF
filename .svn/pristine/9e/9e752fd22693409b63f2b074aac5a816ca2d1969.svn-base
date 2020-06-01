@@ -1,0 +1,23 @@
+package com.samton.web.manage.cust.dao;
+
+import com.samton.platform.common.dao.AutoMapperInteger;
+import com.samton.web.manage.cust.bean.entity.TCustProduct;
+import com.samton.web.manage.cust.bean.vo.CustProductVo;
+
+import java.util.Map;
+
+
+public interface TCustProductMapper extends AutoMapperInteger<TCustProduct> {
+
+    /**
+     * 查询卖家产品信息
+     * @param productId
+     * @return
+     * @throws Exception
+     */
+    public CustProductVo selectCustProductVoById(Integer productId) throws Exception;
+
+    Map<String, Object> selectCustProductByItemId(String itemId) throws Exception;
+
+    CustProductVo selectProductByItemId(String itemId) throws Exception;
+}

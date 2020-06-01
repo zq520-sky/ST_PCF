@@ -1,0 +1,17 @@
+package com.samton.web.manage.task.dao;
+
+import com.samton.web.manage.task.bean.entity.TCustTaskSet;
+
+public interface TCustTaskSetMapper {
+    int deleteByPrimaryKey(Integer taskSetId);
+
+    int insert(TCustTaskSet record);
+
+    int insertSelective(TCustTaskSet record);
+
+    TCustTaskSet selectByPrimaryKey(Integer taskSetId);
+
+    int updateByPrimaryKeySelective(TCustTaskSet record);
+
+    int updateByPrimaryKey(TCustTaskSet record);
+}

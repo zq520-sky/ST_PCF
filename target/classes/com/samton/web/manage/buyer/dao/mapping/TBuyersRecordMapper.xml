@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.samton.web.manage.buyer.dao.TBuyersRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.samton.web.manage.buyer.bean.entity.TBuyersRecord" >
+    <id column="record_id" property="recordId" jdbcType="INTEGER" />
+    <result column="buyer_id" property="buyerId" jdbcType="INTEGER" />
+    <result column="record_month" property="recordMonth" jdbcType="DATE" />
+    <result column="account_money_his" property="accountMoneyHis" jdbcType="NUMERIC" />
+    <result column="brush_recharge" property="brushRecharge" jdbcType="NUMERIC" />
+    <result column="purchase_recharge" property="purchaseRecharge" jdbcType="NUMERIC" />
+    <result column="recharge_total" property="rechargeTotal" jdbcType="NUMERIC" />
+    <result column="quota_limit" property="quotaLimit" jdbcType="NUMERIC" />
+    <result column="quota_month" property="quotaMonth" jdbcType="NUMERIC" />
+    <result column="brush_num" property="brushNum" jdbcType="INTEGER" />
+    <result column="purchase_num" property="purchaseNum" jdbcType="INTEGER" />
+    <result column="brush_total_money" property="brushTotalMoney" jdbcType="NUMERIC" />
+    <result column="purchase_total_money" property="purchaseTotalMoney" jdbcType="NUMERIC" />
+    <result column="refund_money" property="refundMoney" jdbcType="NUMERIC" />
+    <result column="account_money" property="accountMoney" jdbcType="NUMERIC" />
+    <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    record_id, buyer_id, record_month, account_money_his, brush_recharge, purchase_recharge, 
+    recharge_total, quota_limit, quota_month, brush_num, purchase_num, brush_total_money, 
+    purchase_total_money, refund_money, account_money, create_user_id, create_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from public.t_buyers_record
+    where record_id = #{recordId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from public.t_buyers_record
+    where record_id = #{recordId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.samton.web.manage.buyer.bean.entity.TBuyersRecord" >
+    insert into public.t_buyers_record (record_id, buyer_id, record_month, 
+      account_money_his, brush_recharge, purchase_recharge, 
+      recharge_total, quota_limit, quota_month, 
+      brush_num, purchase_num, brush_total_money, 
+      purchase_total_money, refund_money, account_money, 
+      create_user_id, create_date)
+    values (#{recordId,jdbcType=INTEGER}, #{buyerId,jdbcType=INTEGER}, #{recordMonth,jdbcType=DATE}, 
+      #{accountMoneyHis,jdbcType=NUMERIC}, #{brushRecharge,jdbcType=NUMERIC}, #{purchaseRecharge,jdbcType=NUMERIC}, 
+      #{rechargeTotal,jdbcType=NUMERIC}, #{quotaLimit,jdbcType=NUMERIC}, #{quotaMonth,jdbcType=NUMERIC}, 
+      #{brushNum,jdbcType=INTEGER}, #{purchaseNum,jdbcType=INTEGER}, #{brushTotalMoney,jdbcType=NUMERIC}, 
+      #{purchaseTotalMoney,jdbcType=NUMERIC}, #{refundMoney,jdbcType=NUMERIC}, #{accountMoney,jdbcType=NUMERIC}, 
+      #{createUserId,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.samton.web.manage.buyer.bean.entity.TBuyersRecord" >
+    insert into public.t_buyers_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="recordId != null" >
+        record_id,
+      </if>
+      <if test="buyerId != null" >
+        buyer_id,
+      </if>
+      <if test="recordMonth != null" >
+        record_month,
+      </if>
+      <if test="accountMoneyHis != null" >
+        account_money_his,
+      </if>
+      <if test="brushRecharge != null" >
+        brush_recharge,
+      </if>
+      <if test="purchaseRecharge != null" >
+        purchase_recharge,
+      </if>
+      <if test="rechargeTotal != null" >
+        recharge_total,
+      </if>
+      <if test="quotaLimit != null" >
+        quota_limit,
+      </if>
+      <if test="quotaMonth != null" >
+        quota_month,
+      </if>
+      <if test="brushNum != null" >
+        brush_num,
+      </if>
+      <if test="purchaseNum != null" >
+        purchase_num,
+      </if>
+      <if test="brushTotalMoney != null" >
+        brush_total_money,
+      </if>
+      <if test="purchaseTotalMoney != null" >
+        purchase_total_money,
+      </if>
+      <if test="refundMoney != null" >
+        refund_money,
+      </if>
+      <if test="accountMoney != null" >
+        account_money,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="recordId != null" >
+        #{recordId,jdbcType=INTEGER},
+      </if>
+      <if test="buyerId != null" >
+        #{buyerId,jdbcType=INTEGER},
+      </if>
+      <if test="recordMonth != null" >
+        #{recordMonth,jdbcType=DATE},
+      </if>
+      <if test="accountMoneyHis != null" >
+        #{accountMoneyHis,jdbcType=NUMERIC},
+      </if>
+      <if test="brushRecharge != null" >
+        #{brushRecharge,jdbcType=NUMERIC},
+      </if>
+      <if test="purchaseRecharge != null" >
+        #{purchaseRecharge,jdbcType=NUMERIC},
+      </if>
+      <if test="rechargeTotal != null" >
+        #{rechargeTotal,jdbcType=NUMERIC},
+      </if>
+      <if test="quotaLimit != null" >
+        #{quotaLimit,jdbcType=NUMERIC},
+      </if>
+      <if test="quotaMonth != null" >
+        #{quotaMonth,jdbcType=NUMERIC},
+      </if>
+      <if test="brushNum != null" >
+        #{brushNum,jdbcType=INTEGER},
+      </if>
+      <if test="purchaseNum != null" >
+        #{purchaseNum,jdbcType=INTEGER},
+      </if>
+      <if test="brushTotalMoney != null" >
+        #{brushTotalMoney,jdbcType=NUMERIC},
+      </if>
+      <if test="purchaseTotalMoney != null" >
+        #{purchaseTotalMoney,jdbcType=NUMERIC},
+      </if>
+      <if test="refundMoney != null" >
+        #{refundMoney,jdbcType=NUMERIC},
+      </if>
+      <if test="accountMoney != null" >
+        #{accountMoney,jdbcType=NUMERIC},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.samton.web.manage.buyer.bean.entity.TBuyersRecord" >
+    update public.t_buyers_record
+    <set >
+      <if test="buyerId != null" >
+        buyer_id = #{buyerId,jdbcType=INTEGER},
+      </if>
+      <if test="recordMonth != null" >
+        record_month = #{recordMonth,jdbcType=DATE},
+      </if>
+      <if test="accountMoneyHis != null" >
+        account_money_his = #{accountMoneyHis,jdbcType=NUMERIC},
+      </if>
+      <if test="brushRecharge != null" >
+        brush_recharge = #{brushRecharge,jdbcType=NUMERIC},
+      </if>
+      <if test="purchaseRecharge != null" >
+        purchase_recharge = #{purchaseRecharge,jdbcType=NUMERIC},
+      </if>
+      <if test="rechargeTotal != null" >
+        recharge_total = #{rechargeTotal,jdbcType=NUMERIC},
+      </if>
+      <if test="quotaLimit != null" >
+        quota_limit = #{quotaLimit,jdbcType=NUMERIC},
+      </if>
+      <if test="quotaMonth != null" >
+        quota_month = #{quotaMonth,jdbcType=NUMERIC},
+      </if>
+      <if test="brushNum != null" >
+        brush_num = #{brushNum,jdbcType=INTEGER},
+      </if>
+      <if test="purchaseNum != null" >
+        purchase_num = #{purchaseNum,jdbcType=INTEGER},
+      </if>
+      <if test="brushTotalMoney != null" >
+        brush_total_money = #{brushTotalMoney,jdbcType=NUMERIC},
+      </if>
+      <if test="purchaseTotalMoney != null" >
+        purchase_total_money = #{purchaseTotalMoney,jdbcType=NUMERIC},
+      </if>
+      <if test="refundMoney != null" >
+        refund_money = #{refundMoney,jdbcType=NUMERIC},
+      </if>
+      <if test="accountMoney != null" >
+        account_money = #{accountMoney,jdbcType=NUMERIC},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where record_id = #{recordId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.samton.web.manage.buyer.bean.entity.TBuyersRecord" >
+    update public.t_buyers_record
+    set buyer_id = #{buyerId,jdbcType=INTEGER},
+      record_month = #{recordMonth,jdbcType=DATE},
+      account_money_his = #{accountMoneyHis,jdbcType=NUMERIC},
+      brush_recharge = #{brushRecharge,jdbcType=NUMERIC},
+      purchase_recharge = #{purchaseRecharge,jdbcType=NUMERIC},
+      recharge_total = #{rechargeTotal,jdbcType=NUMERIC},
+      quota_limit = #{quotaLimit,jdbcType=NUMERIC},
+      quota_month = #{quotaMonth,jdbcType=NUMERIC},
+      brush_num = #{brushNum,jdbcType=INTEGER},
+      purchase_num = #{purchaseNum,jdbcType=INTEGER},
+      brush_total_money = #{brushTotalMoney,jdbcType=NUMERIC},
+      purchase_total_money = #{purchaseTotalMoney,jdbcType=NUMERIC},
+      refund_money = #{refundMoney,jdbcType=NUMERIC},
+      account_money = #{accountMoney,jdbcType=NUMERIC},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      create_date = #{createDate,jdbcType=TIMESTAMP}
+    where record_id = #{recordId,jdbcType=INTEGER}
+  </update>
+</mapper>

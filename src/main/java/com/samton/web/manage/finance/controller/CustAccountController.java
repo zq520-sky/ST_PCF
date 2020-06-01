@@ -1,0 +1,119 @@
+package com.samton.web.manage.finance.controller;
+
+import com.samton.platform.framework.base.BaseController;
+import com.samton.platform.framework.constant.WebConstant;
+import com.samton.platform.framework.exception.ServiceException;
+import com.samton.platform.framework.mybatis.pagination.Pagination;
+import com.samton.platform.framework.util.CurrentUtil;
+import com.samton.platform.pm.bean.entity.TSysLog;
+import com.samton.platform.pm.constant.PmStateConstant;
+import com.samton.platform.pm.service.ILogService;
+import com.samton.web.manage.finance.bean.excel.CustAccountEntity;
+import com.samton.web.manage.finance.bean.vo.CustAccountVo;
+import com.samton.web.manage.finance.constant.CustAccountExpCodeConstant;
+import com.samton.web.manage.finance.service.ICustAccountService;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.Date;
+import java.util.Map;
+
+/**
+ * @Description: 客户账户Controller
+ * @Author: YangYangen
+ * @Date: 2020/4/13 11:20
+ * Copyright (c) 2020, Samton. All rights reserved
+*/
+@Controller
+@RequestMapping("/manage/finance/")
+public class CustAccountController extends BaseController {
+
+    @Resource
+    private ICustAccountService custAccountService;
+    @Resource
+    private ILogService logService;
+
+    /**
+     * 客户账户分页
+     * @param paramBean
+     * @param custAccountVo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("queryCustAccountList" + WebConstant.PAGE_SUFFIX)
+    public String queryCustAccountList(Pagination<CustAccountVo> paramBean, CustAccountVo custAccountVo) throws Exception{
+        paramBean.setSearch(custAccountVo);
+        Pagination<CustAccountVo> pageData = custAccountService.queryPageCustAccountVoList(paramBean);
+        this.addAttr("pageData", pageData);
+        return "finance/custAccountManage";
+    }
+
+    /**
+     * 客户账户导出
+     * @param paramBean
+     * @param custAccountVo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("exportCustAccountList" + WebConstant.BUSINESS_SUFFIX)
+    public String exportCustAccountList(Pagination<CustAccountVo> paramBean, CustAccountVo custAccountVo) throws Exception {
+        paramBean.setSearch(custAccountVo);
+        Pagination<CustAccountEntity> list = custAccountService.exportPageCustAccountVoList(paramBean);
+        logService.addLog(new TSysLog("客户信息管理-导出", "导出客户管理信息！", PmStateConstant.LOG_PLATFORM));
+        this.export(response,"客户账户管理" + String.format("%1$tY%1$tm%1$td", new Date()), CustAccountEntity.class, list.getData());
+        return null;
+    }
+
+    /**
+     * 客户账户查看
+     * @param accountId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("viewCustAccount" + WebConstant.BUSINESS_SUFFIX)
+    @ResponseBody
+    public Map<String, Object> viewCustAccount(Integer accountId) throws Exception {
+        CustAccountVo custAccountVo = custAccountService.findCustAccountVoById(accountId);
+        return this.getResultMap(true, custAccountVo);
+    }
+
+    /**
+     * 客户账户编辑（1-充值、2-授信、3-调整汇率、4-还款）
+     * @param custAccountVo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("editCustAccount" + WebConstant.BUSINESS_SUFFIX)
+    @ResponseBody
+    public Map<String, Object> editCustAccount(CustAccountVo custAccountVo) throws Exception {
+        //校验主键ID
+        if(custAccountVo.getAccountId() == null){
+            throw new ServiceException(CustAccountExpCodeConstant.CUST_ACCOUNT_EDIT_PARAM_ERROR);
+        }
+        custAccountVo.setUserId(CurrentUtil.getCurrentUser().getUserId().intValue());
+        custAccountVo.setApproveUserName(CurrentUtil.getCurrentUser().getUserName());
+        String logStr = "";
+        switch (custAccountVo.getOprType()){
+            case 1: logStr = "充值【"+custAccountVo.getOprMoney()+"】元"; break;
+            case 2: logStr = "授信【"+custAccountVo.getOprMoney()+"】元"; break;
+            case 3: logStr = "设置汇率【"+custAccountVo.getDollarRate()+"】"; break;
+            case 4: logStr = "还款【"+custAccountVo.getOprMoney()+"】元"; break;
+            case 5: logStr = "运单费【"+custAccountVo.getFreightMoney()+"】元"; break;
+        }
+        //执行编辑
+        boolean result = custAccountService.editCustAccount(custAccountVo);
+        if (result) {
+            logService.addLog(new TSysLog("客户账户管理-编辑", "客户账户【" + custAccountVo.getCustName() + "】"+ logStr +"成功！", PmStateConstant.LOG_PLATFORM));
+        } else {
+            logService.addLog(new TSysLog("客户账户管理-编辑", "客户账户【" + custAccountVo.getCustName() + "】"+ logStr +"失败！", PmStateConstant.LOG_PLATFORM));
+        }
+        if (!result) {
+            throw new ServiceException(CustAccountExpCodeConstant.CUST_ACCOUNT_EDIT_COLUMN_ERROR);
+        }
+        return this.getResultMap(true, result);
+    }
+
+
+}

@@ -1,0 +1,8 @@
+package com.samton.web.manage.order.dao;
+
+import com.samton.platform.common.dao.AutoMapperInteger;
+import com.samton.web.manage.order.bean.entity.TCustOrder;
+
+public interface TCustOrderMapper extends AutoMapperInteger<TCustOrder> {
+
+}

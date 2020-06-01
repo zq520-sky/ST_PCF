@@ -1,0 +1,477 @@
+var index = null;
+var frameId = window.frameElement && window.frameElement.id || '';
+var editFreightSnValidate;
+var editValidate;
+var importSettingOkValidate;
+$(function() {
+	editValidate = $("#editForm").validate({
+		rules:{
+			"task.taskState":{
+				required:true,
+				negative:true
+			},
+			"task.cardsCode":{
+				required:true,
+				negative:true
+			}
+		},
+		submitHandler : function(form) {
+			$(form).ajaxSubmit({
+				success:function(responseText,statusText,xhr,$form){
+					if (responseText.rs > 0) {
+						top.toastr.success("编辑任务状态成功！");
+						FormUtil.resetForm("editForm");
+						doSearch();
+						layer.close(index); //再执行关闭
+					}
+				}
+			})
+
+		}
+	});
+	editFreightSnValidate = $("#editFreightForm").validate({
+		rules:{
+			"task.freightSn":{
+				required:true,
+				negative:true
+			}
+		},
+		submitHandler : function(form) {
+			$(form).ajaxSubmit({
+				success:function(responseText,statusText,xhr,$form){
+					if (responseText.rs > 0) {
+						top.toastr.success("编辑运单号成功！");
+						FormUtil.resetForm("editFreightForm");
+						doSearch();
+						layer.close(index); //再执行关闭
+					}
+				}
+			})
+
+		}
+	});
+	importSettingOkValidate = $("#importSettingOkForm").validate({
+		rules : {
+			file : {
+				required : true
+			}
+		},
+		messages : {
+			file : {
+				required : "请选择导入的文件！"
+			}
+		},
+		submitHandler : function(form) {
+			$(form).ajaxSubmit({
+				success : function(responseText, statusText, xhr, $form) {
+					if (responseText.rs > 0) {
+						top.toastr.success("导入成功！");
+						FormUtil.resetForm("importSettingOkForm");
+						doSearch();
+						layer.close(index);
+					}
+					else{
+						top.toastr.error("导入失败！");
+					}
+
+
+				}
+			})
+
+		}
+	})
+})
+function viewReportPage(id) {
+	if (Number(id)) {
+		//清除原有数据
+		$("#orderCodeView").text('');
+		$("#taskCodeView").text('');
+		$.each($("#viewId td[id$='View']"), function (i, area) {
+			$(area).text('');
+			$(area).val();
+		});
+
+		$.ajax({
+			url: ctx.path + '/manage/task/viewCustTaskReport' + ctx.bizSuffix,
+			async: true,
+			dataType: 'json',
+			type: 'POST',
+			data: {taskId: id},
+			success: function (data) {
+				if (data.rs == -1) {
+					top.toastr.error("获取数据信息失败");
+					return false;
+				}
+				//返回的map对象参数
+				var dataRet = data.data;
+				//对页面属性赋值（要求页面id与map的key值保持一致）
+				var cust = dataRet.cust;
+				var order = dataRet.order;
+				var task = dataRet.task;
+				var product = dataRet.product;
+				var account = dataRet.account;
+				var buyer = dataRet.buyer;
+
+				//如果是刷单，则显示刷单频次和刷单周期；采购显示税收
+				if (order.demandType == 2) {
+					$("#demandType_2_ViewId").removeAttr("style");
+					$("#taxView").attr("style", "display:none;");
+				} else {
+					$("#demandType_2_ViewId").attr("style", "display:none;");
+					$("#taxView").removeAttr("style");
+				}
+
+				for (var key in dataRet) {
+					$("#viewId #" + key + "View").text(dataRet[key]);
+				}
+				for (var key in cust) {
+					$("#viewId #" + key + "View").text(cust[key]);
+				}
+				for (var key in order) {
+					$("#viewId #" + key + "View").text(order[key]);
+				}
+				for (var key in task) {
+					$("#viewId #" + key + "View").text(task[key]);
+				}
+				for (var key in product) {
+					$("#viewId #" + key + "View").text(product[key]);
+				}
+				for (var key in buyer) {
+					$("#viewId #" + key + "View").text(buyer[key]);
+				}
+				for (var key in account) {
+					$("#viewId #" + key + "View").text(account[key]);
+				}
+
+				$("#viewId #taskFinishNoteView").val(task.taskFinishiNote);
+
+				parentIndex = layer.open({
+					title: '查看任务信息',
+					type: 1,
+					area: ['60%', '98%'], //宽高
+					content: $('#viewId'),
+					btn: ['关闭'],
+					cancel: function (index) {
+					}
+				});
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				top.toastr.error("操作失败");
+			}
+		});
+	} else {
+		top.toastr.error("数据异常！");
+	}
+}
+
+function viewReportPage(id) {
+	if (Number(id)) {
+		//清除原有数据
+		$("#orderCodeView").text('');
+		$("#taskCodeView").text('');
+		$.each($("#viewId td[id$='View']"), function (i, area) {
+			$(area).text('');
+			$(area).val();
+		});
+
+		$.ajax({
+			url: ctx.path + '/manage/task/viewCustTaskReport' + ctx.bizSuffix,
+			async: true,
+			dataType: 'json',
+			type: 'POST',
+			data: {taskId: id},
+			success: function (data) {
+				if (data.rs == -1) {
+					top.toastr.error("获取数据信息失败");
+					return false;
+				}
+				//返回的map对象参数
+				var dataRet = data.data;
+				//对页面属性赋值（要求页面id与map的key值保持一致）
+				var cust = dataRet.cust;
+				var order = dataRet.order;
+				var task = dataRet.task;
+				var product = dataRet.product;
+				var account = dataRet.account;
+				var buyer = dataRet.buyer;
+
+				//如果是刷单，则显示刷单频次和刷单周期；采购显示税收
+				if (order.demandType == 2) {
+					$("#demandType_2_ViewId").removeAttr("style");
+					$("#taxView").attr("style", "display:none;");
+				} else {
+					$("#demandType_2_ViewId").attr("style", "display:none;");
+					$("#taxView").removeAttr("style");
+				}
+
+				for (var key in dataRet) {
+					$("#viewId #" + key + "View").text(dataRet[key]);
+				}
+				for (var key in cust) {
+					$("#viewId #" + key + "View").text(cust[key]);
+				}
+				for (var key in order) {
+					$("#viewId #" + key + "View").text(order[key]);
+				}
+				for (var key in task) {
+					$("#viewId #" + key + "View").text(task[key]);
+				}
+				for (var key in product) {
+					$("#viewId #" + key + "View").text(product[key]);
+				}
+				for (var key in buyer) {
+					$("#viewId #" + key + "View").text(buyer[key]);
+				}
+				for (var key in account) {
+					$("#viewId #" + key + "View").text(account[key]);
+				}
+
+				$("#viewId #taskFinishNoteView").val(task.taskFinishiNote);
+
+				parentIndex = layer.open({
+					title: '查看任务信息',
+					type: 1,
+					area: ['60%', '98%'], //宽高
+					content: $('#viewId'),
+					btn: ['关闭'],
+					cancel: function (index) {
+					}
+				});
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				top.toastr.error("操作失败");
+			}
+		});
+	} else {
+		top.toastr.error("数据异常！");
+	}
+}
+//执行查询
+function doSearch() {
+	$("#pageForm").submit();
+	top.progressbar(frameId);
+}
+//打开编辑页面
+function editPage(id) {
+	if (Number(id)) {
+		//清除原有数据
+		$("#orderCodeView").text('');
+		$("#taskCodeView").text('');
+		$.each($("#editId td[id$='Edit']"), function (i, area) {
+			$(area).text('');
+			$(area).val();
+		});
+
+		$.ajax({
+			url : ctx.path + '/manage/task/viewCustTaskInfo' + ctx.bizSuffix,
+			async : true,
+			dataType : 'json',
+			type : 'POST',
+			data : {taskId : id},
+			success : function(data) {
+				if (data.rs== -1) {
+					top.toastr.error("获取数据信息失败");
+					return false;
+				}
+				//返回的map对象参数
+				var dataRet = data.data;
+				//对页面属性赋值（要求页面id与map的key值保持一致）
+				var cust = dataRet.cust;
+				var order = dataRet.order;
+				var task = dataRet.task;
+				var product = dataRet.product;
+				var account = dataRet.account;
+				var buyer = dataRet.buyer;
+
+				//如果是刷单，则显示刷单频次和刷单周期；采购显示税收
+				if (order.demandType == 2) {
+					$("#demandType_2_EditId").removeAttr("style");
+					$("#taxEdit").attr("style", "display:none;");
+				} else {
+					$("#demandType_2_EditId").attr("style", "display:none;");
+					$("#taxView").removeAttr("style");
+				}
+
+				for (var key in dataRet) {
+					$("#editId #"+ key +"Edit").text(dataRet[key]);
+				}
+				for (var key in cust) {
+					$("#editId #"+ key +"Edit").text(cust[key]);
+				}
+				for (var key in order) {
+					$("#editId #"+ key +"Edit").text(order[key]);
+				}
+				for (var key in task) {
+					$("#editId #"+ key +"Edit").text(task[key]);
+				}
+				for (var key in product) {
+					$("#editId #"+ key +"Edit").text(product[key]);
+				}
+				for (var key in buyer) {
+					$("#editId #"+ key +"Edit").text(buyer[key]);
+				}
+				for (var key in account) {
+					$("#editId #"+ key +"Edit").text(account[key]);
+				}
+
+				$("#editId #cardsCodeEdit").val(task.cardsCode);
+				$("#editId #taskIdEdit").val(task.taskId);
+				$("#editId #taskStateEdit").val("已完成");
+
+				parentIndex = layer.open({
+					title : '编辑任务信息',
+					type : 1,
+					area : [ '60%', '98%' ], //宽高
+					btn : [ '保存', '关闭' ],
+					yes : function(index, layero) {
+						$("#editForm").submit();
+					},
+					content : $('#editId'),
+					cancel : function(index) {
+						FormUtil.resetForm("editForm");
+						editValidate.resetForm();
+					}
+				});
+			},
+			error : function(jqXHR, textStatus, errorThrown) {
+				top.toastr.error("操作失败");
+			}
+		});
+	} else {
+		top.toastr.error("数据异常！");
+	}
+}
+
+
+//设置运单号
+function editPageSN(id) {
+	if (Number(id)) {
+		//清除原有数据
+		$("#orderCodeView").text('');
+		$("#taskCodeView").text('');
+		$.each($("#editFreightSn td[id$='Edit']"), function (i, area) {
+			$(area).text('');
+			$(area).val();
+		});
+
+		$.ajax({
+			url : ctx.path + '/manage/task/viewCustTaskInfo' + ctx.bizSuffix,
+			async : true,
+			dataType : 'json',
+			type : 'POST',
+			data : {taskId : id},
+			success : function(data) {
+				if (data.rs== -1) {
+					top.toastr.error("获取数据信息失败");
+					return false;
+				}
+				//返回的map对象参数
+				var dataRet = data.data;
+				//对页面属性赋值（要求页面id与map的key值保持一致）
+				var cust = dataRet.cust;
+				var order = dataRet.order;
+				var task = dataRet.task;
+				var product = dataRet.product;
+				var account = dataRet.account;
+				var buyer = dataRet.buyer;
+
+				//如果是刷单，则显示刷单频次和刷单周期；采购显示税收
+				if (order.demandType == 2) {
+					$("#demandType_3_EditId").removeAttr("style");
+					$("#taxEdit").attr("style", "display:none;");
+				} else {
+					$("#demandType_3_EditId").attr("style", "display:none;");
+					$("#taxEdit").removeAttr("style");
+				}
+
+
+				for (var key in dataRet) {
+					$("#editFreightSn #"+ key +"Edit").text(dataRet[key]);
+				}
+				for (var key in cust) {
+					$("#editFreightSn #"+ key +"Edit").text(cust[key]);
+				}
+				for (var key in order) {
+					$("#editFreightSn #"+ key +"Edit").text(order[key]);
+				}
+				for (var key in task) {
+					$("#editFreightSn #"+ key +"Edit").text(task[key]);
+				}
+				for (var key in product) {
+					$("#editFreightSn #"+ key +"Edit").text(product[key]);
+				}
+				for (var key in buyer) {
+					$("#editFreightSn #"+ key +"Edit").text(buyer[key]);
+				}
+				for (var key in account) {
+					$("#editFreightSn #"+ key +"Edit").text(account[key]);
+				}
+
+				$("#editFreightSn #cardsCodeEdit").val(task.cardsCode);
+				$("#editFreightSn #taskIdEdit").val(task.taskId);
+				$("#editFreightSn #taskStateEdit").val("已完成");
+				$("#editFreightSn #freightSnEdit").val(task.freightSn);
+				$("#editFreightSn #custIdEdit").val(task.custId);
+
+				parentIndex = layer.open({
+					title : '编辑任务信息',
+					type : 1,
+					area : [ '60%', '98%' ], //宽高
+					btn : [ '保存', '关闭' ],
+					yes : function(index, layero) {
+						$("#editFreightForm").submit();
+					},
+					content : $('#editFreightSn'),
+					cancel : function(index) {
+						FormUtil.resetForm("editFreightForm");
+						editValidate.resetForm();
+					}
+				});
+			},
+			error : function(jqXHR, textStatus, errorThrown) {
+				top.toastr.error("操作失败");
+			}
+		});
+	} else {
+		top.toastr.error("数据异常！");
+	}
+}
+
+function openSettingOkPage() {
+	// 页面层
+	index = layer.open({
+		type : 1,
+		title : '更改报告任务状态',
+		move : false,
+		area : [ '420px', '340px' ], // 宽高
+		content : $('#importSettingOk'),
+		btn : [ '保存', '关闭' ],
+		yes : function(index, layero) {
+			$("#importSettingOkForm").submit();
+		},
+		cancel : function(index) {
+			FormUtil.resetForm("importSettingOkForm");
+			addValidate.resetForm();
+		}
+	});
+}
+
+
+function openSettingSnPage() {
+	// 页面层
+	index = layer.open({
+		type : 1,
+		title : '更改报告任务状态',
+		move : false,
+		area : [ '420px', '340px' ], // 宽高
+		content : $('#importSettingSn'),
+		btn : [ '保存', '关闭' ],
+		yes : function(index, layero) {
+			$("#importSettingSnForm").submit();
+		},
+		cancel : function(index) {
+			FormUtil.resetForm("importSettingOkForm");
+			addValidate.resetForm();
+		}
+	});
+}

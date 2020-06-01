@@ -1,0 +1,105 @@
+package com.samton.web.manage.finance.controller;
+
+import com.samton.platform.framework.base.BaseController;
+import com.samton.platform.framework.constant.WebConstant;
+import com.samton.platform.framework.mybatis.pagination.Pagination;
+import com.samton.platform.pm.bean.entity.TSysLog;
+import com.samton.platform.pm.constant.PmStateConstant;
+import com.samton.platform.pm.service.ILogService;
+import com.samton.web.manage.task.bean.entity.TCustTask;
+import com.samton.web.manage.task.bean.vo.CustTaskVo;
+import com.samton.web.manage.task.service.ICustTaskService;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @Description: 消费记录控制类
+ * @Author: ZhongShengbin
+ * @Date: 2020/04/14 19:14
+ * Copyright (c) 2019, Samton. All rights reserved
+ */
+@Controller
+@RequestMapping("/manage/finance")
+public class CustTaskRecordController extends BaseController {
+
+    @Resource
+    ICustTaskService iCustTaskService;
+
+    @Resource
+    ILogService logService;
+
+    /**
+     * 客户授信记录分页
+     *
+     * @param paramBean
+     * @param custTaskVo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/queryTaskInfoList" + WebConstant.PAGE_SUFFIX)
+    public String queryTaskInfoList(Pagination<TCustTask> paramBean, CustTaskVo custTaskVo) throws Exception {
+
+        paramBean.setSearch(custTaskVo);
+        Pagination<TCustTask> pageData = iCustTaskService.queryTaskPageList(paramBean);
+        this.addAttr("pageData", pageData);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdfParse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        if (custTaskVo.getTaskEndDateBegin() == null) {
+            custTaskVo.setTaskEndDateBegin(sdfParse.parse(sdf.format(System.currentTimeMillis()) + " 00:00"));
+        }
+        if (custTaskVo.getTaskEndDateEnd() == null) {
+            custTaskVo.setTaskEndDateEnd(sdfParse.parse(sdf.format(System.currentTimeMillis()) + " 23:59"));
+        }
+        return "finance/custTaskManage";
+    }
+    /**
+     * 客户消费记录导出
+     * @param paramBean
+     * @param custTaskVo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/exportTaskInfoList" + WebConstant.BUSINESS_SUFFIX)
+    public String exportReturnInfoList(Pagination<TCustTask> paramBean, CustTaskVo custTaskVo) throws Exception {
+        paramBean.setSearch(custTaskVo);
+        Pagination<Map<String, Object>> pageData = iCustTaskService.exportTaskPageList(paramBean);
+        logService.addLog(new TSysLog("客户消费记录-导出", "导出客户消费记录！", PmStateConstant.LOG_PLATFORM));
+        String title = "客户名称,账号,电商平台,需求类型,还款状态,产品ID,订单数量,商品单价,税收,美元汇率,订单金额(元),任务完成时间";
+        List<String> colNames = new ArrayList<String>();
+        colNames.add("cust_name");
+        colNames.add("accounts_name");
+        colNames.add("platform_type");
+        colNames.add("redemand_type");
+        colNames.add("reis_close");
+        colNames.add("product_id");
+        colNames.add("order_num");
+        colNames.add("unit_price");
+        colNames.add("tax");
+        colNames.add("dollar_rate");
+        colNames.add("order_price");
+        colNames.add("task_finish_time");
+        this.export(response,"客户消费记录" + String.format("%1$tY%1$tm%1$td", new Date()), title, colNames, pageData);
+        return null;
+    }
+
+    /**
+     * 客户授信记录查看
+     * @param taskId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/viewTaskInfoList" + WebConstant.BUSINESS_SUFFIX)
+    @ResponseBody
+    public Map<String, Object> viewReturn(Integer taskId,Integer productId) throws Exception {
+        CustTaskVo custTaskVo = iCustTaskService.selectTaskVoById(taskId,productId);
+        return this.getResultMap(true, custTaskVo);
+    }
+}

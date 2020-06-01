@@ -1,0 +1,10 @@
+var index = null;
+var frameId = window.frameElement && window.frameElement.id || '';
+
+
+//执行查询
+function doSearch() {
+	$("#pageForm").submit();
+	top.progressbar(frameId);
+}
+

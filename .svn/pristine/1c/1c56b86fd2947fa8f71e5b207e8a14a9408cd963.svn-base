@@ -1,0 +1,552 @@
+<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%@ include file="/resources/platform/inc.jsp"%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+	<script src="${ctx.path}/resources/js/common/DataForm.js?v=1.0"></script>
+	<script src="${ctx.path}/resources/script/buyer/buyerAccountManage.js?v=${ctx.version}"></script>
+	<script src="${ctx.path}/resources/components/My97DatePicker/WdatePicker.js?v=1.0"></script>
+	<script type="text/javascript">
+		$(function() {
+			loadCriteria();
+		});
+		//加载查询条件
+		function loadCriteria() {
+		}
+	</script>
+</head>
+<body>
+<div class="main_con">
+	<form class="tableform" action="${ctx.path}/manage/buyerAccount/queryList${ctx.pageSuffix}" method="post" id="pageForm">
+		<div class="operation_box" id="operation_box">
+			<div class="operation_con">
+				<div class="currenttit"></div>
+				<div class="operation_info">
+					<p:auth mcode="MENU_MANAGE_ACCOUNT_BUYER_IMPORT">
+						<button type="button" class="btn add_btn" onclick="openImportPage();">
+							<i class="minicon addoperation_icon"></i><span>导入买家账号</span>
+						</button>
+					</p:auth>
+					<p:auth mcode="MENU_MANAGE_ACCOUNT_BUYER_EXPORT">
+						<button type="button" class="btn add_btn" onclick="fun_export('${ctx.path}/manage/buyerAccount/exportList${ctx.bizSuffix}')">
+							<i class="minicon exportoperation_icon"></i><span>导出</span>
+						</button>
+					</p:auth>
+				</div>
+			</div>
+		</div>
+		<div class="search_box" id="search_box">
+			<div class="search_nav">
+				<ul>
+					<li>
+						<input type="text" id="searchbuyerCode" name="buyerCode" class="inputtext" placeholder="买家姓名\账号代码" value="${buyersVo.buyerCode}"/>
+					</li>
+					<li>
+						<input type="text" id="searchbuyerName" name="buyerName" class="inputtext" placeholder="账户名称" value="${buyersVo.buyerName}" />
+					</li>
+					<li>
+						<input type="text" id="searchaddress" name="address" class="inputtext" placeholder="地址" value="${buyersVo.address}" />
+					</li>
+					<li>
+						<label class="inputlabel">电商平台：</label>
+						<select class="select" name="platformType" id="searchplatformType" type="select">
+							<option value="">全部</option>
+							<option value="eBay" <c:if test="${buyersVo.platformType == 'eBay'}">selected</c:if> >eBay</option>
+							<option value="Amazon" <c:if test="${buyersVo.platformType == 'Amazon'}">selected</c:if>>Amazon</option>
+							<option value="Wish" <c:if test="${buyersVo.platformType == 'Wish'}">selected</c:if>>Wish</option>
+							<option value="Facebook" <c:if test="${buyersVo.platformType == 'Facebook'}">selected</c:if> >Facebook</option>
+							<option value="tiktok" <c:if test="${buyersVo.platformType == 'tiktok'}">selected</c:if>>tiktok</option>
+							<option value="instagram" <c:if test="${buyersVo.platformType == 'instagram'}">selected</c:if> >instagram</option>
+							<option value="Pinterest" <c:if test="${buyersVo.platformType == 'Pinterest'}">selected</c:if>>Pinterest</option>
+							<option value="etsy" <c:if test="${buyersVo.platformType == 'etsy'}">selected</c:if>>etsy</option>
+							<option value="linkedin" <c:if test="${buyersVo.platformType == 'linkedin'}">selected</c:if> >linkedin</option>
+						</select>
+					</li>
+					<li>
+						<label class="inputlabel">余额筛选：</label>
+						<select class="select" name="accountMoneyOprType" id="searchaccountMoneyOprType" type="select">
+							<option value="">全部</option>
+							<option value="1" <c:if test="${buyersVo.accountMoneyOprType == '1'}">selected</c:if> >0-100</option>
+							<option value="2" <c:if test="${buyersVo.accountMoneyOprType == '2'}">selected</c:if>>>100</option>
+						</select>
+					</li>
+					<li>
+						<label class="inputlabel">余额排序：</label>
+						<select class="select" name="accountMoneyOrder" id="searchaccountMoneyOrder" type="select">
+							<option value="">全部</option>
+							<option value="1" <c:if test="${buyersVo.accountMoneyOrder == '1'}">selected</c:if>>升序</option>
+							<option value="2" <c:if test="${buyersVo.accountMoneyOrder == '2'}">selected</c:if>>降序</option>
+						</select>
+					</li>
+					<li>
+						<label class="inputlabel">禁用状态：</label>
+						<select class="select" name="isForbid" id="searchisForbid" type="select">
+							<option value="">全部</option>
+							<option value="1" <c:if test="${buyersVo.isForbid == '1'}">selected</c:if>>正常</option>
+							<option value="2" <c:if test="${buyersVo.isForbid == '2'}">selected</c:if>>禁用</option>
+						</select>
+					</li>
+				</ul>
+			</div>
+			<div class="search_btncon">
+				<button type="button" class="btn add_btn" onClick="doSearch()">
+					<i class="minicon search_icon"></i>
+					<span>查询</span>
+				</button>
+				<button type="button" class="btn export_btn clearToolBtn">
+					<i class="minicon reload_icon"></i>
+					<span>重置</span>
+				</button>
+			</div>
+		</div>
+
+		<div class="tablelist_box tablelistboxH">
+			<div class="tablelist_con">
+				<div class="tablelist_theadbox">
+					<div class="tablelist_thead">
+						<table>
+							<tr>
+								<th width="50">序号</th>
+								<th width="100">电商平台</th>
+								<th width="100">账号代码</th>
+								<th width="100">账户名称</th>
+								<th width="100">买家姓名</th>
+
+								<th width="100">地址</th>
+								<th width="100">城市</th>
+								<th width="100">州</th>
+								<th width="100">邮编</th>
+								<th width="80">历史余额</th>
+
+								<th width="80">刷单充值</th>
+								<th width="100">采购充值</th>
+								<th width="80">充值总额</th>
+								<th width="100">单月可用额度</th>
+								<th width="80">刷单次数</th>
+
+								<th width="80">采购次数</th>
+								<th width="80">刷单总额</th>
+								<th width="80">采购总额</th>
+								<th width="80">余额</th>
+								<th width="80">禁用状态</th>
+
+								<th width="180" class="operation_th">操作</th>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="tablelist_tbody">
+					<table>
+						<c:if test="${empty pageData.data}">
+							<tr>
+								<td align="center" colspan="10">对不起，没有找到相关数据！</td>
+							</tr>
+						</c:if>
+						<c:forEach items="${pageData.data }" var="data" varStatus="staus">
+							<tr>
+								<td title="${((pageData.page-1)>0?pageData.page-1:0)*pageData.rows+(staus.index + 1) }">
+										${((pageData.page-1)>0?pageData.page-1:0)*pageData.rows+(staus.index + 1) }
+								</td>
+								<td title="${data.platformType }">${data.platformType }</td>
+								<td title="${data.buyerCode }">${data.buyerCode }</td>
+								<td title="${data.buyerName }">${data.buyerName }</td>
+								<td title="${data.userName }">${data.userName }</td>
+
+								<td title="${data.address }">${data.address }</td>
+								<td title="${data.city }">${data.city }</td>
+								<td title="${data.province }">${data.province }</td>
+								<td title="${data.postcode }">${data.postcode }</td>
+								<td title="${data.accountMoneyHis }">${data.accountMoneyHis }</td>
+
+								<td title="${data.brushRecharge }">${data.brushRecharge }</td>
+								<td title="${data.purchaseRecharge }">${data.purchaseRecharge }</td>
+								<td title="${data.rechargeTotal }">${data.rechargeTotal }</td>
+								<td title="${data.quotaMonth }">${data.quotaMonth }</td>
+								<td title="${data.brushNum }">${data.brushNum }</td>
+
+								<td title="${data.purchaseNum }">${data.purchaseNum }</td>
+								<td title="${data.brushTotalMoney }">${data.brushTotalMoney }</td>
+								<td title="${data.purchaseTotalMoney }">${data.purchaseTotalMoney }</td>
+								<td title="${data.accountMoney }">${data.accountMoney }</td>
+								<td title="${data.isForbidCN }">${data.isForbidCN }</td>
+
+								<td class="operation_td">
+									<p:auth mcode="MENU_MANAGE_ACCOUNT_BUYER_VIEW">
+										<button class="operationbtn" type="button" onclick="viewPage(${data.recordId});">
+											<span>查看</span>
+										</button>
+									</p:auth>
+									<p:auth mcode="MENU_MANAGE_ACCOUNT_BUYER_UPDATE">
+										<button class="operationbtn" type="button" onclick="editPage(${data.recordId});">
+											<span>编辑</span>
+										</button>
+									</p:auth>
+									<p:auth mcode="MENU_MANAGE_ACCOUNT_BUYER_SET">
+										<button class="operationbtn" type="button" onclick="setPage(${data.buyerId},${data.isForbid},'${data.buyerCode }');">
+											<c:if test="${data.isForbid==0}">
+												<span>禁用</span>
+											</c:if>
+											<c:if test="${data.isForbid==1}">
+												<span>启用</span>
+											</c:if>
+										</button>
+									</p:auth>
+
+								</td>
+							</tr>
+						</c:forEach>
+					</table>
+				</div>
+			</div>
+		</div>
+		<jsp:include page="/resources/common/page.jsp"></jsp:include>
+	</form>
+</div>
+
+<!-- 查看 -->
+<div id="viewId" class="add_box mCustomScrollbar_y" >
+	<form method="post" id="viewForm">
+		<div class="add_item">
+		<div class="add_list">
+			<h5>买家姓名：</h5>
+			<div class="add_value">
+				<span id="userName"></span>
+			</div>
+		</div>
+		<div class="add_list">
+			<h5>电商平台：</h5>
+			<div class="add_value">
+				<span id="platformType"></span>
+			</div>
+		</div>
+		</div>
+
+		<div class="add_item">
+		<div class="add_list">
+			<h5>账号代码：</h5>
+			<div class="add_value">
+				<span id="buyerCode"></span>
+			</div>
+		</div>
+		<div class="add_list">
+			<h5>账户名称：</h5>
+			<div class="add_value">
+				<span id="buyerName"></span>
+			</div>
+		</div>
+		</div>
+
+		<div class="add_item">
+		<div class="add_list">
+			<h5>地址：</h5>
+			<div class="add_value">
+				<span id="address"></span>
+			</div>
+		</div>
+		<div class="add_list">
+			<h5>城市：</h5>
+			<div class="add_value">
+				<span id="city"></span>
+			</div>
+		</div>
+		</div>
+
+		<div class="add_item">
+		<div class="add_list">
+			<h5>州：</h5>
+			<div class="add_value">
+				<span id="province"></span>
+			</div>
+		</div>
+
+		<div class="add_list">
+			<h5>邮编：</h5>
+			<div class="add_value">
+				<span id="postcode"></span>
+			</div>
+		</div>
+		</div>
+
+		<div class="add_item">
+		<div class="add_list">
+			<h5>历史余额：</h5>
+			<div class="add_value">
+				<span id="accountMoneyHis"></span>
+			</div>
+		</div>
+		<div class="add_list">
+			<h5>刷单充值：</h5>
+			<div class="add_value">
+				<span id="brushRecharge"></span>
+			</div>
+		</div>
+		</div>
+
+		<div class="add_item">
+		<div class="add_list">
+			<h5>采购充值：</h5>
+			<div class="add_value">
+				<span id="purchaseRecharge"></span>
+			</div>
+		</div>
+		<div class="add_list">
+			<h5>充值总额：</h5>
+			<div class="add_value">
+				<span id="rechargeTotal"></span>
+			</div>
+		</div>
+		</div>
+
+		<div class="add_item">
+		<div class="add_list">
+			<h5>单月可用额度：</h5>
+			<div class="add_value">
+				<span id="quotaMonth"></span>
+			</div>
+		</div>
+
+		<div class="add_list">
+			<h5>刷单次数：</h5>
+			<div class="add_value">
+				<span id="brushNum"></span>
+			</div>
+		</div>
+		</div>
+
+		<div class="add_item">
+		<div class="add_list">
+			<h5>采购次数：</h5>
+			<div class="add_value">
+				<span id="purchaseNum"></span>
+			</div>
+		</div>
+		<div class="add_list">
+			<h5>刷单总额：</h5>
+			<div class="add_value">
+				<span id="brushTotalMoney"></span>
+			</div>
+		</div>
+		</div>
+
+		<div class="add_item">
+		<div class="add_list">
+			<h5>采购总额：</h5>
+			<div class="add_value">
+				<span id="purchaseTotalMoney"></span>
+			</div>
+		</div>
+		<div class="add_list">
+			<h5>退款金额：</h5>
+			<div class="add_value">
+				<span id="refundMoney"></span>
+			</div>
+		</div>
+		</div>
+
+		<div class="add_item">
+		<div class="add_list">
+			<h5>余额：</h5>
+			<div class="add_value">
+				<span id="accountMoney"></span>
+			</div>
+		</div>
+		<div class="add_list">
+			<h5>禁用状态：</h5>
+			<div class="add_value">
+				<span id="isForbidCN"></span>
+			</div>
+		</div>
+		</div>
+	</form>
+</div>
+
+<!-- 编辑 -->
+<div id="editId" name="editName" class="add_box mCustomScrollbar_y" data-mcs-theme="dark" style="display:none;">
+	<form method="post" id="editForm" action="${ctx.path}/manage/buyerAccount/editAccount${ctx.bizSuffix}">
+		<input type="hidden" id="recordId" name="recordId" />
+		<input type="hidden" id="buyerId" name="buyerId" />
+		<input type="hidden" id="buyerCodeInput" name="buyerCode" />
+
+		<div class="add_item">
+		<div class="add_list">
+			<h5 class="add_list_name" >买家姓名：</h5>
+			<div class="add_value">
+				<span id="userName"></span>
+			</div>
+		</div>
+		<div class="add_list">
+			<h5 class="add_list_name">电商平台：</h5>
+			<div class="add_value">
+				<span id="platformType"></span>
+			</div>
+		</div>
+		</div>
+
+		<div class="add_item">
+		<div class="add_list">
+			<h5 class="add_list_name">账号代码：</h5>
+			<div class="add_value">
+				<span id="buyerCode"></span>
+			</div>
+		</div>
+		<div class="add_list">
+			<h5 class="add_list_name">账户名称：</h5>
+			<div class="add_value">
+				<span id="buyerName"></span>
+			</div>
+		</div>
+		</div>
+
+		<div class="add_item">
+		<div class="add_list">
+			<h5 class="add_list_name">地址：</h5>
+			<div class="add_value">
+				<input type="text" id="address" name="address" maxlength="128" class="inputtext" />
+			</div>
+		</div>
+		<div class="add_list">
+			<h5 class="add_list_name">城市：</h5>
+			<div class="add_value">
+				<input type="text" id="city" name="city" maxlength="50" class="inputtext" />
+			</div>
+		</div>
+		</div>
+
+		<div class="add_item">
+		<div class="add_list">
+			<h5 class="add_list_name">州：</h5>
+			<div class="add_value">
+				<input type="text" id="province" name="province" maxlength="50" class="inputtext" />
+			</div>
+		</div>
+
+		<div class="add_list">
+			<h5 class="add_list_name">邮编：</h5>
+			<div class="add_value">
+				<input type="text" id="postcode" name="postcode" maxlength="16" class="inputtext" />
+			</div>
+		</div>
+		</div>
+
+		<div class="add_item">
+		<div class="add_list">
+			<h5 class="add_list_name"><em style="color: red;">*</em>历史余额：</h5>
+			<div class="add_value">
+				<input type="text" id="accountMoneyHis" name="accountMoneyHis" maxlength="10" class="inputtext" />
+			</div>
+		</div>
+		<div class="add_list">
+			<h5 class="add_list_name">刷单充值：</h5>
+			<div class="add_value">
+				<span id="brushRecharge"></span>
+			</div>
+		</div>
+		</div>
+
+		<div class="add_item">
+		<div class="add_list">
+			<h5 class="add_list_name">采购充值：</h5>
+			<div class="add_value">
+				<span id="purchaseRecharge"></span>
+			</div>
+		</div>
+		<div class="add_list">
+			<h5 class="add_list_name">充值总额：</h5>
+			<div class="add_value">
+				<span id="rechargeTotal"></span>
+			</div>
+		</div>
+		</div>
+
+		<div class="add_item">
+		<div class="add_list">
+			<h5 class="add_list_name">单月可用额度：</h5>
+			<div class="add_value">
+				<span id="quotaMonth"></span>
+			</div>
+		</div>
+
+		<div class="add_list">
+			<h5 class="add_list_name">刷单次数：</h5>
+			<div class="add_value">
+				<span id="brushNum"></span>
+			</div>
+		</div>
+		</div>
+
+		<div class="add_item">
+		<div class="add_list">
+			<h5 class="add_list_name">采购次数：</h5>
+			<div class="add_value">
+				<span id="purchaseNum"></span>
+			</div>
+		</div>
+		<div class="add_list">
+			<h5 class="add_list_name">刷单总额：</h5>
+			<div class="add_value">
+				<span id="brushTotalMoney"></span>
+			</div>
+		</div>
+		</div>
+
+		<div class="add_item">
+		<div class="add_list">
+			<h5 class="add_list_name">采购总额：</h5>
+			<div class="add_value">
+				<span id="purchaseTotalMoney"></span>
+			</div>
+		</div>
+		<div class="add_list">
+			<h5 class="add_list_name">退款金额：</h5>
+			<div class="add_value">
+				<span id="refundMoney"></span>
+			</div>
+		</div>
+		</div>
+
+		<div class="add_item">
+		<div class="add_list">
+			<h5 class="add_list_name">余额：</h5>
+			<div class="add_value">
+				<span id="accountMoney"></span>
+			</div>
+		</div>
+		<div class="add_list">
+			<h5 class="add_list_name">禁用状态：</h5>
+			<div class="add_value">
+				<span id="isForbidCN"></span>
+			</div>
+		</div>
+		</div>
+	</form>
+  </div>
+	<!-- 账号导入 -->
+	<div id="importBuyerAccount" class="add_box mCustomScrollbar_y" >
+		<form method="post" enctype="multipart/form-data" id="importBuyerAccountForm" action="${ctx.path}/manage/buyerAccount/importAccount${ctx.bizSuffix}">
+			<div class="add_list">
+				<h5><em style="color: red;">*</em>导入文件：</h5>
+				<div class="add_value">
+					<input type="file" id="upload_file" name="file">
+				</div>
+			</div>
+			<div class="add_list">
+				<h5><em style="color: red;">*</em>导入模板：</h5>
+				<div class="add_value">
+					<a  style="color:blue;" href="${ctx.path}/manage/buyerAccount/downloadTemple${ctx.noAuthSuffix}">模板下载</a>
+				</div>
+			</div>
+			<div class="add_list">
+				<h5>操作说明：</h5>
+				<div class="add_value" style="color:red;">
+					<p>使用本工具进行导入应注意:</p>
+					<p>1、请下载使用模板进行导入。</p>
+					<p>2、操作前请按模板数据列进行填写。</p>
+					<p>3、所有单元格应设置为【文本】格式。</p>
+				</div>
+			</div>
+		</form>
+	</div>
+</body>
+</html>
+

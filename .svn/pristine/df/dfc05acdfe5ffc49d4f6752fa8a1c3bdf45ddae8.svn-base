@@ -1,0 +1,246 @@
+package com.samton.web.manage.buyer.controller;
+
+import com.samton.platform.common.util.UpLoadFileUtil;
+import com.samton.platform.framework.base.BaseController;
+import com.samton.platform.framework.constant.WebConstant;
+import com.samton.platform.framework.exception.ServiceException;
+import com.samton.platform.framework.mybatis.pagination.Pagination;
+import com.samton.platform.pm.bean.entity.TSysLog;
+import com.samton.platform.pm.constant.PmStateConstant;
+import com.samton.platform.pm.service.ILogService;
+import com.samton.web.manage.buyer.bean.entity.TBuyers;
+import com.samton.web.manage.buyer.bean.entity.TBuyersRecord;
+import com.samton.web.manage.buyer.bean.vo.BuyersVo;
+import com.samton.web.manage.buyer.constant.BuyerExpCodeConstant;
+import com.samton.web.manage.buyer.service.IBuyerAccountService;
+import com.samton.web.manage.cust.bean.entity.TCustomer;
+import com.samton.web.manage.cust.constant.CustProductExpCodeConstant;
+import com.samton.web.manage.cust.constant.CustomerExpCodeConstant;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.*;
+
+/**
+ * @Description: 买家账号管理 Controller
+ * @Author: Huangqiuping
+ * @Date: 2020/4/13 14:05
+ * Copyright (c) 2019, Samton. All rights reserved
+*/
+@Controller
+@RequestMapping("/manage/buyerAccount/")
+public class BuyerAccountController extends BaseController {
+
+    @Resource
+    private IBuyerAccountService buyerAccountService;
+    @Resource
+    private ILogService logService;
+
+    /**
+     * 买家账号管理分页
+     * @param paramBean
+     * @param buyersVo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("queryList" + WebConstant.PAGE_SUFFIX)
+    public String queryList(Pagination<BuyersVo> paramBean, BuyersVo buyersVo) throws Exception{
+        if(buyersVo!=null&&buyersVo.getAccountMoneyOprType()==null){
+            buyersVo.setIsForbid(1);
+        }
+        paramBean.setSearch(buyersVo);
+        Pagination<BuyersVo> pageData = buyerAccountService.queryPageBuyerVoList(paramBean);
+        this.addAttr("pageData", pageData);
+        return "buyer/buyerAccountManage";
+    }
+
+    /**
+     * 买家账号管理导出
+     * @param paramBean
+     * @param buyersVo
+     * @return
+     * @throws Exception
+     *
+     * 电商平台	账号代码	账户名称	买家姓名	地址	城市	州	邮编	历史余额	刷单充值	采购充值	充值总额	单月可用额度	刷单次数	采购次数	刷单总额	采购总额	余额	禁用状态
+     */
+    @RequestMapping("exportList" + WebConstant.BUSINESS_SUFFIX)
+    public String exportList(Pagination<BuyersVo> paramBean, BuyersVo buyersVo) throws Exception {
+        paramBean.setSearch(buyersVo);
+        Pagination<Map<String, Object>> pageData = buyerAccountService.exportPageBuyerVoList(paramBean);
+        logService.addLog(new TSysLog("买家账号管理-导出", "导出买家账号信息！", PmStateConstant.LOG_PLATFORM));
+        String title = "电商平台,账号代码,账户名称,买家姓名,地址,城市,州,邮编,历史余额,刷单充值,采购充值,充值总额,单月可用额度,刷单次数,采购次数,刷单总额,采购总额,余额,禁用状态";
+        List<String> colNames = new ArrayList<String>();
+        colNames.add("platform_type");
+        colNames.add("buyer_code");
+        colNames.add("buyer_name");
+        colNames.add("user_name");
+        colNames.add("address");
+        colNames.add("city");
+        colNames.add("province");
+
+        colNames.add("postcode");
+        colNames.add("account_money_his");
+        colNames.add("brush_recharge");
+        colNames.add("purchase_recharge");
+        colNames.add("recharge_total");
+        colNames.add("quota_month");
+
+        colNames.add("brush_num");
+        colNames.add("purchase_num");
+        colNames.add("brush_total_money");
+        colNames.add("purchase_total_money");
+        colNames.add("account_money");
+        colNames.add("is_forbid_cn");
+        this.export(response,"买家账号管理" + String.format("%1$tY%1$tm%1$td", new Date()), title, colNames, pageData);
+        return null;
+    }
+
+    /**
+     * 买家账号信息查看
+     * @param recordId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("viewAccount" + WebConstant.BUSINESS_SUFFIX)
+    @ResponseBody
+    public Map<String, Object> viewAccount(Integer recordId) throws Exception {
+        BuyersVo tBuyers = buyerAccountService.selectBuyerAccountByRecordId(recordId);
+        return this.getResultMap(true, tBuyers);
+    }
+
+
+    /**
+     * 买家账号编辑
+     * @param tBuyers
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("editAccount" + WebConstant.BUSINESS_SUFFIX)
+    @ResponseBody
+    public Map<String, Object> editAccount(TBuyers tBuyers, TBuyersRecord tBuyersRecord) throws Exception {
+        //校验主键ID
+        if(tBuyers.getBuyerId() == null||tBuyersRecord.getRecordId()==null){
+            throw new ServiceException(BuyerExpCodeConstant.ACCOUNT_EDIT_ID_ERROR);
+        }
+        //执行编辑
+        boolean result = buyerAccountService.updateBuyerAccount(tBuyers,tBuyersRecord);
+        if (result) {
+            logService.addLog(new TSysLog("买家账号管理-编辑", "编辑买家账号代码【" + tBuyers.getBuyerCode() + "】成功 ！", PmStateConstant.LOG_PLATFORM));
+        } else {
+            logService.addLog(new TSysLog("买家账号管理-编辑", "编辑买家账号代码【" + tBuyers.getBuyerCode() + "】 失败！", PmStateConstant.LOG_PLATFORM));
+        }
+        if (!result) {
+            throw new ServiceException(BuyerExpCodeConstant.ACCOUNT_EDIT_COLUMN_ERROR);
+        }
+        return this.getResultMap(true, result);
+    }
+
+    /**
+     * 买家账号信息禁用/启用
+     * @param tBuyers
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("setAccount" + WebConstant.BUSINESS_SUFFIX)
+    @ResponseBody
+    public Map<String, Object> setAccount(TBuyers tBuyers) throws Exception {
+        //校验主键ID
+        if(tBuyers.getBuyerId() == null){
+            throw new ServiceException(BuyerExpCodeConstant.ACCOUNT_EDIT_COLUMN_ERROR);
+        }
+        //执行编辑
+        boolean result = buyerAccountService.updateSelectiveById(tBuyers);
+        String headStr = tBuyers.getIsForbid() == 0 ? "启用" : "禁用";
+        if (result) {
+            logService.addLog(new TSysLog("买家账号信息管理-禁用/启用", headStr+"买家账号代码【" + tBuyers.getBuyerCode() + "】成功 ！", PmStateConstant.LOG_PLATFORM));
+        } else {
+            logService.addLog(new TSysLog("买家账号信息管理-禁用/启用", headStr+"买家账号代码【" + tBuyers.getBuyerCode() + "】 失败！", PmStateConstant.LOG_PLATFORM));
+        }
+        if (!result) {
+            throw new ServiceException(BuyerExpCodeConstant.ACCOUNT_SET_ERROR);
+        }
+        return this.getResultMap(true, result);
+    }
+
+    @RequestMapping("downloadTemple" + WebConstant.NO_AUTH_SUFFIX)
+    public void downloadTemple(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String fileName = "buyerAccount.xls";
+            response.setCharacterEncoding("utf-8");
+            response.setContentType("multipart/form-data");
+            String agent = request.getHeader("USER-AGENT");
+            if (agent.contains("MSIE") || agent.contains("Trident")) {
+                fileName = java.net.URLEncoder.encode(fileName, "UTF-8");
+            } else {
+                //非IE浏览器的处理：
+                fileName = new String(fileName.getBytes("UTF-8"), "ISO-8859-1");
+            }
+            response.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
+
+            OutputStream outputStream = response.getOutputStream();
+            InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream("templateDownload/buyerAccount.xls");
+            byte[] data = new byte[1024];
+            int read = 0;
+            while ((read = resourceAsStream.read(data)) != -1) {
+                outputStream.write(data, 0, read);
+            }
+            resourceAsStream.close();
+            outputStream.close();
+        } catch (Exception e) {
+
+        }
+    }
+
+    /**
+     * csv格式 账号批量导入
+     * @param file
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("importAccountCSV" + WebConstant.BUSINESS_SUFFIX)
+    @ResponseBody
+    public Map<String, Object> importAccountCSV(@RequestParam("file") CommonsMultipartFile file) throws Exception {
+        Map resultMap = new HashMap();
+        resultMap.put("status",0);//小于0:表示有错误信息
+        //得到文件所有数据，返回数组对象
+        List<String[]> numDatas = UpLoadFileUtil.getData(file.getInputStream());
+        //删除服务器文件
+        if (numDatas != null && numDatas.size() >0 ){
+            //去除列表头
+            numDatas.remove(numDatas.get(0));
+        } else {
+            resultMap.put("msg","导入信息为空,请重新导入！");
+            return this.getResultMap(true, resultMap);
+        }
+        if (numDatas.size() > 3000) {
+            resultMap.put("msg","导入数据条数不能超过3000条,请重新导入！");
+            return this.getResultMap(true, resultMap);
+        }
+        //导入结果
+        resultMap = buyerAccountService.importAccount(numDatas);
+        return this.getResultMap(true, resultMap);
+    }
+
+    /**
+     * Excel xls格式 账号批量导入
+     * @param file
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("importAccount" + WebConstant.BUSINESS_SUFFIX)
+    @ResponseBody
+    public Map<String, Object> importAccount(@RequestParam("file") CommonsMultipartFile file) throws Exception {
+        //导入结果
+        Map resultMap = buyerAccountService.importAccount(file);
+        return this.getResultMap(true, resultMap);
+    }
+}

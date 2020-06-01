@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.samton.web.manage.order.dao.TCustOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.samton.web.manage.order.bean.entity.TCustOrder" >
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="order_code" property="orderCode" jdbcType="VARCHAR" />
+    <result column="cust_id" property="custId" jdbcType="INTEGER" />
+    <result column="demand_type" property="demandType" jdbcType="INTEGER" />
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="unit_price" property="unitPrice" jdbcType="NUMERIC" />
+    <result column="order_num" property="orderNum" jdbcType="INTEGER" />
+    <result column="tax" property="tax" jdbcType="NUMERIC" />
+    <result column="frequency" property="frequency" jdbcType="INTEGER" />
+    <result column="cycle" property="cycle" jdbcType="INTEGER" />
+    <result column="dollar_rate" property="dollarRate" jdbcType="NUMERIC" />
+    <result column="order_total_money" property="orderTotalMoney" jdbcType="NUMERIC" />
+    <result column="task_start_date" property="taskStartDate" jdbcType="DATE" />
+    <result column="order_state" property="orderState" jdbcType="INTEGER" />
+    <result column="task_end_date" property="taskEndDate" jdbcType="DATE" />
+    <result column="release_user_id" property="releaseUserId" jdbcType="INTEGER" />
+    <result column="release_time" property="releaseTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="BIGINT" />
+    <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <insert id="insert" parameterType="com.samton.web.manage.order.bean.entity.TCustOrder" >
+    insert into public.t_cust_order (order_id, order_code, cust_id, 
+      demand_type, product_id, address, 
+      unit_price, order_num, tax, 
+      frequency, cycle, dollar_rate, 
+      order_total_money, task_start_date, order_state, 
+      task_end_date, release_user_id, release_time, 
+      remark, create_user_id, create_date, 
+      modify_user_id, modify_date)
+    values (#{orderId,jdbcType=INTEGER}, #{orderCode,jdbcType=VARCHAR}, #{custId,jdbcType=INTEGER}, 
+      #{demandType,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, 
+      #{unitPrice,jdbcType=NUMERIC}, #{orderNum,jdbcType=INTEGER}, #{tax,jdbcType=NUMERIC}, 
+      #{frequency,jdbcType=INTEGER}, #{cycle,jdbcType=INTEGER}, #{dollarRate,jdbcType=NUMERIC}, 
+      #{orderTotalMoney,jdbcType=NUMERIC}, #{taskStartDate,jdbcType=DATE}, #{orderState,jdbcType=INTEGER}, 
+      #{taskEndDate,jdbcType=DATE}, #{releaseUserId,jdbcType=INTEGER}, #{releaseTime,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{modifyUserId,jdbcType=BIGINT}, #{modifyDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.samton.web.manage.order.bean.entity.TCustOrder" >
+    insert into public.t_cust_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="orderCode != null" >
+        order_code,
+      </if>
+      <if test="custId != null" >
+        cust_id,
+      </if>
+      <if test="demandType != null" >
+        demand_type,
+      </if>
+      <if test="productId != null" >
+        product_id,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="unitPrice != null" >
+        unit_price,
+      </if>
+      <if test="orderNum != null" >
+        order_num,
+      </if>
+      <if test="tax != null" >
+        tax,
+      </if>
+      <if test="frequency != null" >
+        frequency,
+      </if>
+      <if test="cycle != null" >
+        cycle,
+      </if>
+      <if test="dollarRate != null" >
+        dollar_rate,
+      </if>
+      <if test="orderTotalMoney != null" >
+        order_total_money,
+      </if>
+      <if test="taskStartDate != null" >
+        task_start_date,
+      </if>
+      <if test="orderState != null" >
+        order_state,
+      </if>
+      <if test="taskEndDate != null" >
+        task_end_date,
+      </if>
+      <if test="releaseUserId != null" >
+        release_user_id,
+      </if>
+      <if test="releaseTime != null" >
+        release_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id,
+      </if>
+      <if test="modifyDate != null" >
+        modify_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="orderCode != null" >
+        #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="custId != null" >
+        #{custId,jdbcType=INTEGER},
+      </if>
+      <if test="demandType != null" >
+        #{demandType,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null" >
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPrice != null" >
+        #{unitPrice,jdbcType=NUMERIC},
+      </if>
+      <if test="orderNum != null" >
+        #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="tax != null" >
+        #{tax,jdbcType=NUMERIC},
+      </if>
+      <if test="frequency != null" >
+        #{frequency,jdbcType=INTEGER},
+      </if>
+      <if test="cycle != null" >
+        #{cycle,jdbcType=INTEGER},
+      </if>
+      <if test="dollarRate != null" >
+        #{dollarRate,jdbcType=NUMERIC},
+      </if>
+      <if test="orderTotalMoney != null" >
+        #{orderTotalMoney,jdbcType=NUMERIC},
+      </if>
+      <if test="taskStartDate != null" >
+        #{taskStartDate,jdbcType=DATE},
+      </if>
+      <if test="orderState != null" >
+        #{orderState,jdbcType=INTEGER},
+      </if>
+      <if test="taskEndDate != null" >
+        #{taskEndDate,jdbcType=DATE},
+      </if>
+      <if test="releaseUserId != null" >
+        #{releaseUserId,jdbcType=INTEGER},
+      </if>
+      <if test="releaseTime != null" >
+        #{releaseTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyDate != null" >
+        #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+</mapper>
